@@ -47,6 +47,3 @@ next-env.d.ts
 # secrets / sources non versionnés
 /pre
 /animation_scrol
-
-# frames générées (2,7 Mo de webp) — régénérer avec `npm run convert-frames`
-/public/frames/
