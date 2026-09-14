@@ -1,0 +1,67 @@
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { auth, signIn } from "@/auth";
+import GlassCard from "@/components/ui/GlassCard";
+import Reveal from "@/components/ui/Reveal";
+
+export const metadata: Metadata = { title: "Connexion" };
+
+export default async function SignInPage() {
+  const session = await auth();
+  if (session?.user) redirect("/dashboard");
+
+  return (
+    <div
+      className="container"
+      style={{
+        minHeight: "100vh",
+        display: "grid",
+        placeItems: "center",
+        padding: "calc(var(--nav-h) + 24px) 0 4rem",
+      }}
+    >
+      <Reveal style={{ width: "min(440px, 100%)" }}>
+        <GlassCard variant="panel" interactive style={{ textAlign: "center" }}>
+          <span className="eyebrow" style={{ marginBottom: 22 }}>
+            Compte · Gratuit
+          </span>
+          <h1 style={{ fontSize: "clamp(2rem, 4vw, 2.6rem)", marginBottom: ".4em" }}>Connexion</h1>
+          <p className="muted" style={{ marginBottom: "2rem", lineHeight: 1.5 }}>
+            Connectez-vous pour retrouver vos téléchargements et être prévenu des mises à jour.
+          </p>
+          <form
+            action={async () => {
+              "use server";
+              await signIn("google", { redirectTo: "/dashboard" });
+            }}
+          >
+            <button type="submit" className="btn btn-primary btn-block">
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="#4285F4"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.76h3.57c2.08-1.92 3.27-4.74 3.27-8.09z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.76c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M5.84 14.11A6.97 6.97 0 0 1 5.47 12c0-.73.13-1.44.37-2.11V7.05H2.18A11 11 0 0 0 1 12c0 1.78.43 3.45 1.18 4.95l3.66-2.84z"
+                />
+                <path
+                  fill="#EA4335"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.05l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"
+                />
+              </svg>
+              Continuer avec Google
+            </button>
+          </form>
+          <p className="mono" style={{ fontSize: 11, color: "rgba(255,255,255,.5)", marginTop: 18 }}>
+            Aucun mot de passe · aucune newsletter
+          </p>
+        </GlassCard>
+      </Reveal>
+    </div>
+  );
+}

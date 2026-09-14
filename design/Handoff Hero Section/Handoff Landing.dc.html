@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#0b0705;color:#f2e8dd;font-family:'Space Grotesk',system-ui,sans-serif}
+  a{color:inherit;text-decoration:none}
+  @keyframes ho-reveal{from{opacity:0;transform:translateY(38px)}to{opacity:1;transform:none}}
+  @keyframes ho-kenburns{from{transform:scale(1)}to{transform:scale(1.1)}}
+  @keyframes ho-bob{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(8px);opacity:1}}
+</style>
+</helmet>
+
+<div style="position:relative;width:100%;background:#0b0705;overflow-x:hidden">
+
+  <!-- Nav -->
+  <nav style="position:fixed;top:0;left:0;right:0;z-index:50;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,4vw,54px);background:linear-gradient(180deg,rgba(11,7,5,.82),transparent);backdrop-filter:blur(2px)">
+    <a href="#top" style="display:flex;align-items:center;gap:9px;font-weight:700;font-size:19px;letter-spacing:-.02em;color:#f7ede1">handoff<span style="width:7px;height:7px;border-radius:50%;background:#f0a44a;margin-bottom:12px"></span></a>
+    <div style="display:flex;align-items:center;gap:clamp(16px,3vw,34px);font-size:14px;color:rgba(242,232,221,.72)">
+      <a href="#rig" style="letter-spacing:.01em">Fonctions</a>
+      <a href="#simple">Docs</a>
+      <a href="#" style="opacity:.8">GitHub</a>
+      <a href="#cta" style="color:#0b0705;background:#f0a44a;font-weight:600;padding:10px 18px;border-radius:30px">Télécharger</a>
+    </div>
+  </nav>
+
+  <!-- S1 Hero -->
+  <section id="top" style="position:relative;min-height:100vh;display:flex;align-items:flex-end;overflow:hidden">
+    <div style="position:absolute;inset:0;animation:ho-kenburns 24s ease-in-out infinite alternate">
+      <image-slot id="lp-hero" shape="rect" fit="cover" placeholder="Render / vidéo héro — glisse ton visuel"></image-slot>
+    </div>
+    <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(11,7,5,.55) 0%,rgba(11,7,5,.1) 35%,rgba(11,7,5,.35) 60%,rgba(11,7,5,.96) 100%)"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 80% at 20% 100%,rgba(60,32,14,.7),transparent 60%)"></div>
+    <div style="position:relative;z-index:2;padding:0 clamp(20px,5vw,64px) clamp(60px,9vh,110px);max-width:1100px;animation:ho-reveal linear both;animation-timeline:view();animation-range:entry 0% cover 25%">
+      <div style="font-family:'Space Mono',monospace;font-size:clamp(11px,1.1vw,13px);letter-spacing:.24em;color:#f0a44a;text-transform:uppercase;margin-bottom:clamp(18px,3vh,30px)">Addon Blender · Gratuit & open source</div>
+      <h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(52px,9.5vw,148px);line-height:.92;letter-spacing:-.02em;color:#faf3ea;text-wrap:balance">Anime tes objets.<br><span style="font-style:italic;color:#f0a44a">Sans friction.</span></h1>
+      <p style="margin:clamp(22px,3.5vh,38px) 0 0;max-width:560px;font-size:clamp(16px,1.5vw,20px);line-height:1.55;color:rgba(242,232,221,.8)">Handoff rig n'importe quel objet — à une ou deux mains — et le rend prêt à keyframer en quelques secondes. Fait par des animateurs, pour des animateurs.</p>
+    </div>
+    <div style="position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.2em;color:rgba(242,232,221,.6);animation:ho-bob 2.4s ease-in-out infinite">SCROLL<span style="font-size:16px">↓</span></div>
+  </section>
+
+  <!-- S2 Rig -->
+  <section id="rig" style="position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden">
+    <div style="position:absolute;inset:0;animation:ho-kenburns 28s ease-in-out infinite alternate">
+      <image-slot id="lp-rig" shape="rect" fit="cover" placeholder="Render — rig en un clic"></image-slot>
+    </div>
+    <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(11,7,5,.94) 0%,rgba(11,7,5,.72) 42%,rgba(11,7,5,.1) 100%)"></div>
+    <div style="position:relative;z-index:2;padding:0 clamp(20px,5vw,64px);max-width:720px;animation:ho-reveal linear both;animation-timeline:view();animation-range:entry 6% cover 42%">
+      <div style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.2em;color:#f0a44a;margin-bottom:24px">01 — LE RIG</div>
+      <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(44px,7vw,104px);line-height:.96;letter-spacing:-.02em;color:#faf3ea">Un objet.<br>Un clic.<br><span style="font-style:italic;color:#f0a44a">Un rig complet.</span></h2>
+      <p style="margin:30px 0 0;max-width:460px;font-size:clamp(15px,1.4vw,19px);line-height:1.6;color:rgba(242,232,221,.78)">Sélectionne, clique, c'est riggé. Handoff pose un contrôleur propre sur ta mesh sans toucher à ta hiérarchie.</p>
+    </div>
+  </section>
+
+  <!-- S3 Hands -->
+  <section id="hands" style="position:relative;min-height:100vh;display:flex;align-items:center;justify-content:flex-end;overflow:hidden">
+    <div style="position:absolute;inset:0;animation:ho-kenburns 26s ease-in-out infinite alternate">
+      <image-slot id="lp-hands" shape="rect" fit="cover" placeholder="Render — rig une & deux mains"></image-slot>
+    </div>
+    <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(270deg,rgba(11,7,5,.94) 0%,rgba(11,7,5,.68) 44%,rgba(11,7,5,.1) 100%)"></div>
+    <div style="position:relative;z-index:2;padding:0 clamp(20px,5vw,64px);max-width:720px;text-align:right;animation:ho-reveal linear both;animation-timeline:view();animation-range:entry 6% cover 42%">
+      <div style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.2em;color:#f0a44a;margin-bottom:24px">02 — LES MAINS</div>
+      <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(44px,7vw,104px);line-height:.96;letter-spacing:-.02em;color:#faf3ea">Une main.<br>Deux mains.<br><span style="font-style:italic;color:#f0a44a">Peu importe.</span></h2>
+      <p style="margin:30px 0 0;max-width:460px;margin-left:auto;font-size:clamp(15px,1.4vw,19px);line-height:1.6;color:rgba(242,232,221,.78)">Que ton perso tienne l'objet d'une main ou des deux, Handoff gère les prises et les transferts sans casser ton animation.</p>
+    </div>
+  </section>
+
+  <!-- S4 Simple -->
+  <section id="simple" style="position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden">
+    <div style="position:absolute;inset:0;animation:ho-kenburns 30s ease-in-out infinite alternate">
+      <image-slot id="lp-simple" shape="rect" fit="cover" placeholder="Render — l'outil en action"></image-slot>
+    </div>
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(90% 90% at 50% 50%,rgba(11,7,5,.55),rgba(11,7,5,.94))"></div>
+    <div style="position:relative;z-index:2;padding:0 clamp(20px,5vw,64px);max-width:900px;animation:ho-reveal linear both;animation-timeline:view();animation-range:entry 6% cover 42%">
+      <div style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.2em;color:#f0a44a;margin-bottom:24px">03 — LA SIMPLICITÉ</div>
+      <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(48px,8vw,120px);line-height:.94;letter-spacing:-.02em;color:#faf3ea">Bête à utiliser.<br><span style="font-style:italic;color:#f0a44a">Exprès.</span></h2>
+      <p style="margin:30px auto 0;max-width:520px;font-size:clamp(15px,1.4vw,19px);line-height:1.6;color:rgba(242,232,221,.78)">Pas de menu labyrinthe, pas de setup interminable. Tu installes, tu rigges, tu animes. Le reste, c'est de ton ressort.</p>
+    </div>
+  </section>
+
+  <!-- S5 CTA -->
+  <section id="cta" style="position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 clamp(20px,5vw,64px);background:radial-gradient(120% 90% at 50% 0%,#2a190e 0%,#150c07 45%,#0b0705 100%)">
+    <div style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.2em;color:#f0a44a;margin-bottom:28px;animation:ho-reveal linear both;animation-timeline:view();animation-range:entry 4% cover 40%">GRATUIT · OPEN SOURCE · BLENDER 4.x</div>
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(56px,11vw,170px);line-height:.9;letter-spacing:-.02em;color:#faf3ea;animation:ho-reveal linear both;animation-timeline:view();animation-range:entry 6% cover 44%">Prêt à rigger ?</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:clamp(34px,5vh,52px);animation:ho-reveal linear both;animation-timeline:view();animation-range:entry 10% cover 48%">
+      <a href="#" style="background:#f0a44a;color:#0b0705;font-weight:700;font-size:clamp(15px,1.4vw,18px);padding:18px 34px;border-radius:40px;box-shadow:0 16px 40px -12px rgba(240,164,74,.6)">Télécharger l'outil ↓</a>
+      <a href="#" style="color:#faf3ea;font-weight:600;font-size:clamp(15px,1.4vw,18px);padding:18px 32px;border-radius:40px;border:1px solid rgba(242,232,221,.25)">Voir sur GitHub</a>
+    </div>
+    <div style="position:absolute;bottom:36px;left:0;right:0;display:flex;flex-wrap:wrap;gap:8px 26px;justify-content:center;align-items:center;font-size:13px;color:rgba(242,232,221,.45);padding:0 24px">
+      <span style="font-weight:700;color:rgba(242,232,221,.7)">handoff</span>
+      <span>© 2026</span>
+      <span>Licence MIT</span>
+      <span>Fait pour les animateurs</span>
+    </div>
+  </section>
+
+</div>
+
+</x-dc>
+</body>
+</html>
