@@ -36,23 +36,12 @@ export default function HomePage() {
   return (
     <>
       <ScrollAnimation
-        intro={{
-          title: "*PropHandoff* — L'animation de props *réinventée*",
-          description:
-            "Un addon Blender gratuit qui keyframe le transfert d'un objet entre deux parents, au frame exact.",
-        }}
+        intro={{ title: "PropHandoff" }}
         stop1={{
           frame: 60,
-          title: "Passez un objet *en une seconde*",
-          description:
-            "Plus besoin de gérer les contraintes à la main. PropHandoff keyframe automatiquement le transfert au frame exact.",
+          title: "Rigger un objet à un personnage *facilement* en *une seconde*",
         }}
-        stop2={{
-          frame: 110,
-          title: "Votre rig, *sous contrôle*",
-          description:
-            "Visualisez chaque transfert sur la timeline. Revenez en arrière, ajustez, itérez.",
-        }}
+        stop2={{ frame: 110, title: "Votre rig *sous contrôle*" }}
       />
 
       {/* Ce que PropHandoff change */}

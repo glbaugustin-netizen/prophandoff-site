@@ -27,14 +27,13 @@ import { MixedTitle } from "./ui/MixedTitle";
 
 export interface StopContent {
   frame: number;
+  /** Titre (syntaxe *mot* pour le manuscrit). Seul texte affiché au stop. */
   title: string;
-  description: string;
 }
 
 export interface IntroContent {
-  /** Titre h1 affiché au tout début (syntaxe *mot* pour le manuscrit). */
+  /** Titre h1 affiché au tout début, centré, seul (syntaxe *mot* possible). */
   title: string;
-  description?: string;
 }
 
 export interface ScrollAnimationProps {
@@ -79,26 +78,17 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
 }
 
 const headingStyle: CSSProperties = {
-  margin: "0 0 .45em",
-  fontSize: "clamp(1.9rem, 4vw, 3.6rem)",
-  lineHeight: 0.98,
+  margin: 0,
+  fontSize: "clamp(2.4rem, 5.2vw, 4.8rem)",
+  lineHeight: 1.05,
   letterSpacing: "-.035em",
   fontWeight: 700,
   color: "#fff",
-  textShadow: "0 2px 20px rgba(0,0,0,.35)",
+  textShadow: "0 2px 24px rgba(0,0,0,.55), 0 0 60px rgba(0,0,0,.35)",
   textWrap: "balance",
 };
 
-const paragraphStyle: CSSProperties = {
-  margin: 0,
-  maxWidth: "44ch",
-  fontSize: "clamp(1rem, 1.3vw, 1.1rem)",
-  lineHeight: 1.5,
-  color: "rgba(255,255,255,.9)",
-  textShadow: "0 1px 10px rgba(0,0,0,.3)",
-};
-
-/** Wrapper de l'overlay : centré verticalement, moitié droite de l'écran. */
+/** Overlay d'un stop : titre seul, centré verticalement, moitié droite. */
 const overlayWrapStyle = (opacity: number): CSSProperties => ({
   position: "absolute",
   top: 0,
@@ -106,21 +96,19 @@ const overlayWrapStyle = (opacity: number): CSSProperties => ({
   width: "50%",
   height: "100%",
   display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "flex-end",
+  alignItems: "center",
   padding: "0 clamp(20px, 5vw, 64px)",
   boxSizing: "border-box",
   opacity,
-  pointerEvents: opacity > 0.05 ? "auto" : "none",
+  pointerEvents: "none",
   zIndex: 2,
 });
 
-/** Le panneau lui-même glisse et se déploie légèrement avec l'opacité. */
-const overlayPanelStyle = (opacity: number): CSSProperties => ({
-  width: "min(560px, 100%)",
-  transform: `translateY(${((1 - opacity) * 28).toFixed(1)}px) scale(${(0.96 + 0.04 * opacity).toFixed(3)})`,
-  transformOrigin: "50% 60%",
+/** Le titre glisse légèrement vers le haut en apparaissant. */
+const overlayTitleStyle = (opacity: number): CSSProperties => ({
+  ...headingStyle,
+  maxWidth: "14ch",
+  transform: `translateY(${((1 - opacity) * 28).toFixed(1)}px)`,
 });
 
 /* ------------------------------------------------------------------ */
@@ -385,67 +373,39 @@ export default function ScrollAnimation({
           </div>
         )}
 
-        {/* Titre d'intro (h1) : centré, s'efface dès que le scroll commence */}
+        {/* Titre d'intro (h1) : seul, centré, s'efface dès que le scroll commence */}
         {intro && (
           <div
             aria-hidden={derived.introOpacity === 0}
             style={{
               position: "absolute",
               inset: 0,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
+              display: "grid",
+              placeItems: "center",
               textAlign: "center",
               padding: "0 clamp(20px, 6vw, 80px)",
               opacity: derived.introOpacity,
               transform: `translateY(${((1 - derived.introOpacity) * -24).toFixed(1)}px)`,
-              pointerEvents: derived.introOpacity > 0.05 ? "auto" : "none",
+              pointerEvents: "none",
               zIndex: 2,
             }}
           >
-            <span className="eyebrow" style={{ marginBottom: 26 }}>
-              Addon Blender · Gratuit
-            </span>
             <MixedTitle
               as="h1"
               text={intro.title}
-              style={{
-                ...headingStyle,
-                fontSize: "clamp(2.4rem, 6.5vw, 5.6rem)",
-                maxWidth: "16ch",
-              }}
+              style={{ ...headingStyle, fontSize: "clamp(3rem, 8vw, 7rem)" }}
             />
-            {intro.description && (
-              <p style={{ ...paragraphStyle, marginTop: 22, maxWidth: "52ch" }}>{intro.description}</p>
-            )}
           </div>
         )}
 
-        {/* Overlay texte stop 1 */}
+        {/* Overlay stop 1 : titre seul */}
         <div style={overlayWrapStyle(derived.stop1Opacity)} aria-hidden={derived.stop1Opacity === 0}>
-          <div className="lg lg-panel" style={overlayPanelStyle(derived.stop1Opacity)}>
-            <span className="eyebrow" style={{ marginBottom: 22 }}>
-              Addon Blender · Gratuit
-            </span>
-            <MixedTitle as="h2" text={stop1.title} style={headingStyle} />
-            <p style={paragraphStyle}>{stop1.description}</p>
-          </div>
+          <MixedTitle as="h2" text={stop1.title} style={overlayTitleStyle(derived.stop1Opacity)} />
         </div>
 
-        {/* Overlay texte stop 2 */}
+        {/* Overlay stop 2 : titre seul */}
         <div style={overlayWrapStyle(derived.stop2Opacity)} aria-hidden={derived.stop2Opacity === 0}>
-          <div className="lg lg-panel" style={overlayPanelStyle(derived.stop2Opacity)}>
-            <span className="eyebrow" style={{ marginBottom: 22 }}>
-              Timeline · Non destructif
-            </span>
-            <MixedTitle as="h2" text={stop2.title} style={headingStyle} />
-            <p style={paragraphStyle}>{stop2.description}</p>
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 26 }}>
-              <span className="chip">Blender 4.2 → 4.5</span>
-              <span className="chip chip-live">v1.0.0</span>
-            </div>
-          </div>
+          <MixedTitle as="h2" text={stop2.title} style={overlayTitleStyle(derived.stop2Opacity)} />
         </div>
 
         {/* Indicateur scroll */}
