@@ -59,6 +59,7 @@ export function getLocal(progress: number, segment: Segment): number {
 /**
  * Index de frame (1-based) pour un progress donné.
  * Entièrement bidirectionnel : c'est une fonction pure du scroll.
+ * Les paliers STOP sont ici : la frame cible reste figée sur toute la zone.
  */
 export function getFrameIndex(
   progress: number,
@@ -83,51 +84,62 @@ export function getFrameIndex(
 /* ------------------------------------------------------------------ */
 
 export interface ScrollProgress {
-  /** Valeur live (lissée), lue dans la boucle rAF (pas de re-render). */
+  /** Progress brut du scroll, lu dans la boucle rAF (pas de re-render). */
   progressRef: RefObject<number>;
-  /** Valeur React (lissée), mise à jour à chaque tick rAF où elle change. */
+  /** Progress brut du scroll, en state React (overlays, vague, stops). */
   progress: number;
+  /** Frame réellement affichée (entier, lerpée), lue sans re-render. */
+  frameRef: RefObject<number>;
 }
 
 export interface ScrollProgressOptions {
   /**
-   * Inertie : temps (en secondes) pour que la valeur affichée comble ~63 %
-   * de l'écart avec le scroll réel. 0 = aucun lissage. Défaut : 0.18.
-   * Plus la valeur est grande, plus les frames "glissent" après l'arrêt du scroll.
+   * Douceur du lerp sur l'index de frame, par tick à 60 fps.
+   * 0.05 = très doux (longue traîne), 0.2 = quasi instantané. Défaut : 0.1.
    */
-  smoothing?: number;
+  lerpFactor?: number;
+  /** Frame du premier stop (défaut : 60). */
+  stop1Frame?: number;
+  /** Dernière frame = second stop (défaut : 110). */
+  lastFrame?: number;
 }
 
-const DEFAULT_SMOOTHING = 0.18;
-/**
- * Vitesse minimale de rattrapage (en progress/s). Évite la longue traîne de
- * l'easing exponentiel où les dernières frames défilent une par une en
- * saccadant : 0.12 ≈ 22 frames/s, donc la fin de la glisse reste fluide.
- */
-const MIN_VELOCITY = 0.12;
-/** En dessous de cet écart, on colle à la cible. */
-const SETTLE_EPSILON = 0.0005;
+const DEFAULT_LERP_FACTOR = 0.1;
+const DEFAULT_STOP1_FRAME = 60;
+const DEFAULT_LAST_FRAME = 110;
+/** En dessous de cet écart (en frames), on snappe sur la cible. */
+const SETTLE_THRESHOLD = 0.5;
+/** Durée d'un tick de référence : le lerpFactor est exprimé "par tick à 60 fps". */
+const REF_TICK_MS = 1000 / 60;
 
 /**
  * Calcule le progress [0, 1] d'une section sticky :
  *   0 → le haut de la section touche le haut du viewport
  *   1 → le bas de la section touche le bas du viewport
  *
- * Le listener scroll (passive) n'écrit qu'une ref ; une boucle rAF
- * lit cette ref, calcule le progress cible, le lisse avec une inertie
- * exponentielle (indépendante du framerate) et appelle `onFrame`.
+ * Le listener scroll (passive) n'écrit qu'une ref ; une boucle rAF continue
+ * lit cette ref et calcule le progress **brut** (les stops, overlays et la
+ * vague en dépendent directement, sans lissage).
  *
- * Le lissage porte sur le progress lui-même : les zones STOP restent donc
- * marquées (la valeur lissée traverse le palier comme le scroll réel).
+ * Inertie (momentum) : la frame *affichée* rattrape la frame *cible* par
+ * interpolation linéaire à chaque tick —
+ *   `current += (target - current) * lerpFactor`
+ * — puis snappe sur la cible dès que l'écart passe sous 0.5 frame. Le lerp ne
+ * s'applique qu'à l'index de frame, jamais au progress ni aux zones.
+ * `onFrame` n'est appelé que lorsque l'index entier affiché change.
  */
 export function useScrollProgress<T extends HTMLElement>(
   sectionRef: RefObject<T | null>,
-  onFrame?: (progress: number) => void,
+  onFrame?: (frame: number, progress: number) => void,
   options: ScrollProgressOptions = {},
 ): ScrollProgress {
-  const smoothing = options.smoothing ?? DEFAULT_SMOOTHING;
+  const lerpFactor = clamp01(options.lerpFactor ?? DEFAULT_LERP_FACTOR);
+  const stop1Frame = options.stop1Frame ?? DEFAULT_STOP1_FRAME;
+  const lastFrame = options.lastFrame ?? DEFAULT_LAST_FRAME;
+
   const scrollY = useRef<number>(0);
   const progressRef = useRef<number>(0);
+  const frameRef = useRef<number>(1);
   const [progress, setProgress] = useState<number>(0);
 
   // Toujours appeler la dernière version du callback sans relancer l'effet.
@@ -141,9 +153,13 @@ export function useScrollProgress<T extends HTMLElement>(
     let sectionTop = 0;
     let scrollable = 1;
     let rafId = 0;
-    let lastProgress = -1;
-    let smoothed = -1; // -1 = pas encore initialisé (on colle au scroll au 1er tick)
     let lastTime = 0;
+    let lastProgress = -1;
+
+    // Momentum : cible (depuis le scroll) et valeur affichée (lerpée).
+    let targetFrame = 0;
+    let currentFrame = -1; // -1 = pas initialisé → on colle à la cible au 1er tick
+    let lastDisplayFrame = -1;
 
     const measure = (): void => {
       const rect = el.getBoundingClientRect();
@@ -156,30 +172,50 @@ export function useScrollProgress<T extends HTMLElement>(
       scrollY.current = window.scrollY;
     };
 
+    const emit = (frame: number): void => {
+      if (frame === lastDisplayFrame) return;
+      lastDisplayFrame = frame;
+      frameRef.current = frame;
+      onFrameRef.current?.(frame, progressRef.current);
+    };
+
     const loop = (now: number): void => {
-      const target = clamp01((scrollY.current - sectionTop) / scrollable);
-
-      // Inertie : easing exponentiel vers la cible, dt en secondes.
-      const dt = lastTime === 0 ? 0 : Math.min((now - lastTime) / 1000, 0.1);
-      lastTime = now;
-      if (smoothed < 0 || smoothing <= 0) {
-        smoothed = target;
-      } else {
-        const diff = target - smoothed;
-        const alpha = 1 - Math.exp(-dt / smoothing);
-        // Easing exponentiel, mais jamais plus lent que MIN_VELOCITY.
-        const step = Math.max(Math.abs(diff) * alpha, MIN_VELOCITY * dt);
-        smoothed += Math.sign(diff) * Math.min(step, Math.abs(diff));
-        if (Math.abs(target - smoothed) < SETTLE_EPSILON) smoothed = target;
-      }
-
-      const p = smoothed;
+      /* ---- progress brut (stops, overlays, vague) ---- */
+      const p = clamp01((scrollY.current - sectionTop) / scrollable);
       progressRef.current = p;
       if (p !== lastProgress) {
         lastProgress = p;
         setProgress(p);
       }
-      onFrameRef.current?.(p);
+
+      /* ---- frame cible exacte selon le scroll ---- */
+      targetFrame = getFrameIndex(p, stop1Frame, lastFrame);
+
+      /* ---- lerp de la frame affichée vers la cible ---- */
+      // Le facteur est normalisé sur un tick à 60 fps pour que la traîne soit
+      // identique sur un écran 120 Hz (dt clampé pour ne pas sauter après un
+      // onglet en arrière-plan).
+      const dt = lastTime === 0 ? REF_TICK_MS : Math.min(now - lastTime, 100);
+      lastTime = now;
+      const ticks = dt / REF_TICK_MS;
+      const alpha = lerpFactor >= 1 ? 1 : 1 - Math.pow(1 - lerpFactor, ticks);
+
+      if (currentFrame < 0) {
+        currentFrame = targetFrame;
+      } else {
+        currentFrame += (targetFrame - currentFrame) * alpha;
+      }
+
+      const isSettling = Math.abs(currentFrame - targetFrame) > SETTLE_THRESHOLD;
+      if (!isSettling) {
+        // Snap final exact : on ne reste jamais sur une demi-frame.
+        currentFrame = targetFrame;
+      }
+
+      emit(Math.round(currentFrame));
+
+      // La boucle tourne en continu : le lerp continue de rattraper la cible
+      // même sans nouvel événement scroll, et le progress reste à jour.
       rafId = window.requestAnimationFrame(loop);
     };
 
@@ -193,7 +229,7 @@ export function useScrollProgress<T extends HTMLElement>(
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", measure);
     };
-  }, [sectionRef, smoothing]);
+  }, [sectionRef, lerpFactor, stop1Frame, lastFrame]);
 
-  return { progressRef, progress };
+  return { progressRef, progress, frameRef };
 }
