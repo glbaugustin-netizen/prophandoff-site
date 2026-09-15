@@ -59,7 +59,6 @@ export interface ScrollAnimationProps {
 /* ------------------------------------------------------------------ */
 
 const WAVE_COLOR = "#0e1016"; // fond du site (style board)
-const GLOW_COLOR = "#c64bff"; // violet de la palette
 const FADE_IN_VH = 30; // fade in du texte sur les 30 premiers vh du stop
 const FADE_OUT_VH = 15; // fade out sur les derniers vh du stop 1
 const INTRO_FADE_VH = 12; // fade out du titre d'intro
@@ -298,21 +297,22 @@ export default function ScrollAnimation({
 
     const scrollIndicatorOpacity = Math.max(stop1Opacity, stop2Opacity);
 
-    // Vague : translateY de 120px (cachée sous le viewport) jusqu'à
-    // -100vh - 120px (l'écran est entièrement couvert, crête comprise).
-    const waveActive = segment === "transition" && transition > 0;
-    const px = (120 * (1 - transition) - 120 * transition).toFixed(2);
-    const vh = (transition * 100).toFixed(3);
-    const waveTranslate = `translateY(calc(${px}px - ${vh}vh))`;
+    // Sortie : l'image s'assombrit progressivement (ease-in-out) jusqu'au fond
+    // du site, pendant qu'une barre droite monte depuis le bas pour finir
+    // exactement dans la couleur de la section suivante.
+    const fadeOpacity =
+      transition < 0.5 ? 2 * transition * transition : 1 - Math.pow(-2 * transition + 2, 2) / 2;
+    const barActive = segment === "transition" && transition > 0;
+    const barTranslate = `translateY(-${(transition * 100).toFixed(3)}vh)`;
 
     return {
       introOpacity,
       stop1Opacity,
       stop2Opacity,
       scrollIndicatorOpacity,
-      waveOpacity: waveActive ? 1 : 0,
-      waveTranslate,
-      glowOpacity: transition,
+      fadeOpacity,
+      barOpacity: barActive ? 1 : 0,
+      barTranslate,
     };
   }, [progress]);
 
@@ -444,20 +444,20 @@ export default function ScrollAnimation({
           </span>
         </div>
 
-        {/* Glow radial derrière la vague (fade in pendant la transition) */}
+        {/* Assombrissement progressif de l'image pendant la sortie */}
         <div
           aria-hidden="true"
           style={{
             position: "absolute",
             inset: 0,
-            background: `radial-gradient(ellipse 80% 60% at 50% 110%, ${GLOW_COLOR} 0%, rgba(42,0,80,0) 70%)`,
-            opacity: derived.glowOpacity,
+            background: WAVE_COLOR,
+            opacity: derived.fadeOpacity,
             pointerEvents: "none",
             zIndex: 4,
           }}
         />
 
-        {/* Overlay vague de sortie */}
+        {/* Barre droite qui monte depuis le bas et couvre l'écran en fin de section */}
         <div
           aria-hidden="true"
           style={{
@@ -465,23 +465,15 @@ export default function ScrollAnimation({
             left: 0,
             right: 0,
             top: "100%",
-            height: "calc(100vh + 120px)",
-            opacity: derived.waveOpacity,
-            transform: derived.waveTranslate,
+            height: "100vh",
+            background: WAVE_COLOR,
+            opacity: derived.barOpacity,
+            transform: derived.barTranslate,
             willChange: "transform",
             pointerEvents: "none",
             zIndex: 6,
           }}
-        >
-          <svg
-            viewBox="0 0 1440 120"
-            preserveAspectRatio="none"
-            style={{ display: "block", width: "100%", height: 120 }}
-          >
-            <path d="M0,60 C360,120 1080,0 1440,60 L1440,120 L0,120 Z" fill={WAVE_COLOR} />
-          </svg>
-          <div style={{ height: "100vh", background: WAVE_COLOR }} />
-        </div>
+        />
       </div>
     </section>
   );
