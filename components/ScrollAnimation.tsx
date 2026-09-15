@@ -13,7 +13,6 @@ import {
   STOP2_VH,
   TOTAL_VH,
   clamp01,
-  getFrameIndex,
   getLocal,
   getSegment,
   useScrollProgress,
@@ -39,10 +38,10 @@ export interface ScrollAnimationProps {
   /** Extension des fichiers (défaut : "webp"). */
   extension?: string;
   /**
-   * Inertie du scroll en secondes (défaut : 0.18). Les frames continuent de
-   * glisser en ralentissant après l'arrêt du scroll. 0 = aucun lissage.
+   * Douceur du momentum sur l'index de frame (défaut : 0.1).
+   * 0.05 = très doux, 0.2 = quasi instantané.
    */
-  smoothing?: number;
+  lerpFactor?: number;
 }
 
 /* ------------------------------------------------------------------ */
@@ -122,7 +121,7 @@ export default function ScrollAnimation({
   frameCount = 110,
   framesPath = "/frames",
   extension = "webp",
-  smoothing = 0.18,
+  lerpFactor = 0.1,
 }: ScrollAnimationProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -186,28 +185,33 @@ export default function ScrollAnimation({
 
   /* ---------------- Boucle rAF (fournie par le hook) ---------------- */
 
+  // Le hook n'appelle onFrame que quand l'index affiché (lerpé) change.
   const onFrame = useCallback(
-    (p: number): void => {
-      const index = getFrameIndex(p, stop1.frame, lastFrame);
-      // drawImage uniquement si l'index a changé (ou si un resize /
-      // une nouvelle frame décodée a invalidé le rendu : lastDrawnRef = -1).
+    (index: number): void => {
       if (index === lastDrawnRef.current) return;
       lastDrawnRef.current = index;
       draw(index);
     },
-    [draw, stop1.frame, lastFrame],
+    [draw],
   );
 
-  const { progress } = useScrollProgress(sectionRef, onFrame, { smoothing });
+  const { progress, frameRef } = useScrollProgress(sectionRef, onFrame, {
+    lerpFactor,
+    stop1Frame: stop1.frame,
+    lastFrame,
+  });
 
-  // Un resize invalide le rendu courant → redraw au prochain tick.
+  // Redessine la frame courante hors boucle (resize, frame décodée tardivement).
+  const redraw = useCallback((): void => {
+    const index = frameRef.current;
+    lastDrawnRef.current = index;
+    draw(index);
+  }, [draw, frameRef]);
+
   useEffect(() => {
-    const onResize = (): void => {
-      lastDrawnRef.current = -1;
-    };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+    window.addEventListener("resize", redraw);
+    return () => window.removeEventListener("resize", redraw);
+  }, [redraw]);
 
   /* ---------------- Preload en deux passes ---------------- */
 
@@ -237,8 +241,8 @@ export default function ScrollAnimation({
       if (!img) img = await loadImage(frameUrl(i));
       if (cancelled || !img) return;
       framesRef.current[i] = img;
-      // Si une frame de substitution est affichée, forcer un redraw.
-      lastDrawnRef.current = -1;
+      // Si une frame de substitution était affichée, redessiner la bonne.
+      redraw();
     };
 
     const run = async (): Promise<void> => {
@@ -270,7 +274,7 @@ export default function ScrollAnimation({
     return () => {
       cancelled = true;
     };
-  }, [frameUrl, lastFrame, stop1.frame, stop2.frame]);
+  }, [frameUrl, lastFrame, stop1.frame, stop2.frame, redraw]);
 
   /* ---------------- Valeurs dérivées du progress ---------------- */
 
