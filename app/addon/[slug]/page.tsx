@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import GlassCard from "@/components/ui/GlassCard";
 import DownloadButton from "@/components/ui/DownloadButton";
 import Reveal from "@/components/ui/Reveal";
+import { MixedTitle } from "@/components/ui/MixedTitle";
 import { ADDONS, formatDate, getAddon } from "@/lib/addons";
 
 interface PageProps {
@@ -43,9 +44,11 @@ export default async function AddonPage({ params }: PageProps) {
             <span className="chip chip-live">gratuit</span>
             <span className="chip">Blender {addon.blender}</span>
           </div>
-          <h1 style={{ fontSize: "clamp(2.6rem, 6vw, 4.6rem)", marginBottom: ".35em" }}>
-            {addon.name}
-          </h1>
+          <MixedTitle
+            as="h1"
+            text={`${addon.name} *v${addon.version}*`}
+            style={{ fontSize: "clamp(2.6rem, 6vw, 4.6rem)", marginBottom: ".35em" }}
+          />
           <p
             style={{
               fontSize: "clamp(1.05rem, 1.5vw, 1.25rem)",
@@ -144,6 +147,11 @@ export default async function AddonPage({ params }: PageProps) {
               <span>FICHE · ADDON</span>
               <span style={{ color: "var(--dot)" }}>●</span>
             </div>
+            <MixedTitle
+              as="h2"
+              text="Téléchargez *gratuitement*"
+              style={{ fontSize: "1.7rem", marginBottom: 22 }}
+            />
             <dl style={{ margin: 0, display: "grid", gap: 18 }}>
               <div>
                 <dt className="mono" style={dtStyle}>

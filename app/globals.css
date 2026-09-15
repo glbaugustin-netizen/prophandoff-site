@@ -44,7 +44,10 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-glass: cubic-bezier(0.32, 0.72, 0, 1);
 
-  --font-sans: var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
+  /* typographie : Fira Sans (base) + Mea Culpa (mots-clés manuscrits des titres)
+     — --font-fira / --font-mea sont injectées par next/font sur <html> */
+  --font-sans: var(--font-fira), "Fira Sans", system-ui, sans-serif;
+  --font-script: var(--font-mea), "Mea Culpa", cursive;
   --font-mono: var(--font-space-mono), "Space Mono", ui-monospace, monospace;
   --nav-h: 96px;
 }
@@ -63,6 +66,7 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-sans);
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
   overflow-x: hidden;
@@ -103,6 +107,27 @@ button {
 
 .mono {
   font-family: var(--font-mono);
+}
+
+/* Mot manuscrit dans un titre (voir <MixedTitle text="… *mot* …" />).
+   Réservé aux h1/h2/h3 — jamais dans le corps de texte. */
+.script {
+  font-family: var(--font-script);
+  font-size: 1.22em; /* Mea Culpa a une petite hauteur d'x : on compense un peu */
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  display: inline;
+  vertical-align: baseline;
+  padding-inline: 0.06em;
+}
+
+/* Un titre mixte a besoin d'un peu plus d'interligne : les pleins et déliés
+   de Mea Culpa débordent largement au-dessus et en dessous de la ligne. */
+h1:has(.script),
+h2:has(.script),
+h3:has(.script) {
+  line-height: 1.12;
 }
 
 .muted {

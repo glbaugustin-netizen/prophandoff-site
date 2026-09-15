@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Space_Mono } from "next/font/google";
+import { Fira_Sans, Mea_Culpa, Space_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import Providers from "./providers";
 import Navbar from "@/components/ui/Navbar";
@@ -8,16 +8,28 @@ import LiquidFilters from "@/components/ui/LiquidFilters";
 import LiquidBackground from "@/components/ui/LiquidBackground";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+// Police principale : textes courants et base des titres.
+const firaSans = Fira_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-fira",
+  display: "swap",
 });
 
+// Police manuscrite : uniquement les mots-clés des titres (classe .script).
+const meaCulpa = Mea_Culpa({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-mea",
+  display: "swap",
+});
+
+// Mono d'accent (eyebrows, chips, labels) hérité du style board.
 const spaceMono = Space_Mono({
   variable: "--font-space-mono",
   subsets: ["latin"],
   weight: ["400", "700"],
+  display: "swap",
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -50,7 +62,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr" className={`${spaceGrotesk.variable} ${spaceMono.variable}`}>
+    <html
+      lang="fr"
+      className={`${firaSans.variable} ${meaCulpa.variable} ${spaceMono.variable}`}
+    >
       <body style={{ background: "#0e1016" }}>
         <LiquidFilters />
         <LiquidBackground />

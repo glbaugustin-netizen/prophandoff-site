@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { auth, signIn } from "@/auth";
 import GlassCard from "@/components/ui/GlassCard";
 import Reveal from "@/components/ui/Reveal";
+import { MixedTitle } from "@/components/ui/MixedTitle";
 
 export const metadata: Metadata = { title: "Connexion" };
 
@@ -25,7 +26,11 @@ export default async function SignInPage() {
           <span className="eyebrow" style={{ marginBottom: 22 }}>
             Compte · Gratuit
           </span>
-          <h1 style={{ fontSize: "clamp(2rem, 4vw, 2.6rem)", marginBottom: ".4em" }}>Connexion</h1>
+          <MixedTitle
+            as="h1"
+            text="Bienvenue sur *PropHandoff*"
+            style={{ fontSize: "clamp(2rem, 4vw, 2.6rem)", marginBottom: ".4em" }}
+          />
           <p className="muted" style={{ marginBottom: "2rem", lineHeight: 1.5 }}>
             Connectez-vous pour retrouver vos téléchargements et être prévenu des mises à jour.
           </p>

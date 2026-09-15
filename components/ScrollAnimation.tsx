@@ -12,12 +12,14 @@ import {
   STOP1_VH,
   STOP2_VH,
   TOTAL_VH,
+  ZONE1_VH,
   clamp01,
   getFrameIndex,
   getLocal,
   getSegment,
   useScrollProgress,
 } from "../hooks/useScrollProgress";
+import { MixedTitle } from "./ui/MixedTitle";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -29,7 +31,15 @@ export interface StopContent {
   description: string;
 }
 
+export interface IntroContent {
+  /** Titre h1 affiché au tout début (syntaxe *mot* pour le manuscrit). */
+  title: string;
+  description?: string;
+}
+
 export interface ScrollAnimationProps {
+  /** Titre d'ouverture, s'efface sur les premiers vh de scroll. */
+  intro?: IntroContent;
   stop1: StopContent;
   stop2: StopContent;
   /** Nombre total de frames (défaut : 110). */
@@ -53,6 +63,7 @@ const WAVE_COLOR = "#0e1016"; // fond du site (style board)
 const GLOW_COLOR = "#c64bff"; // violet de la palette
 const FADE_IN_VH = 30; // fade in du texte sur les 30 premiers vh du stop
 const FADE_OUT_VH = 15; // fade out sur les derniers vh du stop 1
+const INTRO_FADE_VH = 12; // fade out du titre d'intro
 
 const pad4 = (n: number): string => String(n).padStart(4, "0");
 
@@ -117,6 +128,7 @@ const overlayPanelStyle = (opacity: number): CSSProperties => ({
 /* ------------------------------------------------------------------ */
 
 export default function ScrollAnimation({
+  intro,
   stop1,
   stop2,
   frameCount = 110,
@@ -277,6 +289,9 @@ export default function ScrollAnimation({
   const derived = useMemo(() => {
     const segment = getSegment(progress);
 
+    // Intro : visible au repos, s'efface sur les 12 premiers vh de la zone 1.
+    const introOpacity = 1 - clamp01((getLocal(progress, "zone1") * ZONE1_VH) / INTRO_FADE_VH);
+
     // Stop 1 : fade in sur les 30 premiers vh, fade out sur les 15 derniers.
     // Fonction pure du scroll → le retour arrière fait le fade out naturellement.
     const s1 = getLocal(progress, "stop1") * STOP1_VH; // en vh
@@ -303,6 +318,7 @@ export default function ScrollAnimation({
     const waveTranslate = `translateY(calc(${px}px - ${vh}vh))`;
 
     return {
+      introOpacity,
       stop1Opacity,
       stop2Opacity,
       scrollIndicatorOpacity,
@@ -369,13 +385,50 @@ export default function ScrollAnimation({
           </div>
         )}
 
+        {/* Titre d'intro (h1) : centré, s'efface dès que le scroll commence */}
+        {intro && (
+          <div
+            aria-hidden={derived.introOpacity === 0}
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              padding: "0 clamp(20px, 6vw, 80px)",
+              opacity: derived.introOpacity,
+              transform: `translateY(${((1 - derived.introOpacity) * -24).toFixed(1)}px)`,
+              pointerEvents: derived.introOpacity > 0.05 ? "auto" : "none",
+              zIndex: 2,
+            }}
+          >
+            <span className="eyebrow" style={{ marginBottom: 26 }}>
+              Addon Blender · Gratuit
+            </span>
+            <MixedTitle
+              as="h1"
+              text={intro.title}
+              style={{
+                ...headingStyle,
+                fontSize: "clamp(2.4rem, 6.5vw, 5.6rem)",
+                maxWidth: "16ch",
+              }}
+            />
+            {intro.description && (
+              <p style={{ ...paragraphStyle, marginTop: 22, maxWidth: "52ch" }}>{intro.description}</p>
+            )}
+          </div>
+        )}
+
         {/* Overlay texte stop 1 */}
         <div style={overlayWrapStyle(derived.stop1Opacity)} aria-hidden={derived.stop1Opacity === 0}>
           <div className="lg lg-panel" style={overlayPanelStyle(derived.stop1Opacity)}>
             <span className="eyebrow" style={{ marginBottom: 22 }}>
               Addon Blender · Gratuit
             </span>
-            <h2 style={headingStyle}>{stop1.title}</h2>
+            <MixedTitle as="h2" text={stop1.title} style={headingStyle} />
             <p style={paragraphStyle}>{stop1.description}</p>
           </div>
         </div>
@@ -386,7 +439,7 @@ export default function ScrollAnimation({
             <span className="eyebrow" style={{ marginBottom: 22 }}>
               Timeline · Non destructif
             </span>
-            <h2 style={headingStyle}>{stop2.title}</h2>
+            <MixedTitle as="h2" text={stop2.title} style={headingStyle} />
             <p style={paragraphStyle}>{stop2.description}</p>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 26 }}>
               <span className="chip">Blender 4.2 → 4.5</span>

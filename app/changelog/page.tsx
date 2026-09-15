@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import GlassCard from "@/components/ui/GlassCard";
 import Reveal from "@/components/ui/Reveal";
+import { MixedTitle } from "@/components/ui/MixedTitle";
 import { ADDONS, formatDate } from "@/lib/addons";
 
 export const metadata: Metadata = { title: "Changelog" };
@@ -15,7 +16,7 @@ export default function ChangelogPage() {
     <div className="container page" style={{ maxWidth: 820 }}>
       <Reveal>
         <span className="eyebrow">Historique</span>
-        <h1 className="section-title">Changelog</h1>
+        <MixedTitle as="h1" className="section-title" text="*Changelog*" />
         <p className="section-lead">Toutes les versions publiées, addon par addon.</p>
       </Reveal>
 

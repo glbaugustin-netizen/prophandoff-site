@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth";
 import GlassCard from "@/components/ui/GlassCard";
 import Reveal from "@/components/ui/Reveal";
+import { MixedTitle } from "@/components/ui/MixedTitle";
 import { getAddon, formatDate } from "@/lib/addons";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
@@ -80,8 +81,9 @@ export default async function DashboardPage() {
             <span className="eyebrow" style={{ fontSize: 11, marginBottom: 10 }}>
               Compte
             </span>
-            <h1 style={{ fontSize: "clamp(1.6rem, 3vw, 2.2rem)" }}>{user.name ?? "Utilisateur"}</h1>
-            <p className="muted" style={{ fontSize: ".92rem", marginTop: 6 }}>
+            <MixedTitle as="h1" text="Votre *espace*" style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)" }} />
+            <p style={{ marginTop: 10, fontWeight: 500 }}>{user.name ?? "Utilisateur"}</p>
+            <p className="muted" style={{ fontSize: ".92rem", marginTop: 2 }}>
               {user.email}
             </p>
           </div>

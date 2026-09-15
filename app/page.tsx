@@ -3,6 +3,7 @@ import ScrollAnimation from "@/components/ScrollAnimation";
 import GlassCard from "@/components/ui/GlassCard";
 import DownloadButton from "@/components/ui/DownloadButton";
 import Reveal from "@/components/ui/Reveal";
+import { MixedTitle } from "@/components/ui/MixedTitle";
 import { getAddon } from "@/lib/addons";
 
 const BENEFITS = [
@@ -35,15 +36,20 @@ export default function HomePage() {
   return (
     <>
       <ScrollAnimation
+        intro={{
+          title: "*PropHandoff* — L'animation de props *réinventée*",
+          description:
+            "Un addon Blender gratuit qui keyframe le transfert d'un objet entre deux parents, au frame exact.",
+        }}
         stop1={{
           frame: 60,
-          title: "Passez un objet en une seconde",
+          title: "Passez un objet *en une seconde*",
           description:
             "Plus besoin de gérer les contraintes à la main. PropHandoff keyframe automatiquement le transfert au frame exact.",
         }}
         stop2={{
           frame: 110,
-          title: "Votre rig, sous contrôle",
+          title: "Votre rig, *sous contrôle*",
           description:
             "Visualisez chaque transfert sur la timeline. Revenez en arrière, ajustez, itérez.",
         }}
@@ -54,7 +60,7 @@ export default function HomePage() {
         <div className="container">
           <Reveal>
             <span className="eyebrow">Pourquoi</span>
-            <h2 className="section-title">Ce que PropHandoff change</h2>
+            <MixedTitle as="h2" className="section-title" text="Ce que PropHandoff *change*" />
             <p className="section-lead">
               Le transfert d&apos;un objet entre deux mains, deux personnages ou deux
               props est l&apos;une des opérations les plus pénibles de l&apos;animation
@@ -181,7 +187,7 @@ export default function HomePage() {
         <div className="container" style={{ textAlign: "center" }}>
           <Reveal>
             <span className="eyebrow">Bientôt</span>
-            <h2 className="section-title">D&apos;autres outils arrivent</h2>
+            <MixedTitle as="h2" className="section-title" text="D'autres outils *arrivent*" />
             <p className="section-lead" style={{ marginInline: "auto" }}>
               PropHandoff est le premier d&apos;une série d&apos;addons pensés pour les
               animateurs qui veulent passer moins de temps dans les contraintes et plus de
