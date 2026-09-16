@@ -170,37 +170,6 @@ export default function HomePage() {
           </div>
         </section>
       )}
-
-      {/* Teaser */}
-      <section className="section" id="soon">
-        <div className="container" style={{ textAlign: "center" }}>
-          <Reveal>
-            <span className="eyebrow">Bientôt</span>
-            <MixedTitle as="h2" className="section-title" text="D'autres outils *arrivent*" />
-            <p className="section-lead" style={{ marginInline: "auto" }}>
-              PropHandoff est le premier d&apos;une série d&apos;addons pensés pour les
-              animateurs qui veulent passer moins de temps dans les contraintes et plus de
-              temps à animer.
-            </p>
-          </Reveal>
-          <Reveal delay={150}>
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-                justifyContent: "center",
-                flexWrap: "wrap",
-                marginTop: "2.5rem",
-              }}
-            >
-              <span className="chip">pose library sync</span>
-              <span className="chip">camera handoff</span>
-              <span className="chip">rig snapshots</span>
-              <span className="chip chip-amber">bientôt</span>
-            </div>
-          </Reveal>
-        </div>
-      </section>
     </>
   );
 }
