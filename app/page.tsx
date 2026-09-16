@@ -73,32 +73,35 @@ export default function HomePage() {
         <section className="section" id="addon" style={{ paddingTop: 0 }}>
           <div className="container">
             <Reveal>
-              <GlassCard variant="panel" interactive>
-                <div style={{ maxWidth: "62ch" }}>
-                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 22 }}>
-                    <span className="chip">Blender {addon.blender}</span>
-                  </div>
-                  <h2 style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", marginBottom: ".4em" }}>
-                    {addon.name}
-                  </h2>
-                  <p
-                    style={{
-                      maxWidth: "46ch",
-                      marginBottom: "2rem",
-                      color: "rgba(255,255,255,.9)",
-                      fontSize: "1.05rem",
-                      lineHeight: 1.5,
-                      textShadow: "0 1px 10px rgba(0,0,0,.3)",
-                    }}
-                  >
-                    {addon.tagline} {addon.description}
-                  </p>
-                  <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-                    <DownloadButton slug={addon.slug} variant="primary" label="Télécharger l'outil" />
-                    <Link href={`/addon/${addon.slug}`} className="btn btn-glass">
-                      Voir les détails
-                    </Link>
-                  </div>
+              <GlassCard
+                variant="panel"
+                interactive
+                style={{ maxWidth: 760, marginInline: "auto", textAlign: "center" }}
+              >
+                <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 22 }}>
+                  <span className="chip">Blender {addon.blender}</span>
+                </div>
+                <h2 style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", marginBottom: ".4em" }}>
+                  {addon.name}
+                </h2>
+                <p
+                  style={{
+                    maxWidth: "52ch",
+                    marginInline: "auto",
+                    marginBottom: "2rem",
+                    color: "rgba(255,255,255,.9)",
+                    fontSize: "1.05rem",
+                    lineHeight: 1.5,
+                    textShadow: "0 1px 10px rgba(0,0,0,.3)",
+                  }}
+                >
+                  {addon.tagline} {addon.description}
+                </p>
+                <div style={{ display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
+                  <DownloadButton slug={addon.slug} variant="primary" label="Télécharger l'outil" />
+                  <Link href={`/addon/${addon.slug}`} className="btn btn-glass">
+                    Voir les détails
+                  </Link>
                 </div>
               </GlassCard>
             </Reveal>
