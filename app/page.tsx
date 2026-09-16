@@ -24,12 +24,6 @@ const BENEFITS = [
   },
 ];
 
-const METRICS = [
-  { label: "Une main", value: 92 },
-  { label: "Deux mains", value: 78 },
-  { label: "Simplicité", value: 100 },
-];
-
 export default function HomePage() {
   const addon = getAddon("prop-handoff");
 
@@ -79,21 +73,10 @@ export default function HomePage() {
         <section className="section" id="addon" style={{ paddingTop: 0 }}>
           <div className="container">
             <Reveal>
-              <GlassCard
-                variant="panel"
-                interactive
-                style={{
-                  display: "grid",
-                  gap: "clamp(2rem, 4vw, 3.5rem)",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-                  alignItems: "center",
-                }}
-              >
-                <div>
+              <GlassCard variant="panel" interactive>
+                <div style={{ maxWidth: "62ch" }}>
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 22 }}>
-                    <span className="chip chip-amber">v{addon.version}</span>
                     <span className="chip">Blender {addon.blender}</span>
-                    <span className="chip chip-live">gratuit</span>
                   </div>
                   <h2 style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", marginBottom: ".4em" }}>
                     {addon.name}
@@ -117,54 +100,6 @@ export default function HomePage() {
                     </Link>
                   </div>
                 </div>
-
-                {/* carte "métriques" façon board */}
-                <GlassCard
-                  fine
-                  style={{
-                    borderRadius: 34,
-                    padding: "28px 26px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 26,
-                  }}
-                >
-                  <div
-                    className="mono"
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      fontSize: 11,
-                      fontWeight: 700,
-                      letterSpacing: ".12em",
-                      textShadow: "0 1px 6px rgba(0,0,0,.4)",
-                    }}
-                  >
-                    <span>HANDOFF · RIG</span>
-                    <span style={{ color: "var(--dot)" }}>●</span>
-                  </div>
-                  <div style={{ display: "grid", gap: 14 }}>
-                    {METRICS.map((m) => (
-                      <div key={m.label} style={{ display: "grid", gap: 6 }}>
-                        <span
-                          className="mono"
-                          style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,.8)" }}
-                        >
-                          {m.label}
-                        </span>
-                        <div className="bar">
-                          <i style={{ width: `${m.value}%` }} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <span
-                    className="mono"
-                    style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,.6)" }}
-                  >
-                    Prêt à keyframer en 1 clic
-                  </span>
-                </GlassCard>
               </GlassCard>
             </Reveal>
           </div>
