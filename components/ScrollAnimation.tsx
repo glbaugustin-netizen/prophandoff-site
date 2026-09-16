@@ -371,9 +371,8 @@ export default function ScrollAnimation({
             }}
           >
             <div
-              className="lg lg-fine"
+              className="glass glass--pill"
               style={{
-                borderRadius: 22,
                 padding: "16px 20px",
                 width: "min(300px, 70vw)",
                 display: "grid",

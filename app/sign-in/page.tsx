@@ -22,7 +22,7 @@ export default async function SignInPage() {
       }}
     >
       <Reveal style={{ width: "min(440px, 100%)" }}>
-        <GlassCard variant="panel" interactive style={{ textAlign: "center" }}>
+        <GlassCard variant="panel" tinted style={{ textAlign: "center" }}>
           <span className="eyebrow" style={{ marginBottom: 22 }}>
             Compte · Gratuit
           </span>

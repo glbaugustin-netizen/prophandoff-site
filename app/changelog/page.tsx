@@ -21,7 +21,7 @@ export default function ChangelogPage() {
       </Reveal>
 
       <Reveal delay={120}>
-        <GlassCard variant="panel" style={{ marginTop: "2.5rem" }}>
+        <GlassCard variant="panel" tinted style={{ marginTop: "2.5rem" }}>
           <ol className="timeline" style={{ margin: 0 }}>
             {entries.map(({ addon, entry }) => (
               <li key={`${addon.slug}-${entry.version}`} className="timeline-item">

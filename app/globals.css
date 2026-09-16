@@ -18,21 +18,6 @@
   --amber: linear-gradient(135deg, #ffc061, #ff8a1e);
   --dot: #ff9a3c;
 
-  /* matière verre */
-  --glass-bg: rgba(255, 255, 255, 0.12);
-  --glass-border: rgba(255, 255, 255, 0.35);
-  --glass-tint: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.24),
-    rgba(255, 255, 255, 0.04) 46%,
-    rgba(255, 255, 255, 0) 62%
-  );
-  --glass-edge:
-    inset 0 1.5px 1px rgba(255, 255, 255, 0.8),
-    inset 0 -14px 30px rgba(255, 255, 255, 0.08),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.28);
-  --glass-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.6);
-
   /* rayons */
   --r-pill: 30px;
   --r-card: 30px;
@@ -50,6 +35,13 @@
   --font-script: var(--font-mea), "Mea Culpa", cursive;
   --font-mono: var(--font-space-mono), "Space Mono", ui-monospace, monospace;
   --nav-h: 96px;
+
+  /* Liquid Glass : les valeurs passent par des variables car le minifieur CSS
+     de Next (Lightning CSS) supprime toute déclaration backdrop-filter
+     contenant url(). Le navigateur, lui, l'accepte très bien. */
+  --bf-glass: saturate(1.6) brightness(1.05) url(#liquid);
+  --bf-glass-tinted: saturate(1.5) brightness(1.02) url(#liquid);
+  --bf-glass-drop: saturate(1.6) brightness(1.1) url(#liquid);
 }
 
 * {
@@ -210,10 +202,13 @@ h3:has(.script) {
   font: 600 12px var(--font-mono);
   color: #fff;
   padding: 8px 14px;
-  border-radius: 20px;
-  background: var(--glass-bg);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08));
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.5),
+    0 4px 10px rgba(15, 20, 15, 0.2);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
   white-space: nowrap;
   transition:
     background 0.3s var(--ease-out),
@@ -221,7 +216,7 @@ h3:has(.script) {
 }
 
 .chip:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.12));
   transform: translateY(-1px);
 }
 
@@ -321,16 +316,20 @@ h3:has(.script) {
 
 .btn-glass {
   color: #fff;
-  background: var(--glass-bg);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5);
-  -webkit-backdrop-filter: blur(4px) saturate(160%);
-  backdrop-filter: blur(4px) saturate(160%);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow:
+    inset 1.5px 1.5px 1px rgba(255, 255, 255, 0.6),
+    inset -1px -1px 3px rgba(255, 255, 255, 0.16),
+    inset 0 0 24px rgba(255, 255, 255, 0.08),
+    0 6px 16px rgba(15, 20, 15, 0.18);
+  -webkit-backdrop-filter: saturate(1.6) brightness(1.05);
+  backdrop-filter: var(--bf-glass);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
 }
 
 .btn-glass:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.06));
   border-color: rgba(255, 255, 255, 0.55);
 }
 
@@ -389,100 +388,107 @@ h3:has(.script) {
 }
 
 /* --------------------------------------------------------------------------
-   Verre liquide (réfraction SVG + teinte + reflets)
+   Liquid Glass (iOS 26) : le verre déforme le fond, il ne le floute pas.
+   Aucun blur() dans les backdrop-filter — la réfraction vient de #liquid.
    -------------------------------------------------------------------------- */
 
-.lg {
+.glass {
   position: relative;
-  border-radius: var(--r-card);
-  isolation: isolate;
-  overflow: hidden; /* clippe la réfraction déplacée ; le box-shadow propre n'est pas affecté */
-  box-shadow: var(--glass-shadow);
-  --mx: 50%;
-  --my: 40%;
-  --spec: 0;
+  overflow: hidden; /* découpe propre du liseré et des coins */
+  border-radius: 34px;
+
+  /* la déformation, SANS flou — le repli -webkit (teinte seule) est déclaré
+     avant pour que la version url() gagne partout où elle est comprise */
+  -webkit-backdrop-filter: saturate(1.6) brightness(1.05);
+  backdrop-filter: var(--bf-glass);
+
+  /* teinte très légère : c'est la déformation qui doit se voir */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+
+  /* le liseré donne l'épaisseur du verre */
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow:
+    inset 1.5px 1.5px 1px rgba(255, 255, 255, 0.6),
+    inset -1px -1px 3px rgba(255, 255, 255, 0.16),
+    inset 0 0 24px rgba(255, 255, 255, 0.08),
+    0 22px 48px rgba(15, 20, 15, 0.3),
+    0 6px 16px rgba(15, 20, 15, 0.18);
 }
 
-.lg::before {
-  /* couche réfraction : le fond animé est déformé par le filtre SVG */
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  border-radius: inherit;
-  overflow: hidden;
-  -webkit-backdrop-filter: blur(2px) saturate(180%) brightness(1.08);
-  backdrop-filter: blur(2px) saturate(180%) brightness(1.08);
-  filter: url(#lg-liquid);
+/* variante teintée foncée : blocs contenant du texte blanc */
+.glass--tinted {
+  background: linear-gradient(135deg, rgba(46, 52, 44, 0.26), rgba(30, 34, 30, 0.12));
+  -webkit-backdrop-filter: saturate(1.5) brightness(1.02);
+  backdrop-filter: var(--bf-glass-tinted);
+  border-color: rgba(255, 255, 255, 0.36);
 }
 
-.lg::after {
-  /* teinte + liserés + reflet spéculaire qui suit le pointeur */
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  pointer-events: none;
-  background:
-    radial-gradient(
-      520px circle at var(--mx) var(--my),
-      rgba(255, 255, 255, calc(0.22 * var(--spec))),
-      transparent 55%
-    ),
-    linear-gradient(
-      105deg,
-      transparent 28%,
-      rgba(255, 255, 255, 0.16) 40%,
-      transparent 52%
-    ),
-    var(--glass-tint);
-  box-shadow: var(--glass-edge);
-  transition: --spec 0.5s var(--ease-out);
+/* pastilles internes (icônes, chips) : pas de backdrop, couche claire sur le verre parent */
+.glass-tile {
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08));
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.5),
+    0 4px 10px rgba(15, 20, 15, 0.2);
+  border-radius: 18px;
 }
 
-.lg-fine::before {
-  filter: url(#lg-liquid-fine);
-  -webkit-backdrop-filter: blur(3px) saturate(170%);
-  backdrop-filter: blur(3px) saturate(170%);
-}
-
-.lg-panel {
-  border-radius: var(--r-panel);
-  padding: clamp(28px, 4vw, 56px) clamp(24px, 4vw, 54px);
-}
-
-.lg-card {
+/* rayons proportionnels à la taille */
+.glass--card {
+  border-radius: 34px;
   padding: 28px;
 }
 
-.lg-hover {
-  transition:
-    transform 0.6s var(--ease-spring),
-    box-shadow 0.4s var(--ease-out);
+.glass--panel {
+  border-radius: 36px;
+  padding: clamp(28px, 4vw, 56px) clamp(24px, 4vw, 54px);
 }
 
-.lg-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 40px 80px -26px rgba(0, 0, 0, 0.7);
+.glass--pill {
+  border-radius: 999px;
 }
 
-.lg > * {
-  position: relative;
-  z-index: 1;
+.glass--sm {
+  border-radius: 18px;
 }
 
-/* petite tuile en verre (icône) */
+/* typo sur verre */
+.glass h1,
+.glass h2,
+.glass h3 {
+  color: #fff;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+}
+
+.glass p,
+.glass li,
+.glass dd,
+.glass dt {
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass--tinted {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(28, 32, 28, 0.88);
+  }
+}
+
+/* petite tuile (icône) */
 .tile {
   width: 52px;
   height: 52px;
-  border-radius: var(--r-tile);
   display: grid;
   place-items: center;
   font-size: 22px;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08));
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.5),
+    0 4px 10px rgba(15, 20, 15, 0.2);
+  border-radius: 18px;
 }
 
 .tile-amber {
@@ -522,8 +528,8 @@ h3:has(.script) {
   align-items: center;
   gap: 12px;
   padding: 14px 18px;
-  border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.28);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
@@ -591,8 +597,9 @@ details.accordion summary::after {
   display: grid;
   place-items: center;
   font-family: var(--font-mono);
-  background: var(--glass-bg);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08));
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.5);
   transition: transform 0.5s var(--ease-spring);
 }
 
@@ -732,12 +739,6 @@ details.accordion[open] summary::after {
   }
 }
 
-@property --spec {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -777,16 +778,17 @@ details.accordion[open] summary::after {
   gap: 14px;
   padding: 8px 8px 8px 20px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.38);
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.35),
-    inset 0 -10px 24px rgba(255, 255, 255, 0.05),
-    0 0 0 6px rgba(255, 255, 255, 0.025),
-    0 24px 60px -24px rgba(0, 0, 0, 0.7),
-    0 0 48px -12px rgba(255, 255, 255, 0.12);
-  -webkit-backdrop-filter: blur(16px) saturate(120%);
-  backdrop-filter: blur(16px) saturate(120%);
+    inset 1.5px 1.5px 1px rgba(255, 255, 255, 0.6),
+    inset -1px -1px 3px rgba(255, 255, 255, 0.16),
+    inset 0 0 24px rgba(255, 255, 255, 0.08),
+    0 22px 48px rgba(15, 20, 15, 0.3),
+    0 6px 16px rgba(15, 20, 15, 0.18);
+  -webkit-backdrop-filter: saturate(1.6) brightness(1.05);
+  backdrop-filter: var(--bf-glass);
   transition:
     padding 0.5s var(--ease-glass),
     gap 0.5s var(--ease-glass);
@@ -846,16 +848,15 @@ details.accordion[open] summary::after {
   left: 0;
   z-index: 0;
   border-radius: 999px;
-  opacity: 0;
+  visibility: hidden;
   transition:
     transform 0.75s var(--ease-spring),
-    width 0.75s var(--ease-spring),
-    opacity 0.3s var(--ease-out);
+    width 0.75s var(--ease-spring);
   will-change: transform, width;
 }
 
 .navx-list > li.navx-bubble.is-visible {
-  opacity: 1;
+  visibility: visible;
 }
 
 .navx-drop {
@@ -882,15 +883,15 @@ details.accordion[open] summary::after {
 }
 
 .navx-drop::before {
-  /* réfraction du fond à travers la goutte */
+  /* réfraction du fond à travers la goutte (sans flou) */
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   border-radius: inherit;
-  -webkit-backdrop-filter: blur(3px) saturate(140%) brightness(1.15);
-  backdrop-filter: blur(3px) saturate(140%) brightness(1.15);
-  filter: url(#lg-liquid-fine);
+  overflow: hidden;
+  -webkit-backdrop-filter: saturate(1.6) brightness(1.1);
+  backdrop-filter: var(--bf-glass-drop);
 }
 
 .navx-drop::after {
@@ -902,8 +903,12 @@ details.accordion[open] summary::after {
   width: 42%;
   height: 38%;
   border-radius: 50%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0));
-  filter: blur(1px);
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0.35) 45%,
+    rgba(255, 255, 255, 0) 75%
+  );
   pointer-events: none;
 }
 
@@ -1083,7 +1088,7 @@ details.accordion[open] summary::after {
   .navx-brand {
     display: none !important;
   }
-  .lg-panel {
+  .glass--panel {
     border-radius: 28px;
   }
 }

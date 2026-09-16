@@ -44,7 +44,7 @@ export default async function DashboardPage() {
       <Reveal>
         <GlassCard
           variant="panel"
-          interactive
+          tinted
           style={{ display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap", marginBottom: 26 }}
         >
           {user.image ? (
@@ -101,7 +101,7 @@ export default async function DashboardPage() {
       </Reveal>
 
       <Reveal delay={100}>
-        <GlassCard>
+        <GlassCard tinted>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
             <span className="eyebrow">Mes téléchargements</span>
             <span className="chip">{downloads.length}</span>

@@ -4,9 +4,8 @@ export default function Footer() {
   return (
     <footer className="container" style={{ padding: "2rem 0 2.5rem", position: "relative", zIndex: 1 }}>
       <div
-        className="lg lg-fine"
+        className="glass glass--pill"
         style={{
-          borderRadius: 40,
           padding: "14px 22px",
           display: "flex",
           alignItems: "center",

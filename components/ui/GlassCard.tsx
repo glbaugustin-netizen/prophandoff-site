@@ -1,77 +1,40 @@
-"use client";
-
-import {
-  useCallback,
-  useRef,
-  type CSSProperties,
-  type ElementType,
-  type PointerEvent,
-  type ReactNode,
-} from "react";
+import type { CSSProperties, ElementType, ReactNode } from "react";
 
 interface GlassCardProps {
   children: ReactNode;
   style?: CSSProperties;
   className?: string;
-  /** Variante : "card" (30px) ou "panel" (38px, padding large). */
+  /** Rayon : "card" (34px) ou "panel" (36px, padding large). */
   variant?: "card" | "panel";
-  /** Réfraction plus fine (pilules, petits éléments). */
-  fine?: boolean;
-  /** Reflet spéculaire qui suit le pointeur + léger lift au survol. */
-  interactive?: boolean;
+  /** Verre teinté foncé : à utiliser dès que le bloc contient du texte clair. */
+  tinted?: boolean;
   as?: ElementType;
 }
 
 /**
- * Carte "liquid glass" : réfraction SVG du fond (::before), teinte + liserés +
- * reflet spéculaire (::after). Le contenu est rendu au-dessus (z-index 1).
+ * Surface « Liquid Glass » : le fond n'est pas flouté, il est déformé par le
+ * filtre SVG #liquid (voir LiquidFilters). Surface statique — aucun effet
+ * lié au pointeur.
  */
 export default function GlassCard({
   children,
   style,
   className,
   variant = "card",
-  fine = false,
-  interactive = false,
+  tinted = false,
   as: Tag = "div",
 }: GlassCardProps) {
-  const ref = useRef<HTMLElement | null>(null);
-
-  const onMove = useCallback((e: PointerEvent<HTMLElement>) => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
-  }, []);
-
-  const onEnter = useCallback(() => {
-    ref.current?.style.setProperty("--spec", "1");
-  }, []);
-
-  const onLeave = useCallback(() => {
-    ref.current?.style.setProperty("--spec", "0");
-  }, []);
-
   const classes = [
-    "lg",
-    variant === "panel" ? "lg-panel" : "lg-card",
-    fine ? "lg-fine" : "",
-    interactive ? "lg-hover" : "",
+    "glass",
+    tinted ? "glass--tinted" : "",
+    variant === "panel" ? "glass--panel" : "glass--card",
     className ?? "",
   ]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <Tag
-      ref={ref}
-      className={classes}
-      style={style}
-      onPointerMove={interactive ? onMove : undefined}
-      onPointerEnter={interactive ? onEnter : undefined}
-      onPointerLeave={interactive ? onLeave : undefined}
-    >
+    <Tag className={classes} style={style}>
       {children}
     </Tag>
   );

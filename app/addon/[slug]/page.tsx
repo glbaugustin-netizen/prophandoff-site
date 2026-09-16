@@ -38,7 +38,7 @@ export default async function AddonPage({ params }: PageProps) {
     <div className="container page">
       {/* Hero */}
       <Reveal>
-        <GlassCard variant="panel" interactive style={{ marginBottom: 26 }}>
+        <GlassCard variant="panel" tinted style={{ marginBottom: 26 }}>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 22 }}>
             <span className="chip chip-amber">v{addon.version}</span>
             <span className="chip chip-live">gratuit</span>
@@ -87,7 +87,7 @@ export default async function AddonPage({ params }: PageProps) {
         <div style={{ display: "grid", gap: 26 }}>
           {/* Features */}
           <Reveal delay={80}>
-            <GlassCard interactive>
+            <GlassCard tinted>
               <span className="eyebrow">Fonctionnalités</span>
               <p className="muted" style={{ marginTop: 18, lineHeight: 1.55 }}>
                 {addon.description}
@@ -102,7 +102,7 @@ export default async function AddonPage({ params }: PageProps) {
 
           {/* Changelog accordéon */}
           <Reveal delay={140}>
-            <GlassCard>
+            <GlassCard tinted>
               <span className="eyebrow" style={{ marginBottom: 18 }}>
                 Changelog
               </span>
@@ -132,7 +132,7 @@ export default async function AddonPage({ params }: PageProps) {
 
         {/* Sidebar */}
         <Reveal delay={200} style={{ position: "sticky", top: "calc(var(--nav-h) + 8px)" }}>
-          <GlassCard fine style={{ borderRadius: 34 }}>
+          <GlassCard tinted>
             <div
               className="mono"
               style={{

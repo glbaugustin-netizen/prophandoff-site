@@ -55,7 +55,7 @@ export default function HomePage() {
           <div className="grid-3">
             {BENEFITS.map((b, i) => (
               <Reveal key={b.title} delay={i * 110}>
-                <GlassCard interactive style={{ height: "100%", display: "grid", gap: 18 }}>
+                <GlassCard tinted style={{ height: "100%", display: "grid", gap: 18 }}>
                   <span className="tile" aria-hidden="true">
                     {b.icon}
                   </span>
@@ -77,7 +77,7 @@ export default function HomePage() {
             <Reveal>
               <GlassCard
                 variant="panel"
-                interactive
+                tinted
                 style={{ maxWidth: 760, marginInline: "auto", textAlign: "center" }}
               >
                 <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 22 }}>
