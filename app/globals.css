@@ -837,7 +837,8 @@ details.accordion[open] summary::after {
   z-index: 1;
 }
 
-/* bulle liquid glass : glisse et s'étire sous l'élément sélectionné */
+/* goutte liquid glass : glisse sous l'élément sélectionné avec un mouvement
+   naturel (ressort + squash & stretch), bien visible comme une goutte d'eau */
 .navx-list > li.navx-bubble {
   position: absolute;
   top: 3px;
@@ -846,59 +847,85 @@ details.accordion[open] summary::after {
   z-index: 0;
   border-radius: 999px;
   opacity: 0;
-  isolation: isolate;
-  background: rgba(255, 255, 255, 0.16);
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.85),
-    inset 0 -6px 12px rgba(255, 255, 255, 0.14),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
-    0 6px 18px -6px rgba(0, 0, 0, 0.6),
-    0 0 24px -4px rgba(255, 255, 255, 0.28);
   transition:
-    transform 0.65s var(--ease-spring),
-    width 0.65s var(--ease-spring),
+    transform 0.75s var(--ease-spring),
+    width 0.75s var(--ease-spring),
     opacity 0.3s var(--ease-out);
   will-change: transform, width;
 }
 
-.navx-bubble::before {
-  /* réfraction fine du fond (comme les cartes) */
+.navx-list > li.navx-bubble.is-visible {
+  opacity: 1;
+}
+
+.navx-drop {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  isolation: isolate;
+  transform-origin: 50% 50%;
+  /* corps de la goutte : plus clair en haut à gauche, rebord lumineux */
+  background: radial-gradient(
+    120% 100% at 32% 12%,
+    rgba(255, 255, 255, 0.66),
+    rgba(255, 255, 255, 0.3) 42%,
+    rgba(255, 255, 255, 0.16) 78%
+  );
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 1),
+    inset 0 -8px 14px rgba(255, 255, 255, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.65),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.3),
+    0 2px 6px rgba(0, 0, 0, 0.45),
+    0 10px 22px -6px rgba(0, 0, 0, 0.75),
+    0 0 30px -2px rgba(255, 255, 255, 0.45);
+}
+
+.navx-drop::before {
+  /* réfraction du fond à travers la goutte */
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   border-radius: inherit;
-  -webkit-backdrop-filter: blur(3px) saturate(140%) brightness(1.1);
-  backdrop-filter: blur(3px) saturate(140%) brightness(1.1);
+  -webkit-backdrop-filter: blur(3px) saturate(140%) brightness(1.15);
+  backdrop-filter: blur(3px) saturate(140%) brightness(1.15);
   filter: url(#lg-liquid-fine);
 }
 
-.navx-bubble::after {
-  /* reflet spéculaire qui balaie la bulle à chaque déplacement */
+.navx-drop::after {
+  /* point de lumière en haut à gauche, comme sur une goutte */
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.35) 50%,
-    transparent 70%
-  );
-  background-size: 250% 100%;
-  animation: navx-sheen 1.2s var(--ease-glass);
+  top: 3px;
+  left: 12%;
+  width: 42%;
+  height: 38%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0));
+  filter: blur(1px);
+  pointer-events: none;
 }
 
-.navx-bubble.is-visible {
-  opacity: 1;
+.navx-drop.is-moving {
+  animation: navx-stretch 0.75s var(--ease-glass);
 }
 
-@keyframes navx-sheen {
-  from {
-    background-position: 120% 0;
+@keyframes navx-stretch {
+  0% {
+    transform: scale(1);
   }
-  to {
-    background-position: -120% 0;
+  30% {
+    transform: scaleX(1.22) scaleY(0.84);
+  }
+  62% {
+    transform: scaleX(0.94) scaleY(1.08);
+  }
+  82% {
+    transform: scaleX(1.03) scaleY(0.98);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
@@ -935,7 +962,9 @@ details.accordion[open] summary::after {
 
 .navx-item.is-active {
   color: #fff;
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.45),
+    0 0 12px rgba(255, 255, 255, 0.35);
 }
 
 .navx-icon {

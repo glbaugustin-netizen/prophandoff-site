@@ -103,6 +103,15 @@ export default function Navbar() {
     visible: false,
   });
 
+  // À chaque changement de sélection, la goutte rejoue son squash & stretch
+  // (l'élément interne est re-monté via `key`, l'animation repart de zéro).
+  const [moveKey, setMoveKey] = useState(0);
+  const prevActive = useRef<string | null>(active);
+  useEffect(() => {
+    if (prevActive.current !== active && active) setMoveKey((k) => k + 1);
+    prevActive.current = active;
+  }, [active]);
+
   // La bulle se cale sur l'élément sélectionné (mesure DOM → transform/width).
   const measure = useCallback((): void => {
     const list = listRef.current;
@@ -157,7 +166,9 @@ export default function Navbar() {
             aria-hidden="true"
             className={`navx-bubble${bubble.visible ? " is-visible" : ""}`}
             style={{ transform: `translateX(${bubble.x}px)`, width: bubble.w }}
-          />
+          >
+            <span key={moveKey} className={`navx-drop${moveKey > 0 ? " is-moving" : ""}`} />
+          </li>
           {ITEMS.map((it) => {
             const on = active === it.href;
             return (
