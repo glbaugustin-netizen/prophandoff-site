@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ScrollAnimation from "@/components/ScrollAnimation";
+import HeroSkip from "@/components/HeroSkip";
 import GlassCard from "@/components/ui/GlassCard";
 import DownloadButton from "@/components/ui/DownloadButton";
 import Reveal from "@/components/ui/Reveal";
@@ -37,6 +38,7 @@ export default function HomePage() {
         }}
         stop2={{ frame: 110, title: "Votre rig *sous contrôle*" }}
       />
+      <HeroSkip />
 
       {/* Ce que PropHandoff change */}
       <section className="section after-hero" id="benefits">

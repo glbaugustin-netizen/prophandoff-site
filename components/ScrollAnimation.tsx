@@ -63,6 +63,11 @@ const FADE_IN_VH = 30; // fade in du texte sur les 30 premiers vh du stop
 const FADE_OUT_VH = 15; // fade out sur les derniers vh du stop 1
 const INTRO_FADE_VH = 12; // fade out du titre d'intro
 
+/** Id de la section (utilisé par HeroSkip pour se positionner dessous). */
+export const HERO_SECTION_ID = "hero";
+/** Clé sessionStorage posée quand l'animation a été scrollée jusqu'au bout. */
+export const HERO_DONE_KEY = "prophandoff:hero-done";
+
 const pad4 = (n: number): string => String(n).padStart(4, "0");
 
 /** Charge une image ; résout `null` si elle n'existe pas (404). */
@@ -199,6 +204,17 @@ export default function ScrollAnimation({
 
   const { progress } = useScrollProgress(sectionRef, onFrame, { smoothing });
 
+  // Une fois l'animation vue jusqu'au bout, on s'en souvient pour la session :
+  // les retours sur l'accueil se positionnent directement sous le hero.
+  useEffect(() => {
+    if (progress < 0.999) return;
+    try {
+      window.sessionStorage.setItem(HERO_DONE_KEY, "1");
+    } catch {
+      /* stockage indisponible : on ignore */
+    }
+  }, [progress]);
+
   // Un resize invalide le rendu courant → redraw au prochain tick.
   useEffect(() => {
     const onResize = (): void => {
@@ -321,6 +337,7 @@ export default function ScrollAnimation({
   return (
     <section
       ref={sectionRef}
+      id={HERO_SECTION_ID}
       style={{ height: `${TOTAL_VH}vh`, position: "relative", background: WAVE_COLOR }}
     >
       <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden" }}>
