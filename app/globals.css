@@ -649,6 +649,9 @@ details.accordion[open] summary::after {
    Reveal on scroll
    -------------------------------------------------------------------------- */
 
+/* Pas de will-change ici : il ferait du wrapper un "backdrop root" et les
+   surfaces liquid glass qu'il contient n'auraient plus rien à réfracter.
+   Une fois apparu (.is-in), le wrapper redevient totalement neutre. */
 .reveal {
   opacity: 0;
   transform: translateY(30px) scale(0.985);
@@ -656,7 +659,6 @@ details.accordion[open] summary::after {
     opacity 0.9s var(--ease-out),
     transform 0.9s var(--ease-out);
   transition-delay: var(--d, 0ms);
-  will-change: opacity, transform;
 }
 
 .reveal.is-in {
