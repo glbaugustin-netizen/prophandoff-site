@@ -73,56 +73,9 @@ export default async function HomePage() {
       />
       <HeroSkip />
 
-      {/* Hero SEO : h1 + sous-titre, texte brut */}
-      <section className="section after-hero" id="intro">
-        <div className="container">
-          <Reveal>
-            <span className="eyebrow">{t.home.eyebrow}</span>
-            <MixedTitle as="h1" className="section-title" text={t.home.h1} />
-            <p className="section-lead">{t.home.subtitle}</p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Fonctionnalités : h2 + 3 blocs, texte brut (pas de verre) */}
-      <section className="section" id="features" style={{ paddingTop: 0 }}>
-        <div className="container">
-          <Reveal>
-            <MixedTitle as="h2" className="section-title section-title--sm" text={t.home.featuresTitle} />
-          </Reveal>
-          <div className="grid-3 features">
-            {t.home.features.map((f, i) => (
-              <Reveal key={f.title} delay={i * 110}>
-                <article className="feature">
-                  <span className="tile" aria-hidden="true">
-                    {FEATURE_ICONS[i]}
-                  </span>
-                  <MixedTitle as="h3" text={f.title} className="feature-title" />
-                  <p className="muted" style={{ lineHeight: 1.55 }}>
-                    {f.body}
-                  </p>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Cas d'usage : longue traîne, texte brut */}
-      <section className="section" id="use-cases" style={{ paddingTop: 0 }}>
-        <div className="container">
-          <Reveal>
-            <MixedTitle as="h2" className="section-title section-title--sm" text={t.home.useCaseTitle} />
-            <p className="section-lead" style={{ maxWidth: "70ch" }}>
-              {t.home.useCaseText}
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Bulle de téléchargement */}
+      {/* Bulle de téléchargement, juste sous le hero */}
       {addon && (
-        <section className="section" id="addon" style={{ paddingTop: 0 }}>
+        <section className="section after-hero" id="addon">
           <div className="container">
             <Reveal>
               <GlassCard
@@ -167,6 +120,53 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Hero SEO : h1 + sous-titre, texte brut */}
+      <section className="section" id="intro" style={{ paddingTop: 0 }}>
+        <div className="container">
+          <Reveal>
+            <span className="eyebrow">{t.home.eyebrow}</span>
+            <MixedTitle as="h1" className="section-title" text={t.home.h1} />
+            <p className="section-lead">{t.home.subtitle}</p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Fonctionnalités : h2 + 3 blocs, texte brut (pas de verre) */}
+      <section className="section" id="features" style={{ paddingTop: 0 }}>
+        <div className="container">
+          <Reveal>
+            <MixedTitle as="h2" className="section-title section-title--sm" text={t.home.featuresTitle} />
+          </Reveal>
+          <div className="grid-3 features">
+            {t.home.features.map((f, i) => (
+              <Reveal key={f.title} delay={i * 110}>
+                <article className="feature">
+                  <span className="tile" aria-hidden="true">
+                    {FEATURE_ICONS[i]}
+                  </span>
+                  <MixedTitle as="h3" text={f.title} className="feature-title" />
+                  <p className="muted" style={{ lineHeight: 1.55 }}>
+                    {f.body}
+                  </p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Cas d'usage : longue traîne, texte brut */}
+      <section className="section" id="use-cases" style={{ paddingTop: 0 }}>
+        <div className="container">
+          <Reveal>
+            <MixedTitle as="h2" className="section-title section-title--sm" text={t.home.useCaseTitle} />
+            <p className="section-lead" style={{ maxWidth: "70ch" }}>
+              {t.home.useCaseText}
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
       {/* FAQ : texte brut, + données structurées FAQPage */}
       <section className="section" id="faq" style={{ paddingTop: 0 }}>
