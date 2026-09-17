@@ -11,7 +11,7 @@ import type { CSSProperties } from "react";
  */
 interface MixedTitleProps {
   text: string;
-  as?: "h1" | "h2" | "h3";
+  as?: "h1" | "h2" | "h3" | "p";
   className?: string;
   style?: CSSProperties;
 }

@@ -35,7 +35,7 @@ const spaceMono = Space_Mono({
   display: "swap",
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://prophandoff-site.vercel.app";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -44,8 +44,11 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(SITE_URL),
     title: { default: t.meta.title, template: "%s · PropHandoff" },
     description: t.meta.description,
+    keywords: t.meta.keywords,
+    alternates: { canonical: "/" },
+    robots: { index: true, follow: true },
     openGraph: {
-      title: "PropHandoff",
+      title: t.meta.ogTitle,
       description: t.meta.ogDescription,
       url: SITE_URL,
       siteName: "PropHandoff",
@@ -55,8 +58,8 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: "PropHandoff",
-      description: t.meta.ogDescription,
+      title: t.meta.ogTitle,
+      description: t.meta.twitterDescription,
       images: ["/frames/frame_0060-stop.webp"],
     },
   };

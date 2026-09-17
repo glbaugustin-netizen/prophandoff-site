@@ -14,7 +14,14 @@ export function isLocale(value: unknown): value is Locale {
 /* ------------------------------------------------------------------ */
 
 export interface Dictionary {
-  meta: { title: string; description: string; ogDescription: string };
+  meta: {
+    title: string;
+    description: string;
+    keywords: string;
+    ogTitle: string;
+    ogDescription: string;
+    twitterDescription: string;
+  };
   nav: {
     home: string;
     addon: string;
@@ -27,20 +34,26 @@ export interface Dictionary {
   hero: {
     intro: string;
     stop1: string;
+    stop1Description: string;
     stop2: string;
+    stop2Description: string;
     scroll: string;
     loading: string;
   };
   home: {
-    whyEyebrow: string;
-    whyTitle: string;
-    whyLead: string;
-    benefits: { title: string; body: string }[];
-    downloadTool: string;
-    seeDetails: string;
+    eyebrow: string;
+    h1: string;
+    subtitle: string;
+    features: { title: string; body: string }[];
+    ctaPrimary: string;
+    ctaSecondary: string;
     blenderChip: string;
+    about: string;
   };
   addon: {
+    pageTitle: string;
+    pageDescription: string;
+    h1: string;
     free: string;
     download: string;
     viewGithub: string;
@@ -71,6 +84,8 @@ export interface Dictionary {
     pageTitle: string;
   };
   changelog: {
+    pageTitle: string;
+    pageDescription: string;
     eyebrow: string;
     title: string;
     lead: string;
@@ -80,10 +95,14 @@ export interface Dictionary {
 
 const fr: Dictionary = {
   meta: {
-    title: "PropHandoff — Transfert d'objets en une seconde dans Blender",
+    title: "PropHandoff — Addon Blender pour l'animation des mains",
     description:
-      "PropHandoff est un addon Blender qui keyframe automatiquement le transfert d'un objet entre deux parents, au frame exact. Gratuit.",
-    ogDescription: "Passez un objet d'une main à l'autre en une seconde. Addon Blender gratuit.",
+      "Addon Blender gratuit pour passer des objets entre les mains, gérer les prises à deux mains et les transferts de props. Gagnez des heures de contraintes manuelles.",
+    keywords:
+      "addon blender, prop handoff, animation des mains, addon blender gratuit, rig arme deux mains, mains IK blender, transfert de prop blender",
+    ogTitle: "PropHandoff — Addon Blender d'animation de props",
+    ogDescription: "Passez des objets entre les mains en un clic. Addon Blender gratuit.",
+    twitterDescription: "Addon Blender gratuit pour gérer les transferts de props entre les mains.",
   },
   nav: {
     home: "Accueil",
@@ -96,35 +115,45 @@ const fr: Dictionary = {
   },
   hero: {
     intro: "PropHandoff",
-    stop1: "Rigger un objet à un personnage *facilement* en *une seconde*",
-    stop2: "Votre rig *sous contrôle*",
+    stop1: "Passer un prop *en un clic*",
+    stop1Description:
+      "Plus de contraintes Child Of à la main. PropHandoff keyframe le transfert automatiquement, au frame exact.",
+    stop2: "Votre rig, *sous contrôle*",
+    stop2Description:
+      "Chaque transfert de prop est visible sur votre timeline. Naviguez, ajustez, itérez — sans perdre votre travail.",
     scroll: "SCROLL",
     loading: "Chargement",
   },
   home: {
-    whyEyebrow: "Pourquoi",
-    whyTitle: "Ce que PropHandoff *change*",
-    whyLead:
-      "Le transfert d'un objet entre deux mains, deux personnages ou deux props est l'une des opérations les plus pénibles de l'animation Blender. Plus maintenant.",
-    benefits: [
+    eyebrow: "Addon Blender gratuit",
+    h1: "L'addon Blender pour *l'animation des mains*",
+    subtitle:
+      "Arrêtez de perdre des heures sur les contraintes Child Of. PropHandoff gère les transferts de props, les prises à deux mains et les lâchers — en un clic.",
+    features: [
       {
-        title: "Zéro contrainte à la main",
-        body: "Child Of, influence, compensation de transform : PropHandoff génère tout au frame exact. Vous cliquez, c'est keyframé.",
+        title: "Passez des objets *instantanément*",
+        body: "Assignez n'importe quel prop à une main au frame courant. PropHandoff keyframe les contraintes automatiquement — sans configuration Child Of manuelle.",
       },
       {
-        title: "Lisible sur la timeline",
-        body: "Chaque transfert est marqué. Vous voyez d'un coup d'œil qui tient quoi, et quand, sans ouvrir le Graph Editor.",
+        title: "Système de *prise à deux mains*",
+        body: "Définissez des points de prise sur les armes et les props longs. Les deux mains se placent avec un blending IK fluide.",
       },
       {
-        title: "Non destructif",
-        body: "Un handoff se déplace, se supprime ou se rejoue. Le rig reste propre, aucune constraint fantôme oubliée.",
+        title: "*Contrôle total* de la timeline",
+        body: "Visualisez chaque transfert de prop sur votre timeline. Naviguez entre les événements, revenez en arrière, ajustez — depuis la sidebar.",
       },
     ],
-    downloadTool: "Télécharger l'outil",
-    seeDetails: "Voir les détails",
+    ctaPrimary: "Télécharger gratuitement pour Blender 3.6+",
+    ctaSecondary: "Voir sur GitHub",
     blenderChip: "Blender",
+    about:
+      "PropHandoff est un addon Blender gratuit et open source pour les animateurs. Conçu pour les animateurs de personnages, les développeurs de jeux et les artistes 3D.",
   },
   addon: {
+    pageTitle: "PropHandoff v1.0.0 — Addon Blender gratuit d'animation des mains",
+    pageDescription:
+      "Téléchargez PropHandoff gratuitement. Gérez les transferts de props entre les mains, les prises à deux mains et les lâchers directement dans la sidebar de Blender. Compatible Blender 3.6+.",
+    h1: "PropHandoff — Addon Blender *gratuit*",
     free: "gratuit",
     download: "Télécharger",
     viewGithub: "Voir sur GitHub",
@@ -155,6 +184,8 @@ const fr: Dictionary = {
     pageTitle: "Connexion",
   },
   changelog: {
+    pageTitle: "Changelog — Addon Blender PropHandoff",
+    pageDescription: "Historique des versions et mises à jour de l'addon Blender PropHandoff.",
     eyebrow: "Historique",
     title: "*Changelog*",
     lead: "Toutes les versions publiées, addon par addon.",
@@ -164,10 +195,14 @@ const fr: Dictionary = {
 
 const en: Dictionary = {
   meta: {
-    title: "PropHandoff — Hand off objects in one second in Blender",
+    title: "PropHandoff — Blender Addon for Hand Animation",
     description:
-      "PropHandoff is a Blender addon that automatically keyframes the transfer of an object between two parents, on the exact frame. Free.",
-    ogDescription: "Pass an object from one hand to the other in one second. Free Blender addon.",
+      "Free Blender addon to pass objects between hands, manage two-handed grips and prop transfers. Save hours of manual constraint work.",
+    keywords:
+      "blender addon, prop handoff, hand animation, blender free addon, two handed weapon rig, IK hands blender, blender hand prop transfer",
+    ogTitle: "PropHandoff — Blender Prop Animation Addon",
+    ogDescription: "Pass objects between hands in one click. Free Blender addon.",
+    twitterDescription: "Free Blender addon to manage prop transfers between hands.",
   },
   nav: {
     home: "Home",
@@ -180,35 +215,45 @@ const en: Dictionary = {
   },
   hero: {
     intro: "PropHandoff",
-    stop1: "Rig an object to a character *easily* in *one second*",
-    stop2: "Your rig *under control*",
+    stop1: "Pass a prop *in one click*",
+    stop1Description:
+      "No more manual Child Of constraints. PropHandoff keyframes the transfer automatically at the exact frame.",
+    stop2: "Your rig, *under control*",
+    stop2Description:
+      "Every prop transfer is visible on your timeline. Navigate, adjust, iterate — without losing your work.",
     scroll: "SCROLL",
     loading: "Loading",
   },
   home: {
-    whyEyebrow: "Why",
-    whyTitle: "What PropHandoff *changes*",
-    whyLead:
-      "Handing an object from one hand, character or prop to another is one of the most tedious operations in Blender animation. Not anymore.",
-    benefits: [
+    eyebrow: "Free Blender animation addon",
+    h1: "The Blender Addon for *Hand Animation*",
+    subtitle:
+      "Stop wasting hours on Child Of constraints. PropHandoff handles prop transfers, two-handed grips and releases — in one click.",
+    features: [
       {
-        title: "Zero constraints by hand",
-        body: "Child Of, influence, transform compensation: PropHandoff generates everything on the exact frame. You click, it's keyframed.",
+        title: "Pass objects *instantly*",
+        body: "Assign any prop to a hand at the current frame. PropHandoff keyframes the constraints automatically — no manual Child Of setup.",
       },
       {
-        title: "Readable on the timeline",
-        body: "Every handoff is marked. You see at a glance who holds what, and when, without opening the Graph Editor.",
+        title: "Two-handed *grip system*",
+        body: "Define grip points on weapons and long props. Both hands snap to position with smooth IK blending.",
       },
       {
-        title: "Non-destructive",
-        body: "A handoff can be moved, deleted or replayed. The rig stays clean, no forgotten ghost constraint.",
+        title: "Full *timeline control*",
+        body: "See every prop transfer on your timeline. Navigate between events, go back, adjust — all from the sidebar.",
       },
     ],
-    downloadTool: "Download the tool",
-    seeDetails: "See details",
+    ctaPrimary: "Download Free for Blender 3.6+",
+    ctaSecondary: "View on GitHub",
     blenderChip: "Blender",
+    about:
+      "PropHandoff is a free, open-source Blender addon for animators. Built for character animators, game developers and 3D artists.",
   },
   addon: {
+    pageTitle: "PropHandoff v1.0.0 — Free Blender Hand Animation Addon",
+    pageDescription:
+      "Download PropHandoff free. Manage prop transfers between hands, two-handed grips and releases directly in Blender's sidebar. Compatible Blender 3.6+.",
+    h1: "PropHandoff — *Free* Blender Addon",
     free: "free",
     download: "Download",
     viewGithub: "View on GitHub",
@@ -239,6 +284,8 @@ const en: Dictionary = {
     pageTitle: "Sign in",
   },
   changelog: {
+    pageTitle: "Changelog — PropHandoff Blender Addon",
+    pageDescription: "Version history and updates for the PropHandoff Blender addon.",
     eyebrow: "History",
     title: "*Changelog*",
     lead: "Every published version, addon by addon.",

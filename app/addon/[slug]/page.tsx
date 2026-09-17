@@ -18,9 +18,15 @@ export function generateStaticParams(): Array<{ slug: string }> {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const addon = getAddon(slug, await getLocale());
+  const locale = await getLocale();
+  const addon = getAddon(slug, locale);
   if (!addon) return {};
-  return { title: addon.name, description: addon.tagline };
+  const t = getDictionary(locale);
+  return {
+    title: { absolute: t.addon.pageTitle },
+    description: t.addon.pageDescription,
+    alternates: { canonical: `/addon/${addon.slug}` },
+  };
 }
 
 const dtStyle = {
@@ -47,11 +53,12 @@ export default async function AddonPage({ params }: PageProps) {
             <span className="chip chip-amber">v{addon.version}</span>
             <span className="chip chip-live">{t.addon.free}</span>
             <span className="chip">Blender {addon.blender}</span>
+            <span className="chip">v{addon.version}</span>
           </div>
           <MixedTitle
             as="h1"
-            text={`${addon.name} *v${addon.version}*`}
-            style={{ fontSize: "clamp(2.6rem, 6vw, 4.6rem)", marginBottom: ".35em" }}
+            text={t.addon.h1}
+            style={{ fontSize: "clamp(2.4rem, 5.5vw, 4.2rem)", marginBottom: ".35em" }}
           />
           <p
             style={{
@@ -68,7 +75,7 @@ export default async function AddonPage({ params }: PageProps) {
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
             <DownloadButton slug={addon.slug} label={t.addon.download} />
             <a
-              href="https://github.com/placeholder/prop-handoff"
+              href="https://github.com/studioslay696-ux/prop-handoff"
               target="_blank"
               rel="noreferrer"
               className="btn btn-glass"

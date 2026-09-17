@@ -7,7 +7,14 @@ import { getAddons, formatDate } from "@/lib/addons";
 import { getDictionary } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale-server";
 
-export const metadata: Metadata = { title: "Changelog" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = getDictionary(await getLocale());
+  return {
+    title: { absolute: t.changelog.pageTitle },
+    description: t.changelog.pageDescription,
+    alternates: { canonical: "/changelog" },
+  };
+}
 
 export default async function ChangelogPage() {
   const locale = await getLocale();

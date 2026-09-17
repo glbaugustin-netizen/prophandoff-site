@@ -175,6 +175,38 @@ h3:has(.script) {
   background: linear-gradient(180deg, var(--bg) 0%, rgba(14, 16, 22, 0) 45vh);
 }
 
+/* fonctionnalités de la landing : texte brut, pas de verre */
+.feature {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  padding: 8px 4px;
+}
+
+.feature-title {
+  font-size: 1.45rem;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+}
+
+.feature .tile {
+  width: 46px;
+  height: 46px;
+  font-size: 20px;
+}
+
+/* texte de présentation sous la bulle de téléchargement */
+.about {
+  max-width: 60ch;
+  margin: 2.2rem auto 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+}
+
 /* --------------------------------------------------------------------------
    Eyebrow / chips / badges
    -------------------------------------------------------------------------- */

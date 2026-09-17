@@ -28,8 +28,10 @@ import { useLang } from "./LanguageProvider";
 
 export interface StopContent {
   frame: number;
-  /** Titre (syntaxe *mot* pour le manuscrit). Seul texte affiché au stop. */
+  /** Titre (syntaxe *mot* pour le manuscrit). */
   title: string;
+  /** Phrase courte sous le titre (texte brut, sans panneau). */
+  description?: string;
 }
 
 export interface IntroContent {
@@ -109,12 +111,22 @@ const overlayWrapStyle = (opacity: number): CSSProperties => ({
   zIndex: 2,
 });
 
-/** Le titre glisse légèrement vers le haut en apparaissant. */
-const overlayTitleStyle = (opacity: number): CSSProperties => ({
-  ...headingStyle,
-  maxWidth: "14ch",
+/** Le bloc titre + description glisse légèrement vers le haut en apparaissant. */
+const overlayBlockStyle = (opacity: number): CSSProperties => ({
+  maxWidth: "min(560px, 100%)",
   transform: `translateY(${((1 - opacity) * 28).toFixed(1)}px)`,
 });
+
+const overlayTitleStyle: CSSProperties = { ...headingStyle, maxWidth: "14ch" };
+
+const overlayTextStyle: CSSProperties = {
+  margin: "18px 0 0",
+  maxWidth: "44ch",
+  fontSize: "clamp(1rem, 1.3vw, 1.15rem)",
+  lineHeight: 1.5,
+  color: "rgba(255,255,255,.92)",
+  textShadow: "0 1px 8px rgba(0,0,0,.5), 0 0 30px rgba(0,0,0,.35)",
+};
 
 /* ------------------------------------------------------------------ */
 /*  Composant                                                          */
@@ -409,21 +421,27 @@ export default function ScrollAnimation({
             }}
           >
             <MixedTitle
-              as="h1"
+              as="p"
               text={intro.title}
               style={{ ...headingStyle, fontSize: "clamp(3rem, 8vw, 7rem)" }}
             />
           </div>
         )}
 
-        {/* Overlay stop 1 : titre seul */}
+        {/* Overlay stop 1 : titre + phrase, posés sur la vidéo (pas de verre) */}
         <div style={overlayWrapStyle(derived.stop1Opacity)} aria-hidden={derived.stop1Opacity === 0}>
-          <MixedTitle as="h2" text={stop1.title} style={overlayTitleStyle(derived.stop1Opacity)} />
+          <div style={overlayBlockStyle(derived.stop1Opacity)}>
+            <MixedTitle as="h2" text={stop1.title} style={overlayTitleStyle} />
+            {stop1.description && <p style={overlayTextStyle}>{stop1.description}</p>}
+          </div>
         </div>
 
-        {/* Overlay stop 2 : titre seul */}
+        {/* Overlay stop 2 */}
         <div style={overlayWrapStyle(derived.stop2Opacity)} aria-hidden={derived.stop2Opacity === 0}>
-          <MixedTitle as="h2" text={stop2.title} style={overlayTitleStyle(derived.stop2Opacity)} />
+          <div style={overlayBlockStyle(derived.stop2Opacity)}>
+            <MixedTitle as="h2" text={stop2.title} style={overlayTitleStyle} />
+            {stop2.description && <p style={overlayTextStyle}>{stop2.description}</p>}
+          </div>
         </div>
 
         {/* Indicateur scroll */}

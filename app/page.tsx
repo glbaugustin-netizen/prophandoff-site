@@ -1,4 +1,3 @@
-import Link from "next/link";
 import ScrollAnimation from "@/components/ScrollAnimation";
 import HeroSkip from "@/components/HeroSkip";
 import GlassCard from "@/components/ui/GlassCard";
@@ -9,7 +8,8 @@ import { getAddon } from "@/lib/addons";
 import { getDictionary } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale-server";
 
-const BENEFIT_ICONS = ["⌘", "◔", "↺"];
+const GITHUB_URL = "https://github.com/studioslay696-ux/prop-handoff";
+const FEATURE_ICONS = ["⌘", "✋", "◔"];
 
 export default async function HomePage() {
   const locale = await getLocale();
@@ -20,38 +20,38 @@ export default async function HomePage() {
     <>
       <ScrollAnimation
         intro={{ title: t.hero.intro }}
-        stop1={{ frame: 60, title: t.hero.stop1 }}
-        stop2={{ frame: 110, title: t.hero.stop2 }}
+        stop1={{ frame: 60, title: t.hero.stop1, description: t.hero.stop1Description }}
+        stop2={{ frame: 110, title: t.hero.stop2, description: t.hero.stop2Description }}
       />
       <HeroSkip />
 
-      {/* Ce que PropHandoff change */}
-      <section className="section after-hero" id="benefits">
+      {/* Bloc SEO : h1 + sous-titre + 3 fonctionnalités, en texte brut (pas de verre) */}
+      <section className="section after-hero" id="features">
         <div className="container">
           <Reveal>
-            <span className="eyebrow">{t.home.whyEyebrow}</span>
-            <MixedTitle as="h2" className="section-title" text={t.home.whyTitle} />
-            <p className="section-lead">{t.home.whyLead}</p>
+            <span className="eyebrow">{t.home.eyebrow}</span>
+            <MixedTitle as="h1" className="section-title" text={t.home.h1} />
+            <p className="section-lead">{t.home.subtitle}</p>
           </Reveal>
-          <div className="grid-3">
-            {t.home.benefits.map((b, i) => (
-              <Reveal key={b.title} delay={i * 110}>
-                <GlassCard tinted style={{ height: "100%", display: "grid", gap: 18 }}>
+          <div className="grid-3 features">
+            {t.home.features.map((f, i) => (
+              <Reveal key={f.title} delay={i * 110}>
+                <article className="feature">
                   <span className="tile" aria-hidden="true">
-                    {BENEFIT_ICONS[i] ?? "•"}
+                    {FEATURE_ICONS[i] ?? "•"}
                   </span>
-                  <h3 style={{ fontSize: "1.3rem", letterSpacing: "-.02em" }}>{b.title}</h3>
+                  <MixedTitle as="h2" text={f.title} className="feature-title" />
                   <p className="muted" style={{ lineHeight: 1.55 }}>
-                    {b.body}
+                    {f.body}
                   </p>
-                </GlassCard>
+                </article>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Addon featured */}
+      {/* Bulle de téléchargement */}
       {addon && (
         <section className="section" id="addon" style={{ paddingTop: 0 }}>
           <div className="container">
@@ -62,7 +62,9 @@ export default async function HomePage() {
                 style={{ maxWidth: 760, marginInline: "auto", textAlign: "center" }}
               >
                 <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 22 }}>
-                  <span className="chip">{t.home.blenderChip} {addon.blender}</span>
+                  <span className="chip">
+                    {t.home.blenderChip} {addon.blender}
+                  </span>
                 </div>
                 <h2 style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", marginBottom: ".4em" }}>
                   {addon.name}
@@ -75,18 +77,22 @@ export default async function HomePage() {
                     color: "rgba(255,255,255,.9)",
                     fontSize: "1.05rem",
                     lineHeight: 1.5,
-                    textShadow: "0 1px 10px rgba(0,0,0,.3)",
                   }}
                 >
-                  {addon.tagline} {addon.description}
+                  {addon.tagline}
                 </p>
                 <div style={{ display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
-                  <DownloadButton slug={addon.slug} variant="primary" label={t.home.downloadTool} />
-                  <Link href={`/addon/${addon.slug}`} className="btn btn-glass">
-                    {t.home.seeDetails}
-                  </Link>
+                  <DownloadButton slug={addon.slug} variant="primary" label={t.home.ctaPrimary} />
+                  <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="btn btn-glass">
+                    {t.home.ctaSecondary}
+                  </a>
                 </div>
               </GlassCard>
+            </Reveal>
+
+            {/* Texte de présentation, sous la bulle, en texte brut */}
+            <Reveal delay={120}>
+              <p className="about">{t.home.about}</p>
             </Reveal>
           </div>
         </section>
