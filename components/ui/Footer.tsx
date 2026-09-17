@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { getDictionary } from "@/lib/i18n";
+import { getLocale } from "@/lib/locale-server";
 
-export default function Footer() {
+export default async function Footer() {
+  const t = getDictionary(await getLocale());
   return (
     <footer className="container" style={{ padding: "2rem 0 2.5rem", position: "relative", zIndex: 1 }}>
       <div
@@ -26,7 +29,7 @@ export default function Footer() {
         </span>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
           <Link href="/changelog" className="chip">
-            changelog
+            {t.footer.changelog}
           </Link>
           <a
             href="https://github.com/placeholder/prop-handoff"
@@ -34,7 +37,7 @@ export default function Footer() {
             rel="noreferrer"
             className="chip"
           >
-            GitHub ↗
+            {t.footer.github}
           </a>
         </span>
       </div>

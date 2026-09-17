@@ -3,21 +3,25 @@ import Link from "next/link";
 import GlassCard from "@/components/ui/GlassCard";
 import Reveal from "@/components/ui/Reveal";
 import { MixedTitle } from "@/components/ui/MixedTitle";
-import { ADDONS, formatDate } from "@/lib/addons";
+import { getAddons, formatDate } from "@/lib/addons";
+import { getDictionary } from "@/lib/i18n";
+import { getLocale } from "@/lib/locale-server";
 
 export const metadata: Metadata = { title: "Changelog" };
 
-export default function ChangelogPage() {
-  const entries = ADDONS.flatMap((addon) =>
+export default async function ChangelogPage() {
+  const locale = await getLocale();
+  const t = getDictionary(locale);
+  const entries = getAddons(locale).flatMap((addon) =>
     addon.changelog.map((entry) => ({ addon, entry })),
   ).sort((a, b) => b.entry.date.localeCompare(a.entry.date));
 
   return (
     <div className="container page" style={{ maxWidth: 820 }}>
       <Reveal>
-        <span className="eyebrow">Historique</span>
-        <MixedTitle as="h1" className="section-title" text="*Changelog*" />
-        <p className="section-lead">Toutes les versions publiées, addon par addon.</p>
+        <span className="eyebrow">{t.changelog.eyebrow}</span>
+        <MixedTitle as="h1" className="section-title" text={t.changelog.title} />
+        <p className="section-lead">{t.changelog.lead}</p>
       </Reveal>
 
       <Reveal delay={120}>
@@ -31,7 +35,7 @@ export default function ChangelogPage() {
                   </Link>
                   <span className="chip chip-amber">v{entry.version}</span>
                   <span className="mono muted" style={{ fontSize: 12 }}>
-                    {formatDate(entry.date)}
+                    {formatDate(entry.date, locale)}
                   </span>
                 </div>
                 <h2 style={{ fontSize: "1.4rem", margin: ".85rem 0 .5rem", letterSpacing: "-.02em" }}>

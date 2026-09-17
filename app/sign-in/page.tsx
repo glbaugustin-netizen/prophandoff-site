@@ -4,12 +4,17 @@ import { auth, signIn } from "@/auth";
 import GlassCard from "@/components/ui/GlassCard";
 import Reveal from "@/components/ui/Reveal";
 import { MixedTitle } from "@/components/ui/MixedTitle";
+import { getDictionary } from "@/lib/i18n";
+import { getLocale } from "@/lib/locale-server";
 
-export const metadata: Metadata = { title: "Connexion" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: getDictionary(await getLocale()).signIn.pageTitle };
+}
 
 export default async function SignInPage() {
   const session = await auth();
   if (session?.user) redirect("/dashboard");
+  const t = getDictionary(await getLocale());
 
   return (
     <div
@@ -24,15 +29,15 @@ export default async function SignInPage() {
       <Reveal style={{ width: "min(440px, 100%)" }}>
         <GlassCard variant="panel" tinted style={{ textAlign: "center" }}>
           <span className="eyebrow" style={{ marginBottom: 22 }}>
-            Compte · Gratuit
+            {t.signIn.eyebrow}
           </span>
           <MixedTitle
             as="h1"
-            text="Bienvenue sur *PropHandoff*"
+            text={t.signIn.title}
             style={{ fontSize: "clamp(2rem, 4vw, 2.6rem)", marginBottom: ".4em" }}
           />
           <p className="muted" style={{ marginBottom: "2rem", lineHeight: 1.5 }}>
-            Connectez-vous pour retrouver vos téléchargements et être prévenu des mises à jour.
+            {t.signIn.lead}
           </p>
           <form
             action={async () => {
@@ -59,11 +64,11 @@ export default async function SignInPage() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.05l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"
                 />
               </svg>
-              Continuer avec Google
+              {t.signIn.google}
             </button>
           </form>
           <p className="mono" style={{ fontSize: 11, color: "rgba(255,255,255,.5)", marginTop: 18 }}>
-            Aucun mot de passe · aucune newsletter
+            {t.signIn.note}
           </p>
         </GlassCard>
       </Reveal>

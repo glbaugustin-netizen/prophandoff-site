@@ -20,6 +20,7 @@ import {
   useScrollProgress,
 } from "../hooks/useScrollProgress";
 import { MixedTitle } from "./ui/MixedTitle";
+import { useLang } from "./LanguageProvider";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -128,6 +129,7 @@ export default function ScrollAnimation({
   extension = "webp",
   smoothing = 0.18,
 }: ScrollAnimationProps) {
+  const { t } = useLang();
   const sectionRef = useRef<HTMLElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -380,7 +382,7 @@ export default function ScrollAnimation({
               }}
             >
               <span className="eyebrow" style={{ fontSize: 11 }}>
-                Chargement
+                {t.hero.loading}
               </span>
               <div className="bar">
                 <i style={{ width: `${Math.round(loadProgress * 100)}%` }} />
@@ -450,7 +452,7 @@ export default function ScrollAnimation({
               textShadow: "0 1px 6px rgba(0,0,0,.3)",
             }}
           >
-            SCROLL
+            {t.hero.scroll}
           </span>
           <span
             className="btn btn-glass btn-icon"

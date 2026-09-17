@@ -1048,6 +1048,59 @@ details.accordion[open] summary::after {
   object-fit: cover;
 }
 
+/* bulle FR / EN */
+.lang {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding: 3px;
+  border-radius: 999px;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08));
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.5),
+    0 4px 10px rgba(15, 20, 15, 0.2);
+}
+
+.lang-thumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.9),
+    0 4px 10px rgba(15, 20, 15, 0.35);
+  transition: transform 0.55s var(--ease-spring);
+}
+
+.lang-opt {
+  position: relative;
+  z-index: 1;
+  width: 34px;
+  height: 28px;
+  border-radius: 999px;
+  font: 700 11px var(--font-mono);
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+  transition: color 0.35s var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lang-opt.is-active {
+  color: var(--ink);
+  text-shadow: none;
+}
+
+.lang-opt:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+}
+
 @media (max-width: 560px) {
   .navx-signin-label {
     display: none;

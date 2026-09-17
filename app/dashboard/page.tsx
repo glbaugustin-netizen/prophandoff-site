@@ -5,6 +5,8 @@ import GlassCard from "@/components/ui/GlassCard";
 import Reveal from "@/components/ui/Reveal";
 import { MixedTitle } from "@/components/ui/MixedTitle";
 import { getAddon, formatDate } from "@/lib/addons";
+import { getDictionary } from "@/lib/i18n";
+import { getLocale } from "@/lib/locale-server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export const metadata: Metadata = { title: "Dashboard" };
@@ -37,6 +39,8 @@ export default async function DashboardPage() {
   if (!session?.user || !userId) redirect("/sign-in");
 
   const user = session.user;
+  const locale = await getLocale();
+  const t = getDictionary(locale);
   const downloads = await fetchDownloads(userId);
 
   return (
@@ -79,10 +83,10 @@ export default async function DashboardPage() {
           )}
           <div style={{ flex: 1, minWidth: 200 }}>
             <span className="eyebrow" style={{ fontSize: 11, marginBottom: 10 }}>
-              Compte
+              {t.dashboard.account}
             </span>
-            <MixedTitle as="h1" text="Votre *espace*" style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)" }} />
-            <p style={{ marginTop: 10, fontWeight: 500 }}>{user.name ?? "Utilisateur"}</p>
+            <MixedTitle as="h1" text={t.dashboard.title} style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)" }} />
+            <p style={{ marginTop: 10, fontWeight: 500 }}>{user.name ?? t.dashboard.user}</p>
             <p className="muted" style={{ fontSize: ".92rem", marginTop: 2 }}>
               {user.email}
             </p>
@@ -94,7 +98,7 @@ export default async function DashboardPage() {
             }}
           >
             <button type="submit" className="btn btn-glass btn-sm">
-              Sign out
+              {t.dashboard.signOut}
             </button>
           </form>
         </GlassCard>
@@ -103,7 +107,7 @@ export default async function DashboardPage() {
       <Reveal delay={100}>
         <GlassCard tinted>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-            <span className="eyebrow">Mes téléchargements</span>
+            <span className="eyebrow">{t.dashboard.downloads}</span>
             <span className="chip">{downloads.length}</span>
           </div>
 
@@ -112,15 +116,15 @@ export default async function DashboardPage() {
               className="field"
               style={{ marginTop: 22, justifyContent: "space-between", color: "rgba(255,255,255,.7)" }}
             >
-              <span>Aucun téléchargement pour le moment.</span>
+              <span>{t.dashboard.empty}</span>
               <a href="/addon/prop-handoff" className="btn btn-primary btn-sm">
-                Découvrir
+                {t.dashboard.discover}
               </a>
             </div>
           ) : (
             <ul style={{ listStyle: "none", padding: 0, margin: "22px 0 0", display: "grid", gap: 10 }}>
               {downloads.map((d) => {
-                const addon = getAddon(d.addon_slug);
+                const addon = getAddon(d.addon_slug, locale);
                 return (
                   <li
                     key={d.id}
@@ -135,7 +139,7 @@ export default async function DashboardPage() {
                       <span className="chip">v{d.version}</span>
                     </span>
                     <span className="mono muted" style={{ fontSize: 12 }}>
-                      {formatDate(d.created_at.slice(0, 10))}
+                      {formatDate(d.created_at.slice(0, 10), locale)}
                     </span>
                   </li>
                 );

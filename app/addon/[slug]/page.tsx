@@ -4,19 +4,21 @@ import GlassCard from "@/components/ui/GlassCard";
 import DownloadButton from "@/components/ui/DownloadButton";
 import Reveal from "@/components/ui/Reveal";
 import { MixedTitle } from "@/components/ui/MixedTitle";
-import { ADDONS, formatDate, getAddon } from "@/lib/addons";
+import { ADDON_SLUGS, formatDate, getAddon } from "@/lib/addons";
+import { getDictionary } from "@/lib/i18n";
+import { getLocale } from "@/lib/locale-server";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
 export function generateStaticParams(): Array<{ slug: string }> {
-  return ADDONS.map((a) => ({ slug: a.slug }));
+  return ADDON_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const addon = getAddon(slug);
+  const addon = getAddon(slug, await getLocale());
   if (!addon) return {};
   return { title: addon.name, description: addon.tagline };
 }
@@ -31,7 +33,9 @@ const dtStyle = {
 
 export default async function AddonPage({ params }: PageProps) {
   const { slug } = await params;
-  const addon = getAddon(slug);
+  const locale = await getLocale();
+  const t = getDictionary(locale);
+  const addon = getAddon(slug, locale);
   if (!addon) notFound();
 
   return (
@@ -41,7 +45,7 @@ export default async function AddonPage({ params }: PageProps) {
         <GlassCard variant="panel" tinted style={{ marginBottom: 26 }}>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 22 }}>
             <span className="chip chip-amber">v{addon.version}</span>
-            <span className="chip chip-live">gratuit</span>
+            <span className="chip chip-live">{t.addon.free}</span>
             <span className="chip">Blender {addon.blender}</span>
           </div>
           <MixedTitle
@@ -62,14 +66,14 @@ export default async function AddonPage({ params }: PageProps) {
             {addon.tagline}
           </p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-            <DownloadButton slug={addon.slug} label="Télécharger" />
+            <DownloadButton slug={addon.slug} label={t.addon.download} />
             <a
               href="https://github.com/placeholder/prop-handoff"
               target="_blank"
               rel="noreferrer"
               className="btn btn-glass"
             >
-              Voir sur GitHub
+              {t.addon.viewGithub}
             </a>
           </div>
         </GlassCard>
@@ -88,7 +92,7 @@ export default async function AddonPage({ params }: PageProps) {
           {/* Features */}
           <Reveal delay={80}>
             <GlassCard tinted>
-              <span className="eyebrow">Fonctionnalités</span>
+              <span className="eyebrow">{t.addon.features}</span>
               <p className="muted" style={{ marginTop: 18, lineHeight: 1.55 }}>
                 {addon.description}
               </p>
@@ -104,7 +108,7 @@ export default async function AddonPage({ params }: PageProps) {
           <Reveal delay={140}>
             <GlassCard tinted>
               <span className="eyebrow" style={{ marginBottom: 18 }}>
-                Changelog
+                {t.addon.changelog}
               </span>
               {addon.changelog.map((entry, i) => (
                 <details key={entry.version} className="accordion" open={i === 0}>
@@ -113,7 +117,7 @@ export default async function AddonPage({ params }: PageProps) {
                       <span className="chip chip-amber">v{entry.version}</span>
                       <span>{entry.title}</span>
                       <span className="mono muted" style={{ fontSize: 12 }}>
-                        {formatDate(entry.date)}
+                        {formatDate(entry.date, locale)}
                       </span>
                     </span>
                   </summary>
@@ -144,18 +148,18 @@ export default async function AddonPage({ params }: PageProps) {
                 marginBottom: 22,
               }}
             >
-              <span>FICHE · ADDON</span>
+              <span>{t.addon.sheet}</span>
               <span style={{ color: "var(--dot)" }}>●</span>
             </div>
             <MixedTitle
               as="h2"
-              text="Téléchargez *gratuitement*"
+              text={t.addon.downloadFree}
               style={{ fontSize: "1.7rem", marginBottom: 22 }}
             />
             <dl style={{ margin: 0, display: "grid", gap: 18 }}>
               <div>
                 <dt className="mono" style={dtStyle}>
-                  Compatibilité
+                  {t.addon.compatibility}
                 </dt>
                 <dd style={{ margin: ".3rem 0 0", fontWeight: 600 }}>Blender {addon.blender}</dd>
                 <div className="bar" style={{ marginTop: 8 }}>
@@ -164,26 +168,26 @@ export default async function AddonPage({ params }: PageProps) {
               </div>
               <div>
                 <dt className="mono" style={dtStyle}>
-                  Taille
+                  {t.addon.size}
                 </dt>
                 <dd style={{ margin: ".3rem 0 0", fontWeight: 600 }}>{addon.size}</dd>
               </div>
               <div>
                 <dt className="mono" style={dtStyle}>
-                  Dernière mise à jour
+                  {t.addon.lastUpdate}
                 </dt>
-                <dd style={{ margin: ".3rem 0 0", fontWeight: 600 }}>{formatDate(addon.releasedAt)}</dd>
+                <dd style={{ margin: ".3rem 0 0", fontWeight: 600 }}>{formatDate(addon.releasedAt, locale)}</dd>
               </div>
               <div>
                 <dt className="mono" style={dtStyle}>
-                  Licence
+                  {t.addon.license}
                 </dt>
                 <dd style={{ margin: ".3rem 0 0", fontWeight: 600 }}>GPL-3.0</dd>
               </div>
             </dl>
             <DownloadButton
               slug={addon.slug}
-              label="Télécharger"
+              label={t.addon.download}
               variant="primary"
               className="btn-block"
             />

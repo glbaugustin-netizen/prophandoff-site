@@ -6,6 +6,9 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import LiquidFilters from "@/components/ui/LiquidFilters";
 import LiquidBackground from "@/components/ui/LiquidBackground";
+import LanguageProvider from "@/components/LanguageProvider";
+import { getDictionary } from "@/lib/i18n";
+import { getLocale } from "@/lib/locale-server";
 import "./globals.css";
 
 // Police principale : textes courants et base des titres.
@@ -34,46 +37,48 @@ const spaceMono = Space_Mono({
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: "PropHandoff — Transfert d'objets en une seconde dans Blender",
-    template: "%s · PropHandoff",
-  },
-  description:
-    "PropHandoff est un addon Blender qui keyframe automatiquement le transfert d'un objet entre deux parents, au frame exact. Gratuit.",
-  openGraph: {
-    title: "PropHandoff",
-    description:
-      "Passez un objet d'une main à l'autre en une seconde. Addon Blender gratuit.",
-    url: SITE_URL,
-    siteName: "PropHandoff",
-    images: [{ url: "/frames/frame_0060-stop.webp", width: 1920, height: 1080 }],
-    locale: "fr_FR",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "PropHandoff",
-    description: "Addon Blender gratuit pour le transfert d'objets.",
-    images: ["/frames/frame_0060-stop.webp"],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = getDictionary(locale);
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: { default: t.meta.title, template: "%s · PropHandoff" },
+    description: t.meta.description,
+    openGraph: {
+      title: "PropHandoff",
+      description: t.meta.ogDescription,
+      url: SITE_URL,
+      siteName: "PropHandoff",
+      images: [{ url: "/frames/frame_0060-stop.webp", width: 1920, height: 1080 }],
+      locale: locale === "fr" ? "fr_FR" : "en_GB",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "PropHandoff",
+      description: t.meta.ogDescription,
+      images: ["/frames/frame_0060-stop.webp"],
+    },
+  };
+}
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const locale = await getLocale();
   return (
     <html
-      lang="fr"
+      lang={locale}
       className={`${firaSans.variable} ${meaCulpa.variable} ${spaceMono.variable}`}
     >
       <body style={{ background: "#0e1016" }}>
         <LiquidFilters />
         <LiquidBackground />
-        <Providers>
-          <Navbar />
-          <main style={{ position: "relative", zIndex: 1 }}>{children}</main>
-          <Footer />
-        </Providers>
+        <LanguageProvider initialLocale={locale}>
+          <Providers>
+            <Navbar />
+            <main style={{ position: "relative", zIndex: 1 }}>{children}</main>
+            <Footer />
+          </Providers>
+        </LanguageProvider>
       </body>
     </html>
   );

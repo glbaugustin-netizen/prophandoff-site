@@ -6,37 +6,22 @@ import DownloadButton from "@/components/ui/DownloadButton";
 import Reveal from "@/components/ui/Reveal";
 import { MixedTitle } from "@/components/ui/MixedTitle";
 import { getAddon } from "@/lib/addons";
+import { getDictionary } from "@/lib/i18n";
+import { getLocale } from "@/lib/locale-server";
 
-const BENEFITS = [
-  {
-    icon: "⌘",
-    title: "Zéro contrainte à la main",
-    body: "Child Of, influence, compensation de transform : PropHandoff génère tout au frame exact. Vous cliquez, c'est keyframé.",
-  },
-  {
-    icon: "◔",
-    title: "Lisible sur la timeline",
-    body: "Chaque transfert est marqué. Vous voyez d'un coup d'œil qui tient quoi, et quand, sans ouvrir le Graph Editor.",
-  },
-  {
-    icon: "↺",
-    title: "Non destructif",
-    body: "Un handoff se déplace, se supprime ou se rejoue. Le rig reste propre, aucune constraint fantôme oubliée.",
-  },
-];
+const BENEFIT_ICONS = ["⌘", "◔", "↺"];
 
-export default function HomePage() {
-  const addon = getAddon("prop-handoff");
+export default async function HomePage() {
+  const locale = await getLocale();
+  const t = getDictionary(locale);
+  const addon = getAddon("prop-handoff", locale);
 
   return (
     <>
       <ScrollAnimation
-        intro={{ title: "PropHandoff" }}
-        stop1={{
-          frame: 60,
-          title: "Rigger un objet à un personnage *facilement* en *une seconde*",
-        }}
-        stop2={{ frame: 110, title: "Votre rig *sous contrôle*" }}
+        intro={{ title: t.hero.intro }}
+        stop1={{ frame: 60, title: t.hero.stop1 }}
+        stop2={{ frame: 110, title: t.hero.stop2 }}
       />
       <HeroSkip />
 
@@ -44,20 +29,16 @@ export default function HomePage() {
       <section className="section after-hero" id="benefits">
         <div className="container">
           <Reveal>
-            <span className="eyebrow">Pourquoi</span>
-            <MixedTitle as="h2" className="section-title" text="Ce que PropHandoff *change*" />
-            <p className="section-lead">
-              Le transfert d&apos;un objet entre deux mains, deux personnages ou deux
-              props est l&apos;une des opérations les plus pénibles de l&apos;animation
-              Blender. Plus maintenant.
-            </p>
+            <span className="eyebrow">{t.home.whyEyebrow}</span>
+            <MixedTitle as="h2" className="section-title" text={t.home.whyTitle} />
+            <p className="section-lead">{t.home.whyLead}</p>
           </Reveal>
           <div className="grid-3">
-            {BENEFITS.map((b, i) => (
+            {t.home.benefits.map((b, i) => (
               <Reveal key={b.title} delay={i * 110}>
                 <GlassCard tinted style={{ height: "100%", display: "grid", gap: 18 }}>
                   <span className="tile" aria-hidden="true">
-                    {b.icon}
+                    {BENEFIT_ICONS[i] ?? "•"}
                   </span>
                   <h3 style={{ fontSize: "1.3rem", letterSpacing: "-.02em" }}>{b.title}</h3>
                   <p className="muted" style={{ lineHeight: 1.55 }}>
@@ -81,7 +62,7 @@ export default function HomePage() {
                 style={{ maxWidth: 760, marginInline: "auto", textAlign: "center" }}
               >
                 <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 22 }}>
-                  <span className="chip">Blender {addon.blender}</span>
+                  <span className="chip">{t.home.blenderChip} {addon.blender}</span>
                 </div>
                 <h2 style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", marginBottom: ".4em" }}>
                   {addon.name}
@@ -100,9 +81,9 @@ export default function HomePage() {
                   {addon.tagline} {addon.description}
                 </p>
                 <div style={{ display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
-                  <DownloadButton slug={addon.slug} variant="primary" label="Télécharger l'outil" />
+                  <DownloadButton slug={addon.slug} variant="primary" label={t.home.downloadTool} />
                   <Link href={`/addon/${addon.slug}`} className="btn btn-glass">
-                    Voir les détails
+                    {t.home.seeDetails}
                   </Link>
                 </div>
               </GlassCard>

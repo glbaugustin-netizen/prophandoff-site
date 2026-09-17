@@ -11,6 +11,9 @@ import {
   type ReactNode,
 } from "react";
 import { useSession, signIn } from "next-auth/react";
+import { useLang } from "@/components/LanguageProvider";
+import LangToggle from "./LangToggle";
+import type { Dictionary } from "@/lib/i18n";
 
 /* ------------------------------------------------------------------ */
 /*  Icônes (monochromes, trait 1.8)                                    */
@@ -67,15 +70,15 @@ const Icons = {
 
 interface NavItem {
   href: string;
-  label: string;
+  labelKey: keyof Dictionary["nav"];
   icon: ReactNode;
 }
 
 const ITEMS: NavItem[] = [
-  { href: "/", label: "Accueil", icon: Icons.home },
-  { href: "/addon/prop-handoff", label: "Addon", icon: Icons.addon },
-  { href: "/changelog", label: "Changelog", icon: Icons.changelog },
-  { href: "/dashboard", label: "Dashboard", icon: Icons.dashboard },
+  { href: "/", labelKey: "home", icon: Icons.home },
+  { href: "/addon/prop-handoff", labelKey: "addon", icon: Icons.addon },
+  { href: "/changelog", labelKey: "changelog", icon: Icons.changelog },
+  { href: "/dashboard", labelKey: "dashboard", icon: Icons.dashboard },
 ];
 
 const isActivePath = (pathname: string, href: string): boolean =>
@@ -87,6 +90,7 @@ const isActivePath = (pathname: string, href: string): boolean =>
 
 export default function Navbar() {
   const { data: session, status } = useSession();
+  const { t } = useLang();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
 
@@ -171,6 +175,7 @@ export default function Navbar() {
           </li>
           {ITEMS.map((it) => {
             const on = active === it.href;
+            const label = t.nav[it.labelKey];
             return (
               <li key={it.href}>
                 <Link
@@ -180,20 +185,22 @@ export default function Navbar() {
                     else itemRefs.current.delete(it.href);
                   }}
                   className={`navx-item${on ? " is-active" : ""}`}
-                  aria-label={it.label}
+                  aria-label={label}
                   aria-current={on ? "page" : undefined}
-                  title={it.label}
+                  title={label}
                   onClick={() => setActive(it.href)}
                 >
                   <span className="navx-icon">{it.icon}</span>
                   <span className="navx-label">
-                    <span>{it.label}</span>
+                    <span>{label}</span>
                   </span>
                 </Link>
               </li>
             );
           })}
         </ul>
+
+        <LangToggle />
 
         {status === "loading" ? (
           <span className="navx-avatar" aria-hidden="true" />
@@ -216,11 +223,11 @@ export default function Navbar() {
             type="button"
             className="navx-signin"
             onClick={() => void signIn("google")}
-            aria-label="Se connecter"
-            title="Se connecter"
+            aria-label={t.nav.signInAria}
+            title={t.nav.signInAria}
           >
             <span className="navx-icon">{Icons.user}</span>
-            <span className="navx-signin-label">Sign in</span>
+            <span className="navx-signin-label">{t.nav.signIn}</span>
           </button>
         )}
       </nav>
