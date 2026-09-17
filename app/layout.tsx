@@ -42,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = getDictionary(locale);
   return {
     metadataBase: new URL(SITE_URL),
-    title: { default: t.meta.title, template: "%s · PropHandoff" },
+    title: { default: t.meta.title, template: "%s | PropHandoff" },
     description: t.meta.description,
     keywords: t.meta.keywords,
     alternates: { canonical: "/" },
@@ -52,15 +52,15 @@ export async function generateMetadata(): Promise<Metadata> {
       description: t.meta.ogDescription,
       url: SITE_URL,
       siteName: "PropHandoff",
-      images: [{ url: "/frames/frame_0060-stop.webp", width: 1920, height: 1080 }],
-      locale: locale === "fr" ? "fr_FR" : "en_GB",
+      images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "PropHandoff" }],
+      locale: locale === "fr" ? "fr_FR" : "en_US",
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
       title: t.meta.ogTitle,
       description: t.meta.twitterDescription,
-      images: ["/frames/frame_0060-stop.webp"],
+      images: ["/og.jpg"],
     },
   };
 }

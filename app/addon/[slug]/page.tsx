@@ -7,6 +7,9 @@ import { MixedTitle } from "@/components/ui/MixedTitle";
 import { ADDON_SLUGS, formatDate, getAddon } from "@/lib/addons";
 import { getDictionary } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale-server";
+import JsonLd from "@/components/JsonLd";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://prophandoff-site.vercel.app";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -70,7 +73,7 @@ export default async function AddonPage({ params }: PageProps) {
               textShadow: "0 1px 10px rgba(0,0,0,.3)",
             }}
           >
-            {addon.tagline}
+            {t.addon.shortDescription}
           </p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
             <DownloadButton slug={addon.slug} label={t.addon.download} />
@@ -100,7 +103,8 @@ export default async function AddonPage({ params }: PageProps) {
           <Reveal delay={80}>
             <GlassCard tinted>
               <span className="eyebrow">{t.addon.features}</span>
-              <p className="muted" style={{ marginTop: 18, lineHeight: 1.55 }}>
+              <MixedTitle as="h2" text={t.addon.doesTitle} style={{ fontSize: "1.7rem", margin: "14px 0 12px" }} />
+              <p className="muted" style={{ lineHeight: 1.55 }}>
                 {addon.description}
               </p>
               <ul className="feature-list">
@@ -108,6 +112,16 @@ export default async function AddonPage({ params }: PageProps) {
                   <li key={f}>{f}</li>
                 ))}
               </ul>
+            </GlassCard>
+          </Reveal>
+
+          {/* Installation */}
+          <Reveal delay={120}>
+            <GlassCard tinted>
+              <MixedTitle as="h2" text={t.addon.installTitle} style={{ fontSize: "1.7rem", marginBottom: 12 }} />
+              <p className="muted" style={{ lineHeight: 1.6, maxWidth: "68ch" }}>
+                {t.addon.installText}
+              </p>
             </GlassCard>
           </Reveal>
 
@@ -189,7 +203,7 @@ export default async function AddonPage({ params }: PageProps) {
                 <dt className="mono" style={dtStyle}>
                   {t.addon.license}
                 </dt>
-                <dd style={{ margin: ".3rem 0 0", fontWeight: 600 }}>GPL-3.0</dd>
+                <dd style={{ margin: ".3rem 0 0", fontWeight: 600 }}>MIT</dd>
               </div>
             </dl>
             <DownloadButton
@@ -201,6 +215,24 @@ export default async function AddonPage({ params }: PageProps) {
           </GlassCard>
         </Reveal>
       </div>
+
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: addon.name,
+          applicationCategory: "DesignApplication",
+          applicationSubCategory: "Blender Addon",
+          operatingSystem: "Windows, macOS, Linux",
+          softwareVersion: addon.version,
+          softwareRequirements: "Blender 3.6 or later",
+          description: t.addon.pageDescription,
+          url: `${SITE_URL}/addon/${addon.slug}`,
+          license: "https://opensource.org/licenses/MIT",
+          isAccessibleForFree: true,
+          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+        }}
+      />
 
       <style>{`
         .addon-grid .btn-block { margin-top: 26px; }

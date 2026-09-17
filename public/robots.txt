@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /dashboard
 
 Sitemap: https://prophandoff-site.vercel.app/sitemap.xml

@@ -175,6 +175,35 @@ h3:has(.script) {
   background: linear-gradient(180deg, var(--bg) 0%, rgba(14, 16, 22, 0) 45vh);
 }
 
+.section-title--sm {
+  font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+  margin-bottom: 0.6em;
+}
+
+/* ligne de confiance sous les CTA */
+.trust {
+  margin-top: 18px;
+  font: 600 11.5px var(--font-mono);
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.62);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* FAQ : accordéon en texte brut */
+.faq-q {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+}
+
+.faq-a {
+  margin-top: 0.85rem;
+  max-width: 68ch;
+  line-height: 1.6;
+}
+
 /* fonctionnalités de la landing : texte brut, pas de verre */
 .feature {
   display: grid;

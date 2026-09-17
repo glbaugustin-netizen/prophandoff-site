@@ -7,6 +7,7 @@ import { MixedTitle } from "@/components/ui/MixedTitle";
 import { getAddon } from "@/lib/addons";
 import { getDictionary } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale-server";
+import JsonLd from "@/components/JsonLd";
 
 const GITHUB_URL = "https://github.com/studioslay696-ux/prop-handoff";
 
@@ -53,6 +54,16 @@ export default async function HomePage() {
   const t = getDictionary(locale);
   const addon = getAddon("prop-handoff", locale);
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: t.home.faq.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
   return (
     <>
       <ScrollAnimation
@@ -62,13 +73,22 @@ export default async function HomePage() {
       />
       <HeroSkip />
 
-      {/* Bloc SEO : h1 + sous-titre + 3 fonctionnalités, en texte brut (pas de verre) */}
-      <section className="section after-hero" id="features">
+      {/* Hero SEO : h1 + sous-titre, texte brut */}
+      <section className="section after-hero" id="intro">
         <div className="container">
           <Reveal>
             <span className="eyebrow">{t.home.eyebrow}</span>
             <MixedTitle as="h1" className="section-title" text={t.home.h1} />
             <p className="section-lead">{t.home.subtitle}</p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Fonctionnalités : h2 + 3 blocs, texte brut (pas de verre) */}
+      <section className="section" id="features" style={{ paddingTop: 0 }}>
+        <div className="container">
+          <Reveal>
+            <MixedTitle as="h2" className="section-title section-title--sm" text={t.home.featuresTitle} />
           </Reveal>
           <div className="grid-3 features">
             {t.home.features.map((f, i) => (
@@ -77,7 +97,7 @@ export default async function HomePage() {
                   <span className="tile" aria-hidden="true">
                     {FEATURE_ICONS[i]}
                   </span>
-                  <MixedTitle as="h2" text={f.title} className="feature-title" />
+                  <MixedTitle as="h3" text={f.title} className="feature-title" />
                   <p className="muted" style={{ lineHeight: 1.55 }}>
                     {f.body}
                   </p>
@@ -85,6 +105,18 @@ export default async function HomePage() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Cas d'usage : longue traîne, texte brut */}
+      <section className="section" id="use-cases" style={{ paddingTop: 0 }}>
+        <div className="container">
+          <Reveal>
+            <MixedTitle as="h2" className="section-title section-title--sm" text={t.home.useCaseTitle} />
+            <p className="section-lead" style={{ maxWidth: "70ch" }}>
+              {t.home.useCaseText}
+            </p>
+          </Reveal>
         </div>
       </section>
 
@@ -124,6 +156,7 @@ export default async function HomePage() {
                     {t.home.ctaSecondary}
                   </a>
                 </div>
+                <p className="trust">{t.home.trustLine}</p>
               </GlassCard>
             </Reveal>
 
@@ -134,6 +167,28 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* FAQ : texte brut, + données structurées FAQPage */}
+      <section className="section" id="faq" style={{ paddingTop: 0 }}>
+        <div className="container" style={{ maxWidth: 820 }}>
+          <Reveal>
+            <MixedTitle as="h2" className="section-title section-title--sm" text={t.home.faqTitle} />
+          </Reveal>
+          <Reveal delay={100}>
+            <div className="faq">
+              {t.home.faq.map((f, i) => (
+                <details key={f.q} className="accordion" open={i === 0}>
+                  <summary>
+                    <h3 className="faq-q">{f.q}</h3>
+                  </summary>
+                  <p className="muted faq-a">{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+        <JsonLd data={faqJsonLd} />
+      </section>
     </>
   );
 }

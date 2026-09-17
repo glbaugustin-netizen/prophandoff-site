@@ -63,8 +63,9 @@ const SOURCES: AddonSource[] = [
             date: "2026-09-14",
             title: "Première version",
             changes: [
-              "Système de transfert de props (une et deux mains)",
+              "Système de transfert de props à une et deux mains",
               "Prise à deux mains avec blending IK de proximité",
+              "Panneau timeline listant chaque événement de transfert de prop",
               "Compatible Blender 3.6+",
             ],
           },
@@ -89,9 +90,10 @@ const SOURCES: AddonSource[] = [
             date: "2026-09-14",
             title: "Initial release",
             changes: [
-              "Prop transfer system (one and two-handed)",
+              "Prop transfer system for one-handed and two-handed props",
               "Two-Hand Grip with IK proximity blending",
-              "Compatible Blender 3.6+",
+              "Timeline panel listing every prop transfer event",
+              "Compatible with Blender 3.6+",
             ],
           },
         ],
