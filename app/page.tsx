@@ -9,7 +9,44 @@ import { getDictionary } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale-server";
 
 const GITHUB_URL = "https://github.com/studioslay696-ux/prop-handoff";
-const FEATURE_ICONS = ["⌘", "✋", "◔"];
+
+const iconProps = {
+  width: 22,
+  height: 22,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.7,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": true,
+} as const;
+
+/* Icônes monochromes des 3 fonctionnalités (même trait que la navbar). */
+const FEATURE_ICONS = [
+  // transfert instantané : un objet qui passe d'une main à l'autre
+  <svg key="pass" {...iconProps}>
+    <rect x="8.5" y="8.5" width="7" height="7" rx="1.8" />
+    <path d="M3 12h4" />
+    <path d="M5.5 9.5 3 12l2.5 2.5" />
+    <path d="M17 12h4" />
+    <path d="M18.5 9.5 21 12l-2.5 2.5" />
+  </svg>,
+  // prise à deux mains : deux poignées serrées autour d'un manche
+  <svg key="grip" {...iconProps}>
+    <path d="M12 3v18" />
+    <path d="M5 8.5c0-1.4 1.1-2.5 2.5-2.5H10v7.5c0 1.4-1.1 2.5-2.5 2.5S5 14.9 5 13.5v-5Z" />
+    <path d="M19 8.5c0-1.4-1.1-2.5-2.5-2.5H14v7.5c0 1.4 1.1 2.5 2.5 2.5S19 14.9 19 13.5v-5Z" />
+    <path d="M7 10h3M14 10h3" />
+  </svg>,
+  // contrôle de la timeline : piste avec keyframes
+  <svg key="timeline" {...iconProps}>
+    <path d="M3 12h18" />
+    <path d="m7 9.5 2.5 2.5L7 14.5 4.5 12 7 9.5Z" />
+    <path d="m14.5 9.5 2.5 2.5-2.5 2.5-2.5-2.5 2.5-2.5Z" />
+    <path d="M19.5 7.5v9" />
+  </svg>,
+];
 
 export default async function HomePage() {
   const locale = await getLocale();
@@ -38,7 +75,7 @@ export default async function HomePage() {
               <Reveal key={f.title} delay={i * 110}>
                 <article className="feature">
                   <span className="tile" aria-hidden="true">
-                    {FEATURE_ICONS[i] ?? "•"}
+                    {FEATURE_ICONS[i]}
                   </span>
                   <MixedTitle as="h2" text={f.title} className="feature-title" />
                   <p className="muted" style={{ lineHeight: 1.55 }}>
