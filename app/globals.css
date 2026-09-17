@@ -42,6 +42,11 @@
   --bf-glass: saturate(1.6) brightness(1.05) url(#liquid);
   --bf-glass-tinted: saturate(1.5) brightness(1.02) url(#liquid);
   --bf-glass-drop: saturate(1.6) brightness(1.1) url(#liquid);
+
+  /* luminescence douce émise par les surfaces en verre */
+  --glass-glow:
+    0 0 40px rgba(255, 255, 255, 0.1),
+    0 0 110px rgba(255, 255, 255, 0.06);
 }
 
 * {
@@ -322,7 +327,8 @@ h3:has(.script) {
     inset 1.5px 1.5px 1px rgba(255, 255, 255, 0.6),
     inset -1px -1px 3px rgba(255, 255, 255, 0.16),
     inset 0 0 24px rgba(255, 255, 255, 0.08),
-    0 6px 16px rgba(15, 20, 15, 0.18);
+    0 6px 16px rgba(15, 20, 15, 0.18),
+    var(--glass-glow);
   -webkit-backdrop-filter: saturate(1.6) brightness(1.05);
   backdrop-filter: var(--bf-glass);
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
@@ -412,7 +418,8 @@ h3:has(.script) {
     inset -1px -1px 3px rgba(255, 255, 255, 0.16),
     inset 0 0 24px rgba(255, 255, 255, 0.08),
     0 22px 48px rgba(15, 20, 15, 0.3),
-    0 6px 16px rgba(15, 20, 15, 0.18);
+    0 6px 16px rgba(15, 20, 15, 0.18),
+    var(--glass-glow);
 }
 
 /* variante teintée foncée : blocs contenant du texte blanc */
@@ -693,32 +700,7 @@ details.accordion[open] summary::after {
   }
 }
 
-@keyframes lg-drift {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(60px, -40px) scale(1.15);
-  }
-  66% {
-    transform: translate(-40px, 30px) scale(0.92);
-  }
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-}
 
-@keyframes lg-drift2 {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(-70px, 50px) scale(1.2);
-  }
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-}
 
 @keyframes lg-bob {
   0%,
@@ -788,7 +770,8 @@ details.accordion[open] summary::after {
     inset -1px -1px 3px rgba(255, 255, 255, 0.16),
     inset 0 0 24px rgba(255, 255, 255, 0.08),
     0 22px 48px rgba(15, 20, 15, 0.3),
-    0 6px 16px rgba(15, 20, 15, 0.18);
+    0 6px 16px rgba(15, 20, 15, 0.18),
+    var(--glass-glow);
   -webkit-backdrop-filter: saturate(1.6) brightness(1.05);
   backdrop-filter: var(--bf-glass);
   transition:
