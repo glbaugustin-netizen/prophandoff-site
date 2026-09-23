@@ -78,7 +78,7 @@ export default async function AddonPage({ params }: PageProps) {
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
             <DownloadButton slug={addon.slug} label={t.addon.download} />
             <a
-              href="https://github.com/studioslay696-ux/prop-handoff"
+              href="https://github.com/glbaugustin-netizen/prop-handoff"
               target="_blank"
               rel="noreferrer"
               className="btn btn-glass"
@@ -203,7 +203,7 @@ export default async function AddonPage({ params }: PageProps) {
                 <dt className="mono" style={dtStyle}>
                   {t.addon.license}
                 </dt>
-                <dd style={{ margin: ".3rem 0 0", fontWeight: 600 }}>MIT</dd>
+                <dd style={{ margin: ".3rem 0 0", fontWeight: 600 }}>GPL-3.0</dd>
               </div>
             </dl>
             <DownloadButton
@@ -225,10 +225,10 @@ export default async function AddonPage({ params }: PageProps) {
           applicationSubCategory: "Blender Addon",
           operatingSystem: "Windows, macOS, Linux",
           softwareVersion: addon.version,
-          softwareRequirements: "Blender 3.6 or later",
+          softwareRequirements: "Blender 4.2 or later",
           description: t.addon.pageDescription,
           url: `${SITE_URL}/addon/${addon.slug}`,
-          license: "https://opensource.org/licenses/MIT",
+          license: "https://www.gnu.org/licenses/gpl-3.0.html",
           isAccessibleForFree: true,
           offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
         }}

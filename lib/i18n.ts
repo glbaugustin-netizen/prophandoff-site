@@ -112,7 +112,7 @@ const fr: Dictionary = {
   meta: {
     title: "PropHandoff — Addon Blender gratuit de transfert de props",
     description:
-      "Addon Blender gratuit pour passer des objets entre les mains, rigger des armes à deux mains et keyframer les transferts de props automatiquement. Blender 3.6+.",
+      "Addon Blender gratuit pour passer des objets entre les mains, rigger des armes à deux mains et keyframer les transferts de props automatiquement. Blender 4.2+.",
     keywords: [
       "addon Blender prop handoff",
       "passer un objet entre les mains Blender",
@@ -125,7 +125,7 @@ const fr: Dictionary = {
     ],
     ogTitle: "PropHandoff — Addon Blender gratuit de prop handoff",
     ogDescription:
-      "Passez des objets entre les mains en un clic. Prises à deux mains, keyframing automatique, contrôle total de la timeline. Gratuit et open source pour Blender 3.6+.",
+      "Passez des objets entre les mains en un clic. Prises à deux mains, keyframing automatique, contrôle total de la timeline. Gratuit et open source pour Blender 4.2+.",
     twitterDescription:
       "Passez des objets entre les mains en un clic. Addon Blender gratuit et open source pour les animateurs de personnages.",
   },
@@ -172,9 +172,9 @@ const fr: Dictionary = {
     useCaseTitle: "Conçu pour *les animateurs de personnages et les développeurs de jeux*",
     useCaseText:
       "PropHandoff est fait pour les moments qui dévorent votre temps : un personnage qui dégaine une épée dans son dos, un fusil qui passe d'un port à deux mains à un rechargement à une main, une tasse qu'on se passe à table. Chacun de ces gestes signifie normalement une pile de contraintes Child Of, des keyframes manuels et des transforms cassés quand on scrubbe en arrière. PropHandoff les transforme en un seul clic et garde chaque transfert éditable.",
-    ctaPrimary: "Télécharger gratuitement pour Blender 3.6+",
+    ctaPrimary: "Télécharger gratuitement pour Blender 4.2+",
     ctaSecondary: "Voir sur GitHub",
-    trustLine: "Gratuit et open source · Licence MIT · Conçu par un animateur de personnages",
+    trustLine: "Gratuit et open source · Licence GPL-3.0 · Conçu par un animateur de personnages",
     blenderChip: "Blender",
     about:
       "PropHandoff est un addon Blender gratuit et open source pour les animateurs de personnages, les développeurs de jeux et les artistes 3D. Conçu pour rendre les transferts de props, les prises à deux mains et l'animation IK des mains assez rapides pour ne plus y penser.",
@@ -202,7 +202,7 @@ const fr: Dictionary = {
       },
       {
         q: "Quelles versions de Blender sont supportées ?",
-        a: "PropHandoff est compatible avec Blender 3.6 et plus, dont 4.0, 4.1 et 4.2+.",
+        a: "PropHandoff demande Blender 4.2 au minimum. Il est développé et testé sur Blender 5.2, et testé sur les rigs Auto-Rig Pro et Rigify avec les bras en IK.",
       },
       {
         q: "Peut-on modifier ou supprimer un transfert de prop après l'avoir keyframé ?",
@@ -211,16 +211,16 @@ const fr: Dictionary = {
     ],
   },
   addon: {
-    pageTitle: "PropHandoff v1.0.0 — Addon Blender gratuit d'animation des mains",
+    pageTitle: "PropHandoff — Addon Blender gratuit d'animation des mains",
     pageDescription:
-      "Téléchargez PropHandoff gratuitement. Keyframez les transferts de props entre les mains, riggez des armes à deux mains et gérez les lâchers depuis la sidebar de Blender. Blender 3.6, 4.0, 4.1, 4.2+.",
+      "Téléchargez PropHandoff gratuitement. Keyframez les transferts de props entre les mains, riggez des armes à deux mains et gérez les lâchers depuis la sidebar de Blender. Blender 4.2 et plus.",
     h1: "PropHandoff — Addon Blender *gratuit* de prop handoff",
     shortDescription:
       "Le moyen le plus rapide d'animer des props entre les mains dans Blender. Keyframez transferts, prises à deux mains et lâchers depuis un seul panneau de la sidebar — gratuit et open source.",
     doesTitle: "Ce que PropHandoff *fait*",
     installTitle: "Comment *installer PropHandoff*",
     installText:
-      "Téléchargez le .zip depuis GitHub, ouvrez Blender, allez dans Edit → Preferences → Add-ons → Install, sélectionnez le fichier et cochez la case. Le panneau PropHandoff apparaît dans la sidebar de la vue 3D (touche N). Aucune dépendance, aucun compte, aucune clé de licence.",
+      "Téléchargez le .zip depuis GitHub, ouvrez Blender, allez dans Edit ▸ Preferences ▸ Add-ons ▸ ▾ ▸ Install from Disk…, sélectionnez le fichier et cochez la case. Le panneau PropHandoff apparaît dans la sidebar de la vue 3D (touche N). Une version packagée pour la plateforme Extensions est aussi disponible sur GitHub : installez l'une ou l'autre, jamais les deux en même temps. Aucune dépendance, aucun compte, aucune clé de licence.",
     free: "gratuit",
     download: "Télécharger",
     viewGithub: "Voir sur GitHub",
@@ -265,7 +265,7 @@ const en: Dictionary = {
   meta: {
     title: "PropHandoff — Free Blender Addon for Hand Prop Transfer",
     description:
-      "Free Blender addon to pass objects between hands, build two-handed weapon rigs and keyframe prop transfers automatically. No Child Of setup. Blender 3.6+.",
+      "Free Blender addon to pass objects between hands, build two-handed weapon rigs and keyframe prop transfers automatically. No Child Of setup. Blender 4.2+.",
     keywords: [
       "Blender prop handoff addon",
       "pass object between hands Blender",
@@ -278,7 +278,7 @@ const en: Dictionary = {
     ],
     ogTitle: "PropHandoff — Free Blender Prop Handoff Addon",
     ogDescription:
-      "Pass objects between hands in one click. Two-handed grips, automatic keyframing, full timeline control. Free and open source for Blender 3.6+.",
+      "Pass objects between hands in one click. Two-handed grips, automatic keyframing, full timeline control. Free and open source for Blender 4.2+.",
     twitterDescription:
       "Pass objects between hands in one click. Free, open-source Blender addon for character animators.",
   },
@@ -325,9 +325,9 @@ const en: Dictionary = {
     useCaseTitle: "Built for *character animators and game developers*",
     useCaseText:
       "PropHandoff was made for the moments that eat your time: a character drawing a sword from its back, a rifle moving from a two-handed carry to a one-handed reload, a mug passed across a table. Each of those normally means a stack of Child Of constraints, manual keyframes and broken transforms when you scrub back. PropHandoff turns them into a single click and keeps every transfer editable.",
-    ctaPrimary: "Download Free for Blender 3.6+",
+    ctaPrimary: "Download Free for Blender 4.2+",
     ctaSecondary: "View on GitHub",
-    trustLine: "Free and open source · MIT licensed · Built by a character animator",
+    trustLine: "Free and open source · GPL-3.0 licensed · Built by a character animator",
     blenderChip: "Blender",
     about:
       "PropHandoff is a free, open-source Blender addon for character animators, game developers and 3D artists. Built to make prop transfers, two-handed grips and hand IK animation fast enough to stop thinking about them.",
@@ -355,7 +355,7 @@ const en: Dictionary = {
       },
       {
         q: "Which Blender versions are supported?",
-        a: "PropHandoff is compatible with Blender 3.6 and above, including 4.0, 4.1 and 4.2+.",
+        a: "PropHandoff requires Blender 4.2 as a minimum. It is developed and tested on Blender 5.2, and tested against Auto-Rig Pro and Rigify rigs with the arms in IK.",
       },
       {
         q: "Can I edit or remove a prop transfer after it has been keyframed?",
@@ -364,16 +364,16 @@ const en: Dictionary = {
     ],
   },
   addon: {
-    pageTitle: "PropHandoff v1.0.0 — Free Blender Hand Animation Addon",
+    pageTitle: "PropHandoff — Free Blender Hand Animation Addon",
     pageDescription:
-      "Download PropHandoff free. Keyframe prop transfers between hands, build two-handed weapon rigs and manage releases from Blender's sidebar. Blender 3.6, 4.0, 4.1, 4.2+.",
+      "Download PropHandoff free. Keyframe prop transfers between hands, build two-handed weapon rigs and manage releases from Blender's sidebar. Blender 4.2 and later.",
     h1: "PropHandoff — *Free* Blender Prop Handoff Addon",
     shortDescription:
       "The fastest way to animate props between hands in Blender. Keyframe transfers, two-handed grips and releases from a single sidebar panel — free and open source.",
     doesTitle: "What PropHandoff *does*",
     installTitle: "How to *install PropHandoff*",
     installText:
-      "Download the .zip from GitHub, open Blender, go to Edit → Preferences → Add-ons → Install, select the file and enable the checkbox. The PropHandoff panel appears in the 3D viewport sidebar under the N-panel. No dependencies, no account, no license key.",
+      "Download the .zip from GitHub, open Blender, go to Edit ▸ Preferences ▸ Add-ons ▸ ▾ ▸ Install from Disk…, select the file and enable the checkbox. The PropHandoff panel appears in the 3D viewport sidebar under the N-panel. A build packaged for the Extensions platform is also available on GitHub: install one or the other, never both at the same time. No dependencies, no account, no license key.",
     free: "free",
     download: "Download",
     viewGithub: "View on GitHub",

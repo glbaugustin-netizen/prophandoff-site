@@ -9,7 +9,7 @@ import { getDictionary } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale-server";
 import JsonLd from "@/components/JsonLd";
 
-const GITHUB_URL = "https://github.com/studioslay696-ux/prop-handoff";
+const GITHUB_URL = "https://github.com/glbaugustin-netizen/prop-handoff";
 
 const iconProps = {
   width: 22,

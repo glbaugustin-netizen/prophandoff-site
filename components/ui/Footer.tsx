@@ -32,7 +32,7 @@ export default async function Footer() {
             {t.footer.changelog}
           </Link>
           <a
-            href="https://github.com/studioslay696-ux/prop-handoff"
+            href="https://github.com/glbaugustin-netizen/prop-handoff"
             target="_blank"
             rel="noreferrer"
             className="chip"

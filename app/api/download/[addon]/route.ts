@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 const DOWNLOAD_URLS: Record<string, string> = {
   "prop-handoff":
-    "https://github.com/studioslay696-ux/prop-handoff/releases/download/v1.0.0/prop_handoff_v0.0.9.zip",
+    "https://github.com/glbaugustin-netizen/prop-handoff/releases/download/v0.3.3/prop_handoff_v0.3.3.zip",
 };
 
 export async function GET(
@@ -22,7 +22,7 @@ export async function GET(
     const { error } = await db.from("downloads").insert({
       user_id: session.user.id,
       addon_slug: addon,
-      version: "1.0.0",
+      version: "0.3.3",
     });
     if (error) console.error("[download] insert failed:", error.message);
   }
