@@ -61,7 +61,8 @@ export interface ScrollAnimationProps {
 /*  Constantes                                                         */
 /* ------------------------------------------------------------------ */
 
-const WAVE_COLOR = "#0e1016"; // fond du site (style board)
+const HERO_BG = "#1a120c"; // le rendu est sombre : seule cette section l'est
+const EXIT_BG = "#eee6d8"; // sable : couleur de la page qui suit
 const FADE_IN_VH = 30; // fade in du texte sur les 30 premiers vh du stop
 const FADE_OUT_VH = 15; // fade out sur les derniers vh du stop 1
 const INTRO_FADE_VH = 12; // fade out du titre d'intro
@@ -70,8 +71,6 @@ const INTRO_FADE_VH = 12; // fade out du titre d'intro
 const MARQUEE_WORD = "PROP HANDOFF";
 const MARQUEE_LINES = 24; // réparties sur 260vh : la colonne couvre toujours l'écran
 const MARQUEE_SHIFT_VH = 40; // course de chaque colonne sur la transition
-/** Dégradé en haut de la barre de sortie : le gris arrive sans arête nette. */
-const BAR_FADE_VH = 34;
 
 /** Id de la section (utilisé par HeroSkip pour se positionner dessous). */
 export const HERO_SECTION_ID = "hero";
@@ -97,8 +96,8 @@ const headingStyle: CSSProperties = {
   lineHeight: 1.05,
   letterSpacing: "-.035em",
   fontWeight: 700,
-  color: "#fff",
-  textShadow: "0 2px 24px rgba(0,0,0,.55), 0 0 60px rgba(0,0,0,.35)",
+  color: "#fffdf8",
+  textShadow: "3px 3px 0 rgba(26,18,12,.85)",
   textWrap: "balance",
 };
 
@@ -138,14 +137,14 @@ const marqueeLineStyle: CSSProperties = {
 
 const marqueeSolidStyle: CSSProperties = {
   ...marqueeLineStyle,
-  color: "rgba(255,255,255,.9)",
+  color: EXIT_BG,
 };
 
 /** Une ligne sur deux en contour : donne de la matière sans surcharger. */
 const marqueeOutlineStyle: CSSProperties = {
   ...marqueeLineStyle,
   color: "transparent",
-  WebkitTextStroke: "1px rgba(255,255,255,.4)",
+  WebkitTextStroke: "2px rgba(238,230,216,.55)",
 };
 
 const overlayTextStyle: CSSProperties = {
@@ -153,8 +152,8 @@ const overlayTextStyle: CSSProperties = {
   maxWidth: "44ch",
   fontSize: "clamp(1rem, 1.3vw, 1.15rem)",
   lineHeight: 1.5,
-  color: "rgba(255,255,255,.92)",
-  textShadow: "0 1px 8px rgba(0,0,0,.5), 0 0 30px rgba(0,0,0,.35)",
+  color: "#fffdf8",
+  textShadow: "2px 2px 0 rgba(26,18,12,.8)",
 };
 
 /* ------------------------------------------------------------------ */
@@ -373,9 +372,9 @@ export default function ScrollAnimation({
 
     // La barre part plus tard et son bord haut est dégradé : au lieu d'un
     // rectangle net qui coupe l'écran, le gris monte en fondu.
-    const barProgress = clamp01((transition - 0.25) / 0.75);
+    const barProgress = clamp01((transition - 0.2) / 0.8);
     const barActive = segment === "transition" && barProgress > 0;
-    const barTranslate = `translateY(-${(barProgress * (100 + BAR_FADE_VH)).toFixed(3)}vh)`;
+    const barTranslate = `translateY(-${(barProgress * 100).toFixed(3)}vh)`;
 
     return {
       introOpacity,
@@ -396,7 +395,7 @@ export default function ScrollAnimation({
     <section
       ref={sectionRef}
       id={HERO_SECTION_ID}
-      style={{ height: `${TOTAL_VH}vh`, position: "relative", background: WAVE_COLOR }}
+      style={{ height: `${TOTAL_VH}vh`, position: "relative", background: HERO_BG }}
     >
       <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden" }}>
         {/* Canvas principal */}
@@ -408,8 +407,8 @@ export default function ScrollAnimation({
             width: "100%",
             height: "100%",
             display: "block",
-            filter: ready ? "none" : "blur(12px)",
-            transition: "filter .6s ease",
+            opacity: ready ? 1 : 0,
+            transition: "opacity .3s linear",
             zIndex: 0,
           }}
         />
@@ -424,12 +423,12 @@ export default function ScrollAnimation({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: WAVE_COLOR,
+              background: HERO_BG,
               zIndex: 5,
             }}
           >
             <div
-              className="glass glass--pill"
+              className="card"
               style={{
                 padding: "16px 20px",
                 width: "min(300px, 70vw)",
@@ -510,14 +509,14 @@ export default function ScrollAnimation({
             style={{
               fontSize: 10.5,
               letterSpacing: ".2em",
-              color: "rgba(255,255,255,.7)",
-              textShadow: "0 1px 6px rgba(0,0,0,.3)",
+              color: "#fffdf8",
+              textShadow: "2px 2px 0 rgba(26,18,12,.8)",
             }}
           >
             {t.hero.scroll}
           </span>
           <span
-            className="btn btn-glass btn-icon"
+            className="btn btn-icon"
             style={{ animation: "lg-bob 2.4s ease-in-out infinite" }}
           >
             ↓
@@ -530,7 +529,7 @@ export default function ScrollAnimation({
           style={{
             position: "absolute",
             inset: 0,
-            background: WAVE_COLOR,
+            background: EXIT_BG,
             opacity: derived.fadeOpacity,
             pointerEvents: "none",
             zIndex: 4,
@@ -578,8 +577,7 @@ export default function ScrollAnimation({
           ))}
         </div>
 
-        {/* Voile gris qui monte depuis le bas, bord haut en dégradé, et couvre
-            l'écran en fin de section pour raccorder avec la suite */}
+        {/* Aplat sable qui monte depuis le bas et raccorde avec la page */}
         <div
           aria-hidden="true"
           style={{
@@ -587,8 +585,8 @@ export default function ScrollAnimation({
             left: 0,
             right: 0,
             top: "100%",
-            height: `calc(100vh + ${BAR_FADE_VH}vh)`,
-            background: `linear-gradient(to bottom, rgba(14,16,22,0) 0, ${WAVE_COLOR} ${BAR_FADE_VH}vh)`,
+            height: "100vh",
+            background: EXIT_BG,
             opacity: derived.barOpacity,
             transform: derived.barTranslate,
             willChange: "transform",

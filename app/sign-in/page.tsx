@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { auth, signIn } from "@/auth";
-import GlassCard from "@/components/ui/GlassCard";
+import Card from "@/components/ui/Card";
 import Reveal from "@/components/ui/Reveal";
 import { MixedTitle } from "@/components/ui/MixedTitle";
 import { getDictionary } from "@/lib/i18n";
@@ -27,7 +27,7 @@ export default async function SignInPage() {
       }}
     >
       <Reveal style={{ width: "min(440px, 100%)" }}>
-        <GlassCard variant="panel" tinted style={{ textAlign: "center" }}>
+        <Card variant="panel" mist style={{ textAlign: "center" }}>
           <span className="eyebrow" style={{ marginBottom: 22 }}>
             {t.signIn.eyebrow}
           </span>
@@ -67,10 +67,10 @@ export default async function SignInPage() {
               {t.signIn.google}
             </button>
           </form>
-          <p className="mono" style={{ fontSize: 11, color: "rgba(255,255,255,.5)", marginTop: 18 }}>
+          <p className="mono muted" style={{ fontSize: 11, marginTop: 18 }}>
             {t.signIn.note}
           </p>
-        </GlassCard>
+        </Card>
       </Reveal>
     </div>
   );

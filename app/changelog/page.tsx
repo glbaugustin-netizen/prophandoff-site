@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import GlassCard from "@/components/ui/GlassCard";
+import Card from "@/components/ui/Card";
 import Reveal from "@/components/ui/Reveal";
 import { MixedTitle } from "@/components/ui/MixedTitle";
 import { getAddons, formatDate } from "@/lib/addons";
@@ -32,7 +32,7 @@ export default async function ChangelogPage() {
       </Reveal>
 
       <Reveal delay={120}>
-        <GlassCard variant="panel" tinted style={{ marginTop: "2.5rem" }}>
+        <Card variant="panel" mist style={{ marginTop: "2.5rem" }}>
           <ol className="timeline" style={{ margin: 0 }}>
             {entries.map(({ addon, entry }) => (
               <li key={`${addon.slug}-${entry.version}`} className="timeline-item">
@@ -58,7 +58,7 @@ export default async function ChangelogPage() {
               </li>
             ))}
           </ol>
-        </GlassCard>
+        </Card>
       </Reveal>
     </div>
   );

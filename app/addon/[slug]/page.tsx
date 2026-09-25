@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import GlassCard from "@/components/ui/GlassCard";
+import Card from "@/components/ui/Card";
 import DownloadButton from "@/components/ui/DownloadButton";
 import Reveal from "@/components/ui/Reveal";
 import { MixedTitle } from "@/components/ui/MixedTitle";
@@ -37,7 +37,7 @@ const dtStyle = {
   fontWeight: 700,
   letterSpacing: ".14em",
   textTransform: "uppercase",
-  color: "rgba(255,255,255,.65)",
+  color: "var(--ink-muted)",
 } as const;
 
 export default async function AddonPage({ params }: PageProps) {
@@ -51,12 +51,11 @@ export default async function AddonPage({ params }: PageProps) {
     <div className="container page">
       {/* Hero */}
       <Reveal>
-        <GlassCard variant="panel" tinted style={{ marginBottom: 26 }}>
+        <Card variant="panel" mist style={{ marginBottom: 26 }}>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 22 }}>
             <span className="chip chip-amber">v{addon.version}</span>
             <span className="chip chip-live">{t.addon.free}</span>
             <span className="chip">Blender {addon.blender}</span>
-            <span className="chip">v{addon.version}</span>
           </div>
           <MixedTitle
             as="h1"
@@ -67,10 +66,9 @@ export default async function AddonPage({ params }: PageProps) {
             style={{
               fontSize: "clamp(1.05rem, 1.5vw, 1.25rem)",
               maxWidth: "46ch",
-              color: "rgba(255,255,255,.9)",
+              color: "var(--ink-muted)",
               lineHeight: 1.5,
               marginBottom: "2rem",
-              textShadow: "0 1px 10px rgba(0,0,0,.3)",
             }}
           >
             {t.addon.shortDescription}
@@ -81,12 +79,12 @@ export default async function AddonPage({ params }: PageProps) {
               href="https://github.com/glbaugustin-netizen/prop-handoff"
               target="_blank"
               rel="noreferrer"
-              className="btn btn-glass"
+              className="btn btn-secondary"
             >
               {t.addon.viewGithub}
             </a>
           </div>
-        </GlassCard>
+        </Card>
       </Reveal>
 
       <div
@@ -101,7 +99,7 @@ export default async function AddonPage({ params }: PageProps) {
         <div style={{ display: "grid", gap: 26 }}>
           {/* Features */}
           <Reveal delay={80}>
-            <GlassCard tinted>
+            <Card mist>
               <span className="eyebrow">{t.addon.features}</span>
               <MixedTitle as="h2" text={t.addon.doesTitle} style={{ fontSize: "1.7rem", margin: "14px 0 12px" }} />
               <p className="muted" style={{ lineHeight: 1.55 }}>
@@ -112,22 +110,22 @@ export default async function AddonPage({ params }: PageProps) {
                   <li key={f}>{f}</li>
                 ))}
               </ul>
-            </GlassCard>
+            </Card>
           </Reveal>
 
           {/* Installation */}
           <Reveal delay={120}>
-            <GlassCard tinted>
+            <Card mist>
               <MixedTitle as="h2" text={t.addon.installTitle} style={{ fontSize: "1.7rem", marginBottom: 12 }} />
               <p className="muted" style={{ lineHeight: 1.6, maxWidth: "68ch" }}>
                 {t.addon.installText}
               </p>
-            </GlassCard>
+            </Card>
           </Reveal>
 
           {/* Changelog accordéon */}
           <Reveal delay={140}>
-            <GlassCard tinted>
+            <Card mist>
               <span className="eyebrow" style={{ marginBottom: 18 }}>
                 {t.addon.changelog}
               </span>
@@ -151,13 +149,13 @@ export default async function AddonPage({ params }: PageProps) {
                   </ul>
                 </details>
               ))}
-            </GlassCard>
+            </Card>
           </Reveal>
         </div>
 
         {/* Sidebar */}
         <Reveal delay={200} style={{ position: "sticky", top: "calc(var(--nav-h) + 8px)" }}>
-          <GlassCard tinted>
+          <Card mist>
             <div
               className="mono"
               style={{
@@ -212,7 +210,7 @@ export default async function AddonPage({ params }: PageProps) {
               variant="primary"
               className="btn-block"
             />
-          </GlassCard>
+          </Card>
         </Reveal>
       </div>
 

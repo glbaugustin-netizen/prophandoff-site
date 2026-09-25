@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth";
-import GlassCard from "@/components/ui/GlassCard";
+import Card from "@/components/ui/Card";
 import Reveal from "@/components/ui/Reveal";
 import { MixedTitle } from "@/components/ui/MixedTitle";
 import { getAddon, formatDate } from "@/lib/addons";
@@ -46,9 +46,9 @@ export default async function DashboardPage() {
   return (
     <div className="container page" style={{ maxWidth: 820 }}>
       <Reveal>
-        <GlassCard
+        <Card
           variant="panel"
-          tinted
+          mist
           style={{ display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap", marginBottom: 26 }}
         >
           {user.image ? (
@@ -58,25 +58,12 @@ export default async function DashboardPage() {
               alt=""
               width={64}
               height={64}
-              style={{
-                borderRadius: "50%",
-                border: "1px solid rgba(255,255,255,.5)",
-                boxShadow: "inset 0 1px 1px rgba(255,255,255,.6), 0 10px 22px -10px rgba(0,0,0,.5)",
-              }}
+              style={{ border: "2px solid var(--ink)" }}
             />
           ) : (
             <span
-              style={{
-                width: 64,
-                height: 64,
-                borderRadius: "50%",
-                background: "rgba(255,255,255,.92)",
-                color: "var(--ink)",
-                display: "grid",
-                placeItems: "center",
-                fontWeight: 700,
-                fontSize: "1.5rem",
-              }}
+              className="tile tile-amber"
+              style={{ width: 64, height: 64, fontSize: "1.5rem", fontWeight: 700 }}
             >
               {(user.name ?? "?").charAt(0).toUpperCase()}
             </span>
@@ -97,15 +84,15 @@ export default async function DashboardPage() {
               await signOut({ redirectTo: "/" });
             }}
           >
-            <button type="submit" className="btn btn-glass btn-sm">
+            <button type="submit" className="btn btn-secondary btn-sm">
               {t.dashboard.signOut}
             </button>
           </form>
-        </GlassCard>
+        </Card>
       </Reveal>
 
       <Reveal delay={100}>
-        <GlassCard tinted>
+        <Card mist>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
             <span className="eyebrow">{t.dashboard.downloads}</span>
             <span className="chip">{downloads.length}</span>
@@ -114,7 +101,7 @@ export default async function DashboardPage() {
           {downloads.length === 0 ? (
             <div
               className="field"
-              style={{ marginTop: 22, justifyContent: "space-between", color: "rgba(255,255,255,.7)" }}
+              style={{ marginTop: 22, justifyContent: "space-between" }}
             >
               <span>{t.dashboard.empty}</span>
               <a href="/addon/prop-handoff" className="btn btn-primary btn-sm">
@@ -129,7 +116,7 @@ export default async function DashboardPage() {
                   <li
                     key={d.id}
                     className="field"
-                    style={{ justifyContent: "space-between", borderRadius: 20 }}
+                    style={{ justifyContent: "space-between" }}
                   >
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 12 }}>
                       <span className="tile tile-amber" style={{ width: 40, height: 40, fontSize: 16 }}>
@@ -146,7 +133,7 @@ export default async function DashboardPage() {
               })}
             </ul>
           )}
-        </GlassCard>
+        </Card>
       </Reveal>
     </div>
   );

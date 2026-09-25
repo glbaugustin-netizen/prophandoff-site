@@ -1,6 +1,6 @@
 import ScrollAnimation from "@/components/ScrollAnimation";
 import HeroSkip from "@/components/HeroSkip";
-import GlassCard from "@/components/ui/GlassCard";
+import Card from "@/components/ui/Card";
 import DownloadButton from "@/components/ui/DownloadButton";
 import Reveal from "@/components/ui/Reveal";
 import { MixedTitle } from "@/components/ui/MixedTitle";
@@ -78,9 +78,9 @@ export default async function HomePage() {
         <section className="section after-hero" id="addon">
           <div className="container">
             <Reveal>
-              <GlassCard
+              <Card
                 variant="panel"
-                tinted
+                mist
                 style={{ maxWidth: 760, marginInline: "auto", textAlign: "center" }}
               >
                 <div style={{ display: "flex", justifyContent: "center", gap: 8, flexWrap: "wrap", marginBottom: 22 }}>
@@ -96,7 +96,7 @@ export default async function HomePage() {
                     maxWidth: "52ch",
                     marginInline: "auto",
                     marginBottom: "2rem",
-                    color: "rgba(255,255,255,.9)",
+                    color: "var(--ink-muted)",
                     fontSize: "1.05rem",
                     lineHeight: 1.5,
                   }}
@@ -105,12 +105,12 @@ export default async function HomePage() {
                 </p>
                 <div style={{ display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
                   <DownloadButton slug={addon.slug} variant="primary" label={t.home.ctaPrimary} />
-                  <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="btn btn-glass">
+                  <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="btn btn-secondary">
                     {t.home.ctaSecondary}
                   </a>
                 </div>
                 <p className="trust">{t.home.trustLine}</p>
-              </GlassCard>
+              </Card>
             </Reveal>
 
             {/* Texte de présentation, sous la bulle, en texte brut */}

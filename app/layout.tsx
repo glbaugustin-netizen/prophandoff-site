@@ -1,37 +1,28 @@
 import type { Metadata } from "next";
-import { Fira_Sans, Mea_Culpa, Space_Mono } from "next/font/google";
+import { DM_Sans, Fraunces } from "next/font/google";
 import type { ReactNode } from "react";
 import Providers from "./providers";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
-import LiquidFilters from "@/components/ui/LiquidFilters";
-import LiquidBackground from "@/components/ui/LiquidBackground";
 import LanguageProvider from "@/components/LanguageProvider";
 import { getDictionary } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale-server";
 import "./globals.css";
 
-// Police principale : textes courants et base des titres.
-const firaSans = Fira_Sans({
+// Titres.
+const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-fira",
+  weight: ["500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-fraunces",
   display: "swap",
 });
 
-// Police manuscrite : uniquement les mots-clés des titres (classe .script).
-const meaCulpa = Mea_Culpa({
+// Texte courant, libellés, boutons.
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-mea",
-  display: "swap",
-});
-
-// Mono d'accent (eyebrows, chips, labels) hérité du style board.
-const spaceMono = Space_Mono({
-  variable: "--font-space-mono",
-  subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "600", "700"],
+  variable: "--font-dm-sans",
   display: "swap",
 });
 
@@ -70,11 +61,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html
       lang={locale}
-      className={`${firaSans.variable} ${meaCulpa.variable} ${spaceMono.variable}`}
+      className={`${fraunces.variable} ${dmSans.variable}`}
     >
-      <body style={{ background: "#0e1016" }}>
-        <LiquidFilters />
-        <LiquidBackground />
+      <body>
         <LanguageProvider initialLocale={locale}>
           <Providers>
             <Navbar />

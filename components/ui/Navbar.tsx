@@ -92,7 +92,6 @@ export default function Navbar() {
   const { data: session, status } = useSession();
   const { t } = useLang();
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
 
   // Sélection "optimiste" au clic, puis alignée sur la route réelle.
   const routeActive = ITEMS.find((it) => isActivePath(pathname, it.href))?.href ?? null;
@@ -106,15 +105,6 @@ export default function Navbar() {
     w: 0,
     visible: false,
   });
-
-  // À chaque changement de sélection, la goutte rejoue son squash & stretch
-  // (l'élément interne est re-monté via `key`, l'animation repart de zéro).
-  const [moveKey, setMoveKey] = useState(0);
-  const prevActive = useRef<string | null>(active);
-  useEffect(() => {
-    if (prevActive.current !== active && active) setMoveKey((k) => k + 1);
-    prevActive.current = active;
-  }, [active]);
 
   // La bulle se cale sur l'élément sélectionné (mesure DOM → transform/width).
   const measure = useCallback((): void => {
@@ -149,15 +139,8 @@ export default function Navbar() {
     };
   }, [measure]);
 
-  useEffect(() => {
-    const onScroll = (): void => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
-    <header className={`navx${scrolled ? " is-scrolled" : ""}`}>
+    <header className="navx">
       <nav className="navx-pill" aria-label="Navigation principale">
         <Link href="/" className="navx-brand" onClick={() => setActive("/")}>
           handoff
@@ -165,13 +148,13 @@ export default function Navbar() {
         </Link>
 
         <ul className="navx-list" ref={listRef}>
-          {/* bulle liquid glass qui glisse sous l'élément sélectionné */}
+          {/* bloc or qui glisse sous l'élément sélectionné */}
           <li
             aria-hidden="true"
             className={`navx-bubble${bubble.visible ? " is-visible" : ""}`}
             style={{ transform: `translateX(${bubble.x}px)`, width: bubble.w }}
           >
-            <span key={moveKey} className={`navx-drop${moveKey > 0 ? " is-moving" : ""}`} />
+            <span className="navx-drop" />
           </li>
           {ITEMS.map((it) => {
             const on = active === it.href;
@@ -213,7 +196,7 @@ export default function Navbar() {
           >
             {session.user.image ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={session.user.image} alt="" width={34} height={34} />
+              <img src={session.user.image} alt="" width={36} height={36} />
             ) : (
               <span>{(session.user.name ?? "?").charAt(0).toUpperCase()}</span>
             )}
