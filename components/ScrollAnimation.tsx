@@ -95,11 +95,11 @@ const headingStyle: CSSProperties = {
   textWrap: "balance",
 };
 
-/** Overlay d'un stop : titre seul, centré verticalement, moitié gauche. */
-const overlayWrapStyle = (opacity: number): CSSProperties => ({
+/** Overlay d'un stop : centré verticalement sur une moitié de l'écran. */
+const overlayWrapStyle = (opacity: number, side: "left" | "right"): CSSProperties => ({
   position: "absolute",
   top: 0,
-  left: 0,
+  [side]: 0,
   width: "50%",
   height: "100%",
   display: "flex",
@@ -428,16 +428,16 @@ export default function ScrollAnimation({
           </div>
         )}
 
-        {/* Overlay stop 1 : titre + phrase, posés sur la vidéo (pas de verre) */}
-        <div style={overlayWrapStyle(derived.stop1Opacity)} aria-hidden={derived.stop1Opacity === 0}>
+        {/* Overlay stop 1 : titre + phrase à droite, posés sur la vidéo (pas de verre) */}
+        <div style={overlayWrapStyle(derived.stop1Opacity, "right")} aria-hidden={derived.stop1Opacity === 0}>
           <div style={overlayBlockStyle(derived.stop1Opacity)}>
             <MixedTitle as="h2" text={stop1.title} style={overlayTitleStyle} />
             {stop1.description && <p style={overlayTextStyle}>{stop1.description}</p>}
           </div>
         </div>
 
-        {/* Overlay stop 2 */}
-        <div style={overlayWrapStyle(derived.stop2Opacity)} aria-hidden={derived.stop2Opacity === 0}>
+        {/* Overlay stop 2 : à gauche */}
+        <div style={overlayWrapStyle(derived.stop2Opacity, "left")} aria-hidden={derived.stop2Opacity === 0}>
           <div style={overlayBlockStyle(derived.stop2Opacity)}>
             <MixedTitle as="h2" text={stop2.title} style={overlayTitleStyle} />
             {stop2.description && <p style={overlayTextStyle}>{stop2.description}</p>}
