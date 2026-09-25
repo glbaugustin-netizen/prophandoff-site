@@ -70,6 +70,8 @@ const INTRO_FADE_VH = 12; // fade out du titre d'intro
 const MARQUEE_WORD = "PROP HANDOFF";
 const MARQUEE_LINES = 24; // réparties sur 260vh : la colonne couvre toujours l'écran
 const MARQUEE_SHIFT_VH = 40; // course de chaque colonne sur la transition
+/** Dégradé en haut de la barre de sortie : le gris arrive sans arête nette. */
+const BAR_FADE_VH = 34;
 
 /** Id de la section (utilisé par HeroSkip pour se positionner dessous). */
 export const HERO_SECTION_ID = "hero";
@@ -369,8 +371,11 @@ export default function ScrollAnimation({
         : 0;
     const marqueeShift = transition * MARQUEE_SHIFT_VH;
 
-    const barActive = segment === "transition" && transition > 0;
-    const barTranslate = `translateY(-${(transition * 100).toFixed(3)}vh)`;
+    // La barre part plus tard et son bord haut est dégradé : au lieu d'un
+    // rectangle net qui coupe l'écran, le gris monte en fondu.
+    const barProgress = clamp01((transition - 0.25) / 0.75);
+    const barActive = segment === "transition" && barProgress > 0;
+    const barTranslate = `translateY(-${(barProgress * (100 + BAR_FADE_VH)).toFixed(3)}vh)`;
 
     return {
       introOpacity,
@@ -573,7 +578,8 @@ export default function ScrollAnimation({
           ))}
         </div>
 
-        {/* Barre droite qui monte depuis le bas et couvre l'écran en fin de section */}
+        {/* Voile gris qui monte depuis le bas, bord haut en dégradé, et couvre
+            l'écran en fin de section pour raccorder avec la suite */}
         <div
           aria-hidden="true"
           style={{
@@ -581,8 +587,8 @@ export default function ScrollAnimation({
             left: 0,
             right: 0,
             top: "100%",
-            height: "100vh",
-            background: WAVE_COLOR,
+            height: `calc(100vh + ${BAR_FADE_VH}vh)`,
+            background: `linear-gradient(to bottom, rgba(14,16,22,0) 0, ${WAVE_COLOR} ${BAR_FADE_VH}vh)`,
             opacity: derived.barOpacity,
             transform: derived.barTranslate,
             willChange: "transform",
