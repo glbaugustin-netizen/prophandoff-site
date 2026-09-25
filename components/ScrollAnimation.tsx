@@ -66,6 +66,11 @@ const FADE_IN_VH = 30; // fade in du texte sur les 30 premiers vh du stop
 const FADE_OUT_VH = 15; // fade out sur les derniers vh du stop 1
 const INTRO_FADE_VH = 12; // fade out du titre d'intro
 
+/** Transition de sortie : bandeau typographique qui défile en sens inverse. */
+const MARQUEE_WORD = "PROP HANDOFF";
+const MARQUEE_LINES = 24; // réparties sur 260vh : la colonne couvre toujours l'écran
+const MARQUEE_SHIFT_VH = 40; // course de chaque colonne sur la transition
+
 /** Id de la section (utilisé par HeroSkip pour se positionner dessous). */
 export const HERO_SECTION_ID = "hero";
 /** Clé sessionStorage posée quand l'animation a été scrollée jusqu'au bout. */
@@ -118,6 +123,28 @@ const overlayBlockStyle = (opacity: number): CSSProperties => ({
 });
 
 const overlayTitleStyle: CSSProperties = { ...headingStyle, maxWidth: "14ch" };
+
+const marqueeLineStyle: CSSProperties = {
+  display: "block",
+  textAlign: "center",
+  whiteSpace: "nowrap",
+  fontSize: "min(8vh, 7vw)",
+  fontWeight: 700,
+  lineHeight: 1.04,
+  letterSpacing: "-0.03em",
+};
+
+const marqueeSolidStyle: CSSProperties = {
+  ...marqueeLineStyle,
+  color: "rgba(255,255,255,.9)",
+};
+
+/** Une ligne sur deux en contour : donne de la matière sans surcharger. */
+const marqueeOutlineStyle: CSSProperties = {
+  ...marqueeLineStyle,
+  color: "transparent",
+  WebkitTextStroke: "1px rgba(255,255,255,.4)",
+};
 
 const overlayTextStyle: CSSProperties = {
   margin: "18px 0 0",
@@ -323,15 +350,25 @@ export default function ScrollAnimation({
     const transition = getLocal(progress, "transition");
     let stop2Opacity = 0;
     if (segment === "stop2") stop2Opacity = clamp01(s2 / FADE_IN_VH);
-    else if (segment === "transition") stop2Opacity = 1 - clamp01(transition / 0.5);
+    else if (segment === "transition") stop2Opacity = 1 - clamp01(transition / 0.35);
 
     const scrollIndicatorOpacity = Math.max(stop1Opacity, stop2Opacity);
 
     // Sortie : l'image s'assombrit progressivement (ease-in-out) jusqu'au fond
     // du site, pendant qu'une barre droite monte depuis le bas pour finir
     // exactement dans la couleur de la section suivante.
-    const fadeOpacity =
-      transition < 0.5 ? 2 * transition * transition : 1 - Math.pow(-2 * transition + 2, 2) / 2;
+    // L'assombrissement est plus rapide que la transition pour que le bandeau
+    // typographique se lise sur un fond déjà sombre.
+    const dark = clamp01(transition / 0.6);
+    const fadeOpacity = dark < 0.5 ? 2 * dark * dark : 1 - Math.pow(-2 * dark + 2, 2) / 2;
+
+    // Bandeau : apparaît vite, défile, puis s'efface avant que la barre couvre.
+    const marqueeOpacity =
+      segment === "transition"
+        ? clamp01(transition / 0.18) * (1 - clamp01((transition - 0.7) / 0.3))
+        : 0;
+    const marqueeShift = transition * MARQUEE_SHIFT_VH;
+
     const barActive = segment === "transition" && transition > 0;
     const barTranslate = `translateY(-${(transition * 100).toFixed(3)}vh)`;
 
@@ -341,6 +378,8 @@ export default function ScrollAnimation({
       stop2Opacity,
       scrollIndicatorOpacity,
       fadeOpacity,
+      marqueeOpacity,
+      marqueeShift,
       barOpacity: barActive ? 1 : 0,
       barTranslate,
     };
@@ -492,6 +531,47 @@ export default function ScrollAnimation({
             zIndex: 4,
           }}
         />
+
+        {/* Bandeau typographique : la colonne de droite monte, celle de gauche descend */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            opacity: derived.marqueeOpacity,
+            pointerEvents: "none",
+            zIndex: 5,
+          }}
+        >
+          {(["left", "right"] as const).map((side) => (
+            <div key={side} style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: 0,
+                  right: 0,
+                  minHeight: "260vh",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-around",
+                  // la gauche descend, la droite monte
+                  transform: `translateY(calc(-50% + ${(
+                    (side === "left" ? 1 : -1) * derived.marqueeShift
+                  ).toFixed(2)}vh))`,
+                  willChange: "transform",
+                }}
+              >
+                {Array.from({ length: MARQUEE_LINES }, (_, i) => (
+                  <span key={i} style={i % 2 === 0 ? marqueeSolidStyle : marqueeOutlineStyle}>
+                    {MARQUEE_WORD}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
 
         {/* Barre droite qui monte depuis le bas et couvre l'écran en fin de section */}
         <div
