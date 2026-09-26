@@ -46,6 +46,12 @@ const Icons = {
       <path d="M12 12v9" />
     </svg>
   ),
+  guides: (
+    <svg {...iconProps}>
+      <path d="M12 7.5C10.5 6 8.5 5.5 4.5 5.5v12c4 0 6 .5 7.5 2 1.5-1.5 3.5-2 7.5-2v-12c-4 0-6 .5-7.5 2Z" />
+      <path d="M12 7.5v12" />
+    </svg>
+  ),
   changelog: (
     <svg {...iconProps}>
       <circle cx="12" cy="12" r="8.5" />
@@ -77,6 +83,7 @@ interface NavItem {
 const ITEMS: NavItem[] = [
   { href: "/", labelKey: "home", icon: Icons.home },
   { href: "/addon/prop-handoff", labelKey: "addon", icon: Icons.addon },
+  { href: "/guides", labelKey: "guides", icon: Icons.guides },
   { href: "/changelog", labelKey: "changelog", icon: Icons.changelog },
   { href: "/dashboard", labelKey: "dashboard", icon: Icons.dashboard },
 ];

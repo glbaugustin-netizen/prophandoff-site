@@ -30,6 +30,7 @@ export interface Dictionary {
   nav: {
     home: string;
     addon: string;
+    guides: string;
     changelog: string;
     dashboard: string;
     signIn: string;
@@ -98,6 +99,17 @@ export interface Dictionary {
     note: string;
     pageTitle: string;
   };
+  guides: {
+    pageTitle: string;
+    pageDescription: string;
+    eyebrow: string;
+    title: string;
+    lead: string;
+    items: { title: string; intro: string; steps: string[] }[];
+    manualTitle: string;
+    manualText: string;
+    manualCta: string;
+  };
   changelog: {
     pageTitle: string;
     pageDescription: string;
@@ -132,6 +144,7 @@ const fr: Dictionary = {
   nav: {
     home: "Accueil",
     addon: "Addon",
+    guides: "Guides",
     changelog: "Changelog",
     dashboard: "Dashboard",
     signIn: "Se connecter",
@@ -250,6 +263,53 @@ const fr: Dictionary = {
     note: "Aucun mot de passe · aucune newsletter",
     pageTitle: "Connexion",
   },
+  guides: {
+    pageTitle: "Guides — Prise en main de PropHandoff",
+    pageDescription:
+      "Installer PropHandoff, keyframer un premier transfert de prop entre les mains et rigger une arme à deux mains dans Blender. Guides pas à pas.",
+    eyebrow: "Prise en main",
+    title: "Guides *PropHandoff*",
+    lead: "Trois guides courts pour installer l'addon et animer votre premier transfert de prop. Chaque étape se fait depuis le panneau PropHandoff de la sidebar (touche N).",
+    items: [
+      {
+        title: "Installer l'addon",
+        intro: "Deux minutes, aucune dépendance, aucun compte.",
+        steps: [
+          "Téléchargez prop_handoff_v0.3.3.zip depuis la page Releases du dépôt GitHub.",
+          "Dans Blender : Edit ▸ Preferences ▸ Add-ons ▸ ▾ ▸ Install from Disk… puis choisissez le zip.",
+          "Cochez la case PropHandoff : l'onglet apparaît dans la sidebar de la vue 3D (touche N).",
+          "Mise à jour : désactivez l'addon, cliquez Remove, redémarrez Blender, puis installez le nouveau zip.",
+          "prop_handoff_extension.zip est le même addon packagé pour la plateforme Extensions : installez l'un ou l'autre, jamais les deux.",
+        ],
+      },
+      {
+        title: "Votre premier transfert de prop",
+        intro: "Le prop suit la main : une épée qui passe d'une main à l'autre, un objet qu'on repose.",
+        steps: [
+          "Sélectionnez le prop, puis cliquez Setup Prop dans le panneau.",
+          "Placez-vous au frame du transfert et choisissez Assign ▸ Left hand (ou Right hand).",
+          "Le prop ne bouge pas d'un pixel : la contrainte et ses keyframes sont posées pour vous.",
+          "Plus loin dans le plan : réassignez à l'autre main, faites un Release en espace monde, ou un Throw qui prolonge le geste en parabole.",
+          "L'historique des transferts est reconstruit depuis les F-Curves : naviguez avec Previous, Next et Go.",
+        ],
+      },
+      {
+        title: "Rigger une arme à deux mains",
+        intro: "Cette fois ce sont les mains qui suivent le prop : lance, fusil, batte.",
+        steps: [
+          "Configurez le prop, puis définissez une Grip Zone sur le manche : la main libre l'attrape par proximité, via des drivers, sans cycle de dépendance.",
+          "Utilisez Attach pour keyframer la prise des deux mains au frame voulu.",
+          "Master Hand décide qui commande : le prop suit une main, l'autre main suit le prop.",
+          "La limite d'allonge empêche le personnage de s'étirer au-delà de ses propres bras.",
+          "Plusieurs props à la fois : chaque objet garde ses slots, ses contraintes et son historique, et apparaît comme un onglet du panneau.",
+        ],
+      },
+    ],
+    manualTitle: "Manuel complet et rigs supportés",
+    manualText:
+      "Le manuel détaillé (chaque panneau, l'architecture de la Grip Zone, les limitations connues et le dépannage) est dans le dépôt. Développé et testé sur Blender 5.2, avec Auto-Rig Pro (c_hand_ik.l / c_hand_ik.r) et un personnage Rigify (hand_ik.L / hand_ik.R), bras en IK. Tout rig dont les mains sont pilotées par des contrôleurs IK devrait fonctionner ; les bras uniquement FK sont supportés pour les transferts.",
+    manualCta: "Lire le manuel sur GitHub",
+  },
   changelog: {
     pageTitle: "Changelog — Addon Blender PropHandoff",
     pageDescription:
@@ -285,6 +345,7 @@ const en: Dictionary = {
   nav: {
     home: "Home",
     addon: "Addon",
+    guides: "Guides",
     changelog: "Changelog",
     dashboard: "Dashboard",
     signIn: "Sign in",
@@ -402,6 +463,53 @@ const en: Dictionary = {
     google: "Continue with Google",
     note: "No password · no newsletter",
     pageTitle: "Sign in",
+  },
+  guides: {
+    pageTitle: "Guides — Getting started with PropHandoff",
+    pageDescription:
+      "Install PropHandoff, keyframe your first hand prop transfer and rig a two-handed weapon in Blender. Step-by-step guides.",
+    eyebrow: "Getting started",
+    title: "PropHandoff *guides*",
+    lead: "Three short guides to install the addon and animate your first prop transfer. Every step happens in the PropHandoff panel of the sidebar (N key).",
+    items: [
+      {
+        title: "Install the addon",
+        intro: "Two minutes, no dependency, no account.",
+        steps: [
+          "Download prop_handoff_v0.3.3.zip from the Releases page of the GitHub repository.",
+          "In Blender: Edit ▸ Preferences ▸ Add-ons ▸ ▾ ▸ Install from Disk… then pick the zip.",
+          "Tick the PropHandoff checkbox: the tab shows up in the 3D View sidebar (N key).",
+          "Updating: disable the addon, click Remove, restart Blender, then install the new zip.",
+          "prop_handoff_extension.zip is the same addon packaged for the Extensions platform: install one or the other, never both.",
+        ],
+      },
+      {
+        title: "Your first prop transfer",
+        intro: "The prop follows a hand: a sword passed from one hand to the other, an object put down.",
+        steps: [
+          "Select the prop, then click Setup Prop in the panel.",
+          "Move to the transfer frame and choose Assign ▸ Left hand (or Right hand).",
+          "The prop does not move by a pixel: the constraint and its keyframes are built for you.",
+          "Later in the shot: reassign to the other hand, Release in world space, or Throw along a parabola that extends the gesture.",
+          "The transfer history is rebuilt from the F-Curves: navigate it with Previous, Next and Go.",
+        ],
+      },
+      {
+        title: "Rig a two-handed weapon",
+        intro: "This time the hands follow the prop: spear, rifle, bat.",
+        steps: [
+          "Set the prop up, then define a Grip Zone on the shaft: the free hand catches it by proximity, driver-based, with no dependency cycle.",
+          "Use Attach to keyframe both hands gripping on the frame you want.",
+          "Master Hand decides who leads: the prop follows one hand, the other hand follows the prop.",
+          "The arm reach limit keeps the character from stretching past its own arms.",
+          "Several props at once: each object keeps its own slots, constraints and history, and shows up as a tab in the panel.",
+        ],
+      },
+    ],
+    manualTitle: "Full manual and supported rigs",
+    manualText:
+      "The detailed manual (every panel, the Grip Zone architecture, known limitations and troubleshooting) lives in the repository. Developed and tested on Blender 5.2, against Auto-Rig Pro (c_hand_ik.l / c_hand_ik.r) and a Rigify human (hand_ik.L / hand_ik.R), arms in IK. Any rig whose hands are driven by IK controllers should work; FK-only arms are supported for transfers.",
+    manualCta: "Read the manual on GitHub",
   },
   changelog: {
     pageTitle: "Changelog — PropHandoff Blender Addon",
