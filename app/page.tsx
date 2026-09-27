@@ -69,7 +69,13 @@ export default async function HomePage() {
       <ScrollAnimation
         intro={{ title: t.hero.intro }}
         stop1={{ frame: 60, title: t.hero.stop1, description: t.hero.stop1Description }}
-        stop2={{ frame: 110, title: t.hero.stop2, description: t.hero.stop2Description }}
+        stop2={{
+          frame: 110,
+          title: t.hero.stop2,
+          description: t.hero.stop2Description,
+          // la frame 110 est claire : texte en encre
+          tone: "dark",
+        }}
       />
       <HeroSkip />
 

@@ -2,7 +2,7 @@ import sharp from "sharp";
 import { readdir, mkdir } from "fs/promises";
 import { join } from "path";
 
-const src = "./animation_scrol";
+const src = "../aniamtion_scroll/rendu_jaune";
 const dst = "./public/frames";
 await mkdir(dst, { recursive: true });
 

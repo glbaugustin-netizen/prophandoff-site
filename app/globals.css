@@ -98,10 +98,11 @@ button {
   color: var(--ink-muted);
 }
 
-/* Le hero est le seul bloc sombre du site (rendu 3D) : l'accent des titres
-   posés dessus passe en or pour rester lisible. */
+/* Sur le rendu du hero, la couleur du fond change d'une frame à l'autre :
+   l'accent garde donc la couleur du titre (claire ou encre) et se distingue
+   par l'italique seul. */
 #hero .script {
-  color: var(--gold-500);
+  color: inherit;
 }
 
 /* --------------------------------------------------------------------------

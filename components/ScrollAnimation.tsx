@@ -32,6 +32,11 @@ export interface StopContent {
   title: string;
   /** Phrase courte sous le titre (texte brut, sans panneau). */
   description?: string;
+  /**
+   * Ton du texte selon la frame : "light" sur une image sombre (défaut),
+   * "dark" sur une image claire.
+   */
+  tone?: "light" | "dark";
 }
 
 export interface IntroContent {
@@ -90,14 +95,17 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
   });
 }
 
+const PAPER = "#fffdf8";
+const INK = "#2a1d14";
+
 const headingStyle: CSSProperties = {
   margin: 0,
   fontSize: "clamp(2.4rem, 5.2vw, 4.8rem)",
   lineHeight: 1.05,
   letterSpacing: "-.035em",
   fontWeight: 700,
-  color: "#fffdf8",
-  textShadow: "3px 3px 0 rgba(26,18,12,.85)",
+  color: PAPER,
+  textShadow: `3px 3px 0 ${INK}`,
   textWrap: "balance",
 };
 
@@ -123,7 +131,12 @@ const overlayBlockStyle = (opacity: number): CSSProperties => ({
   transform: `translateY(${((1 - opacity) * 28).toFixed(1)}px)`,
 });
 
-const overlayTitleStyle: CSSProperties = { ...headingStyle, maxWidth: "14ch" };
+const overlayTitleStyle = (tone: "light" | "dark"): CSSProperties => ({
+  ...headingStyle,
+  maxWidth: "14ch",
+  color: tone === "dark" ? INK : PAPER,
+  textShadow: tone === "dark" ? `3px 3px 0 ${PAPER}` : `3px 3px 0 ${INK}`,
+});
 
 const marqueeLineStyle: CSSProperties = {
   display: "block",
@@ -137,24 +150,25 @@ const marqueeLineStyle: CSSProperties = {
 
 const marqueeSolidStyle: CSSProperties = {
   ...marqueeLineStyle,
-  color: EXIT_BG,
+  color: INK,
 };
 
 /** Une ligne sur deux en contour : donne de la matière sans surcharger. */
 const marqueeOutlineStyle: CSSProperties = {
   ...marqueeLineStyle,
   color: "transparent",
-  WebkitTextStroke: "2px rgba(238,230,216,.55)",
+  WebkitTextStroke: `2px ${INK}`,
 };
 
-const overlayTextStyle: CSSProperties = {
+const overlayTextStyle = (tone: "light" | "dark"): CSSProperties => ({
   margin: "18px 0 0",
   maxWidth: "44ch",
   fontSize: "clamp(1rem, 1.3vw, 1.15rem)",
+  fontWeight: 600,
   lineHeight: 1.5,
-  color: "#fffdf8",
-  textShadow: "2px 2px 0 rgba(26,18,12,.8)",
-};
+  color: tone === "dark" ? INK : PAPER,
+  textShadow: tone === "dark" ? "none" : `2px 2px 0 ${INK}`,
+});
 
 /* ------------------------------------------------------------------ */
 /*  Composant                                                          */
@@ -170,6 +184,8 @@ export default function ScrollAnimation({
   smoothing = 0.18,
 }: ScrollAnimationProps) {
   const { t } = useLang();
+  const tone1 = stop1.tone ?? "light";
+  const tone2 = stop2.tone ?? "light";
   const sectionRef = useRef<HTMLElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -407,8 +423,6 @@ export default function ScrollAnimation({
             width: "100%",
             height: "100%",
             display: "block",
-            opacity: ready ? 1 : 0,
-            transition: "opacity .3s linear",
             zIndex: 0,
           }}
         />
@@ -474,16 +488,16 @@ export default function ScrollAnimation({
         {/* Overlay stop 1 : titre + phrase à droite, posés sur la vidéo (pas de verre) */}
         <div style={overlayWrapStyle(derived.stop1Opacity, "right")} aria-hidden={derived.stop1Opacity === 0}>
           <div style={overlayBlockStyle(derived.stop1Opacity)}>
-            <MixedTitle as="h2" text={stop1.title} style={overlayTitleStyle} />
-            {stop1.description && <p style={overlayTextStyle}>{stop1.description}</p>}
+            <MixedTitle as="h2" text={stop1.title} style={overlayTitleStyle(tone1)} />
+            {stop1.description && <p style={overlayTextStyle(tone1)}>{stop1.description}</p>}
           </div>
         </div>
 
         {/* Overlay stop 2 : à gauche */}
         <div style={overlayWrapStyle(derived.stop2Opacity, "left")} aria-hidden={derived.stop2Opacity === 0}>
           <div style={overlayBlockStyle(derived.stop2Opacity)}>
-            <MixedTitle as="h2" text={stop2.title} style={overlayTitleStyle} />
-            {stop2.description && <p style={overlayTextStyle}>{stop2.description}</p>}
+            <MixedTitle as="h2" text={stop2.title} style={overlayTitleStyle(tone2)} />
+            {stop2.description && <p style={overlayTextStyle(tone2)}>{stop2.description}</p>}
           </div>
         </div>
 
@@ -509,8 +523,8 @@ export default function ScrollAnimation({
             style={{
               fontSize: 10.5,
               letterSpacing: ".2em",
-              color: "#fffdf8",
-              textShadow: "2px 2px 0 rgba(26,18,12,.8)",
+              color: INK,
+              fontWeight: 700,
             }}
           >
             {t.hero.scroll}
