@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 import Card from "@/components/ui/Card";
 import Reveal from "@/components/ui/Reveal";
 import { MixedTitle } from "@/components/ui/MixedTitle";
+import SignOutButton from "@/components/ui/SignOutButton";
 import { getAddon, formatDate } from "@/lib/addons";
 import { getDictionary } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale-server";
@@ -78,16 +79,7 @@ export default async function DashboardPage() {
               {user.email}
             </p>
           </div>
-          <form
-            action={async () => {
-              "use server";
-              await signOut({ redirectTo: "/" });
-            }}
-          >
-            <button type="submit" className="btn btn-secondary btn-sm">
-              {t.dashboard.signOut}
-            </button>
-          </form>
+          <SignOutButton label={t.dashboard.signOut} />
         </Card>
       </Reveal>
 
