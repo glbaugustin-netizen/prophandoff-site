@@ -14,6 +14,7 @@
   --rust-900: #6e3112; /* survol rouille */
   --ink: #2a1d14; /* texte, bordures, ombres */
   --ink-muted: #6b5443; /* texte secondaire */
+  --black: #000; /* marque (marteau de la navbar), noir pur */
 
   --border: 2px solid var(--ink);
   --shadow-brutal: 4px 4px 0 var(--ink);
@@ -633,7 +634,7 @@ body[data-hero-nav="hidden"] .navx {
 
 .navx-brand {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
   font-family: var(--font-display);
   font-weight: 600;
@@ -642,11 +643,14 @@ body[data-hero-nav="hidden"] .navx {
   padding-right: 8px;
 }
 
-.navx-brand-dot {
-  width: 10px;
-  height: 10px;
-  background: var(--rust-700);
-  border: 2px solid var(--ink);
+/* Le marteau se lit comme une lettre : posé sur la ligne de base, aussi haut
+   que les ascendantes de Fraunces (h, d : 0,75 em). */
+.navx-brand-mark {
+  flex: none;
+  height: 0.75em;
+  width: auto;
+  aspect-ratio: 696 / 1005;
+  fill: var(--black);
 }
 
 .navx-list {

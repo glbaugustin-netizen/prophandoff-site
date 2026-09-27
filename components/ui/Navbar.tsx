@@ -74,6 +74,14 @@ const Icons = {
   ),
 } satisfies Record<string, ReactNode>;
 
+/* Marque : le marteau du logo PH, relevé au pixel sur le logo source (tête
+   696 × 455, manche de 126 de large). Plein, et non au trait comme les icônes. */
+const BrandMark = (
+  <svg className="navx-brand-mark" viewBox="0 0 696 1005" aria-hidden="true">
+    <path d="M0 0H135L285 98H411L561 0H696V455H561L411 339V1005H285V339L135 455H0Z" />
+  </svg>
+);
+
 interface NavItem {
   href: string;
   labelKey: keyof Dictionary["nav"];
@@ -151,7 +159,7 @@ export default function Navbar() {
       <nav className="navx-pill" aria-label="Navigation principale">
         <Link href="/" className="navx-brand" onClick={() => setActive("/")}>
           handoff
-          <span className="navx-brand-dot" aria-hidden="true" />
+          {BrandMark}
         </Link>
 
         <ul className="navx-list" ref={listRef}>
