@@ -124,6 +124,11 @@ button {
   position: relative;
 }
 
+/* Une ancre (bouton SKIP, lien #) ne doit pas se caler sous la barre fixe. */
+section[id] {
+  scroll-margin-top: calc(var(--nav-h) + 16px);
+}
+
 .section-title {
   font-size: clamp(2rem, 4.6vw, 3.4rem);
   margin: 0.3em 0 0.45em;
@@ -563,6 +568,40 @@ details.accordion[open] summary::after {
    Navigation
    -------------------------------------------------------------------------- */
 
+/* Bouton SKIP du hero : discret, en bas à droite du rendu. */
+.hero-skip {
+  position: absolute;
+  right: clamp(16px, 4vw, 48px);
+  bottom: clamp(16px, 4vh, 40px);
+  z-index: 7;
+  padding: 7px 13px;
+  background: var(--paper);
+  color: var(--ink);
+  border: var(--border);
+  font: 700 11px/1 var(--font-sans);
+  letter-spacing: 0.12em;
+  transition:
+    background 0.1s,
+    transform 0.1s,
+    box-shadow 0.1s;
+}
+
+.hero-skip:hover {
+  background: var(--gold-500);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-brutal);
+}
+
+.hero-skip:active {
+  transform: translate(0, 0);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.hero-skip:focus-visible {
+  outline: 3px solid var(--rust-700);
+  outline-offset: 3px;
+}
+
 .navx {
   position: fixed;
   top: 0;
@@ -571,6 +610,16 @@ details.accordion[open] summary::after {
   z-index: 50;
   background: var(--paper);
   border-bottom: var(--border);
+  transition:
+    transform 0.35s ease-out,
+    opacity 0.35s ease-out;
+}
+
+/* Masquée pendant l'animation de scroll, de retour avec le bandeau. */
+body[data-hero-nav="hidden"] .navx {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .navx-pill {

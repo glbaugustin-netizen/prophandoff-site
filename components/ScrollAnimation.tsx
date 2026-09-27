@@ -13,6 +13,7 @@ import {
   STOP2_VH,
   TOTAL_VH,
   ZONE1_VH,
+  ZONE2_VH,
   clamp01,
   getFrameIndex,
   getLocal,
@@ -55,6 +56,8 @@ export interface ScrollAnimationProps {
   framesPath?: string;
   /** Extension des fichiers (défaut : "webp"). */
   extension?: string;
+  /** Id de la section vers laquelle le bouton SKIP fait descendre. */
+  skipTargetId?: string;
   /**
    * Inertie du scroll en secondes (défaut : 0.18). Les frames continuent de
    * glisser en ralentissant après l'arrêt du scroll. 0 = aucun lissage.
@@ -76,6 +79,7 @@ const INTRO_FADE_VH = 12; // fade out du titre d'intro
 const MARQUEE_WORD = "PROP HANDOFF";
 const MARQUEE_LINES = 24; // réparties sur 260vh : la colonne couvre toujours l'écran
 const MARQUEE_SHIFT_VH = 40; // course de chaque colonne sur la transition
+const SKIP_FADE_VH = 30; // le bouton SKIP s'efface sur la fin de la zone 2
 
 /** Id de la section (utilisé par HeroSkip pour se positionner dessous). */
 export const HERO_SECTION_ID = "hero";
@@ -181,6 +185,7 @@ export default function ScrollAnimation({
   frameCount = 110,
   framesPath = "/frames",
   extension = "webp",
+  skipTargetId = "addon",
   smoothing = 0.18,
 }: ScrollAnimationProps) {
   const { t } = useLang();
@@ -389,6 +394,18 @@ export default function ScrollAnimation({
     // La barre part plus tard et son bord haut est dégradé : au lieu d'un
     // rectangle net qui coupe l'écran, le gris monte en fondu.
     const barProgress = clamp01((transition - 0.2) / 0.8);
+    // SKIP : visible tant que l'animation avance, disparu à la dernière frame.
+    const z2 = getLocal(progress, "zone2") * ZONE2_VH; // en vh
+    const skipOpacity =
+      segment === "zone1" || segment === "stop1"
+        ? 1
+        : segment === "zone2"
+          ? 1 - clamp01((z2 - (ZONE2_VH - SKIP_FADE_VH)) / SKIP_FADE_VH)
+          : 0;
+
+    // La barre de navigation réapparaît quand le bandeau se met à défiler.
+    const navVisible = segment === "transition";
+
     const barActive = segment === "transition" && barProgress > 0;
     const barTranslate = `translateY(-${(barProgress * 100).toFixed(3)}vh)`;
 
@@ -398,12 +415,26 @@ export default function ScrollAnimation({
       stop2Opacity,
       scrollIndicatorOpacity,
       fadeOpacity,
+      skipOpacity,
+      navVisible,
       marqueeOpacity,
       marqueeShift,
       barOpacity: barActive ? 1 : 0,
       barTranslate,
     };
   }, [progress]);
+
+  // La nav est masquée pendant l'animation et revient avec le bandeau.
+  // On passe par un attribut sur <body> : la Navbar n'a rien à recalculer.
+  useEffect(() => {
+    document.body.dataset.heroNav = derived.navVisible ? "visible" : "hidden";
+  }, [derived.navVisible]);
+
+  useEffect(() => {
+    return () => {
+      delete document.body.dataset.heroNav;
+    };
+  }, []);
 
   /* ---------------- Rendu ---------------- */
 
@@ -500,6 +531,25 @@ export default function ScrollAnimation({
             {stop2.description && <p style={overlayTextStyle(tone2)}>{stop2.description}</p>}
           </div>
         </div>
+
+        {/* Bouton SKIP : descend directement à la zone de téléchargement */}
+        <button
+          type="button"
+          className="hero-skip"
+          aria-label={t.hero.skipAria}
+          aria-hidden={derived.skipOpacity === 0}
+          onClick={() => {
+            document
+              .getElementById(skipTargetId)
+              ?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+          style={{
+            opacity: derived.skipOpacity,
+            pointerEvents: derived.skipOpacity > 0.3 ? "auto" : "none",
+          }}
+        >
+          {t.hero.skip}
+        </button>
 
         {/* Indicateur scroll */}
         <div

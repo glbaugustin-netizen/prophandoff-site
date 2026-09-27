@@ -44,6 +44,8 @@ export interface Dictionary {
     stop2: string;
     stop2Description: string;
     scroll: string;
+    skip: string;
+    skipAria: string;
     loading: string;
   };
   home: {
@@ -160,6 +162,8 @@ const fr: Dictionary = {
     stop2Description:
       "Chaque transfert de prop reste visible et éditable sur votre timeline. Naviguez, ajustez, itérez — sans perdre votre travail d'animation.",
     scroll: "SCROLL",
+    skip: "SKIP",
+    skipAria: "Passer l'animation et aller au téléchargement",
     loading: "Chargement",
   },
   home: {
@@ -361,6 +365,8 @@ const en: Dictionary = {
     stop2Description:
       "Every prop transfer stays visible and editable on your timeline. Navigate, adjust, iterate — without losing your animation work.",
     scroll: "SCROLL",
+    skip: "SKIP",
+    skipAria: "Skip the animation and go to the download",
     loading: "Loading",
   },
   home: {
