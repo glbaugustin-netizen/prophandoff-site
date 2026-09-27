@@ -750,6 +750,49 @@ body[data-hero-nav="hidden"] .navx {
   margin-left: 8px;
 }
 
+/* nom au survol (et au focus clavier) : étiquette sous l'icône, qui ne décale
+   pas la barre */
+.navx-tip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  z-index: 2;
+  padding: 6px 9px;
+  background: var(--paper);
+  color: var(--ink);
+  border: var(--border);
+  box-shadow: var(--shadow-brutal);
+  font: 600 13px/1 var(--font-sans);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -4px);
+  transition:
+    opacity 0.12s ease-out,
+    transform 0.12s ease-out,
+    visibility 0.12s;
+}
+
+@media (hover: hover) {
+  .navx-item:hover .navx-tip {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+}
+
+.navx-item:focus-visible .navx-tip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+/* l'élément actif affiche déjà son nom */
+.navx-item.is-active .navx-tip {
+  display: none;
+}
+
 .navx-signin {
   display: inline-flex;
   align-items: center;
@@ -919,6 +962,10 @@ body[data-hero-nav="hidden"] .navx {
     grid-template-columns: 0fr;
     opacity: 0;
     margin-left: 0;
+  }
+  /* le nom de l'actif est masqué : l'étiquette de survol prend le relais */
+  .navx-item.is-active .navx-tip {
+    display: block;
   }
   .lang-opt {
     width: 32px;

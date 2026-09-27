@@ -185,12 +185,14 @@ export default function Navbar() {
                   className={`navx-item${on ? " is-active" : ""}`}
                   aria-label={label}
                   aria-current={on ? "page" : undefined}
-                  title={label}
                   onClick={() => setActive(it.href)}
                 >
                   <span className="navx-icon">{it.icon}</span>
                   <span className="navx-label">
                     <span>{label}</span>
+                  </span>
+                  <span className="navx-tip" aria-hidden="true">
+                    {label}
                   </span>
                 </Link>
               </li>
