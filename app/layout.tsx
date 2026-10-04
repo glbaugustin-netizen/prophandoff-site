@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import Providers from "./providers";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
+import SupportWidget from "@/components/support/SupportWidget";
 import LanguageProvider from "@/components/LanguageProvider";
 import { getDictionary } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale-server";
@@ -69,6 +70,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             <Navbar />
             <main style={{ position: "relative", zIndex: 1 }}>{children}</main>
             <Footer />
+            <SupportWidget />
           </Providers>
         </LanguageProvider>
       </body>

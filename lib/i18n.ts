@@ -1,3 +1,5 @@
+import type { SupportError, TicketKind } from "./support";
+
 export type Locale = "fr" | "en";
 
 export const LOCALES: readonly Locale[] = ["fr", "en"] as const;
@@ -120,6 +122,42 @@ export interface Dictionary {
     lead: string;
   };
   footer: { changelog: string; github: string };
+  support: {
+    fabAria: string;
+    unreadAria: string;
+    title: string;
+    lead: string;
+    signInLead: string;
+    signIn: string;
+    loading: string;
+    close: string;
+    back: string;
+    newTicket: string;
+    empty: string;
+    tabOpen: string;
+    tabClosed: string;
+    kinds: Record<TicketKind, string>;
+    statusOpen: string;
+    statusClosed: string;
+    newReply: string;
+    kindLabel: string;
+    subjectLabel: string;
+    subjectPlaceholder: string;
+    messageLabel: string;
+    messagePlaceholder: string;
+    cancel: string;
+    create: string;
+    send: string;
+    sending: string;
+    replyPlaceholder: string;
+    you: string;
+    dev: string;
+    visitor: string;
+    closeTicket: string;
+    reopenTicket: string;
+    closedNote: string;
+    errors: Record<SupportError, string>;
+  };
 }
 
 const fr: Dictionary = {
@@ -323,6 +361,50 @@ const fr: Dictionary = {
     lead: "Toutes les versions de PropHandoff, de la plus récente à la plus ancienne. Chaque entrée indique ce qui a changé et les versions de Blender testées.",
   },
   footer: { changelog: "changelog", github: "GitHub ↗" },
+  support: {
+    fabAria: "Contacter le dev",
+    unreadAria: "nouveaux messages",
+    title: "Support",
+    lead: "Un bug, une idée de fonctionnalité ? Écrivez-moi : je lis tout et je réponds ici.",
+    signInLead: "Connectez-vous avec Google pour ouvrir un ticket et retrouver mes réponses.",
+    signIn: "Se connecter avec Google",
+    loading: "Chargement…",
+    close: "Fermer",
+    back: "Retour aux tickets",
+    newTicket: "Nouveau ticket",
+    empty: "Aucun ticket pour l'instant.",
+    tabOpen: "Ouverts",
+    tabClosed: "Fermés",
+    kinds: { bug: "Bug", feature: "Idée", question: "Question" },
+    statusOpen: "Ouvert",
+    statusClosed: "Fermé",
+    newReply: "Nouveau message",
+    kindLabel: "Type",
+    subjectLabel: "Sujet",
+    subjectPlaceholder: "En quelques mots",
+    messageLabel: "Message",
+    messagePlaceholder:
+      "Décrivez le problème ou l'idée : version de Blender, étapes pour reproduire, résultat attendu…",
+    cancel: "Annuler",
+    create: "Envoyer le ticket",
+    send: "Envoyer",
+    sending: "Envoi…",
+    replyPlaceholder: "Votre message",
+    you: "Vous",
+    dev: "Le dev",
+    visitor: "Visiteur",
+    closeTicket: "Fermer le ticket",
+    reopenTicket: "Rouvrir le ticket",
+    closedNote: "Ticket fermé : un nouveau message de votre part le rouvrira.",
+    errors: {
+      unauthorized: "Votre session a expiré : reconnectez-vous.",
+      unavailable: "Le support est momentanément indisponible. Réessayez dans quelques minutes.",
+      invalid: "Message vide ou trop long.",
+      not_found: "Ce ticket est introuvable.",
+      too_many_open: "Vous avez déjà 5 tickets ouverts : attendez une réponse avant d'en ouvrir un autre.",
+      rate_limited: "Beaucoup de messages d'un coup : patientez quelques minutes.",
+    },
+  },
 };
 
 const en: Dictionary = {
@@ -526,6 +608,49 @@ const en: Dictionary = {
     lead: "Every release of PropHandoff, newest first. Each entry lists what changed and which Blender versions it was tested against.",
   },
   footer: { changelog: "changelog", github: "GitHub ↗" },
+  support: {
+    fabAria: "Contact the dev",
+    unreadAria: "new messages",
+    title: "Support",
+    lead: "Found a bug or have a feature idea? Write to me: I read everything and reply here.",
+    signInLead: "Sign in with Google to open a ticket and get my replies.",
+    signIn: "Sign in with Google",
+    loading: "Loading…",
+    close: "Close",
+    back: "Back to tickets",
+    newTicket: "New ticket",
+    empty: "No tickets yet.",
+    tabOpen: "Open",
+    tabClosed: "Closed",
+    kinds: { bug: "Bug", feature: "Idea", question: "Question" },
+    statusOpen: "Open",
+    statusClosed: "Closed",
+    newReply: "New message",
+    kindLabel: "Type",
+    subjectLabel: "Subject",
+    subjectPlaceholder: "In a few words",
+    messageLabel: "Message",
+    messagePlaceholder: "Describe the issue or the idea: Blender version, steps to reproduce, expected result…",
+    cancel: "Cancel",
+    create: "Send ticket",
+    send: "Send",
+    sending: "Sending…",
+    replyPlaceholder: "Your message",
+    you: "You",
+    dev: "The dev",
+    visitor: "Visitor",
+    closeTicket: "Close ticket",
+    reopenTicket: "Reopen ticket",
+    closedNote: "Ticket closed: a new message from you will reopen it.",
+    errors: {
+      unauthorized: "Your session expired: please sign in again.",
+      unavailable: "Support is temporarily unavailable. Try again in a few minutes.",
+      invalid: "Message empty or too long.",
+      not_found: "This ticket can't be found.",
+      too_many_open: "You already have 5 open tickets: wait for a reply before opening another one.",
+      rate_limited: "Lots of messages at once: please wait a few minutes.",
+    },
+  },
 };
 
 export const DICTIONARIES: Record<Locale, Dictionary> = { fr, en };
@@ -540,5 +665,15 @@ export function formatDate(iso: string, locale: Locale): string {
     day: "numeric",
     month: "long",
     year: "numeric",
+  });
+}
+
+/** Date et heure courtes dans la langue courante (ex. « 4 oct., 14:32 »). */
+export function formatDateTime(iso: string, locale: Locale): string {
+  return new Date(iso).toLocaleString(locale === "fr" ? "fr-FR" : "en-GB", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 }

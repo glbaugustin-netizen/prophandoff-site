@@ -927,6 +927,442 @@ body[data-hero-nav="hidden"] .navx {
 }
 
 /* --------------------------------------------------------------------------
+   Support : bouton flottant « Contacter le dev » et panneau de tickets
+   -------------------------------------------------------------------------- */
+
+.support-fab,
+.support-panel {
+  --support-gap: clamp(16px, 3vw, 28px);
+  position: fixed;
+  right: var(--support-gap);
+  z-index: 60;
+  transition:
+    opacity 0.25s ease-out,
+    visibility 0.25s,
+    transform 0.25s ease-out;
+}
+
+.support-fab {
+  bottom: var(--support-gap);
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  background: var(--gold-500);
+  color: var(--ink);
+  border: var(--border);
+  box-shadow: var(--shadow-brutal);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s,
+    opacity 0.25s ease-out,
+    visibility 0.25s;
+}
+
+.support-fab:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-brutal-hover);
+}
+
+.support-fab:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.support-fab:focus-visible {
+  outline: 3px solid var(--rust-700);
+  outline-offset: 3px;
+}
+
+.support-fab[aria-expanded="true"] {
+  background: var(--paper);
+}
+
+/* nom au survol, à gauche du bouton (même étiquette que la navbar) */
+.support-fab-tip {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 12px);
+  padding: 6px 9px;
+  background: var(--paper);
+  color: var(--ink);
+  border: var(--border);
+  box-shadow: var(--shadow-brutal);
+  font: 600 13px/1 var(--font-sans);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(4px, -50%);
+  transition:
+    opacity 0.12s ease-out,
+    transform 0.12s ease-out,
+    visibility 0.12s;
+}
+
+@media (hover: hover) {
+  .support-fab:hover .support-fab-tip {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, -50%);
+  }
+}
+
+.support-fab:focus-visible .support-fab-tip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
+}
+
+.support-badge {
+  position: absolute;
+  top: -12px;
+  left: -12px;
+  display: grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 5px;
+  background: var(--rust-700);
+  color: var(--paper);
+  border: var(--border);
+  font: 700 12px/1 var(--font-sans);
+}
+
+.support-panel {
+  bottom: calc(var(--support-gap) + 74px);
+  display: flex;
+  flex-direction: column;
+  width: min(400px, calc(100vw - 2 * var(--support-gap)));
+  height: min(580px, calc(100dvh - var(--nav-h) - 2 * var(--support-gap) - 90px));
+  background: var(--paper);
+  color: var(--ink);
+  border: var(--border);
+  box-shadow: var(--shadow-brutal-hover);
+}
+
+/* pendant l'animation du hero, le coin appartient au bouton SKIP */
+body[data-hero-nav="hidden"] .support-fab,
+body[data-hero-nav="hidden"] .support-panel {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px);
+  pointer-events: none;
+}
+
+.support-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px 8px 14px;
+  background: var(--gold-500);
+  border-bottom: var(--border);
+}
+
+.support-title {
+  flex: 1;
+  font: 600 21px/1.1 var(--font-display);
+}
+
+.support-icon-btn {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 2px solid transparent;
+}
+
+.support-icon-btn:hover {
+  background: var(--paper);
+  border-color: var(--ink);
+}
+
+.support-icon-btn:focus-visible,
+.support-ticket:focus-visible,
+.support-tab:focus-visible,
+.support-link:focus-visible {
+  outline: 3px solid var(--rust-700);
+  outline-offset: 2px;
+}
+
+.support-form {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.support-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+}
+
+.support-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--mist-100);
+  border-top: var(--border);
+}
+
+.support-state {
+  padding: 18px 14px;
+  color: var(--ink-muted);
+}
+
+.support-lead {
+  line-height: 1.45;
+}
+
+.support-empty,
+.support-note,
+.support-date {
+  color: var(--ink-muted);
+}
+
+.support-note {
+  font-size: 13px;
+}
+
+.support-error {
+  padding: 8px 10px;
+  background: var(--paper);
+  border: 2px solid var(--rust-700);
+  color: var(--rust-700);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.support-label {
+  font: 700 12px/1 var(--font-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.support-body input,
+.support-body textarea,
+.support-reply textarea {
+  display: block;
+  width: 100%;
+}
+
+.support-body textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+/* type de ticket : pastilles radio (le vrai bouton radio couvre la pastille) */
+.support-kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.support-kind {
+  position: relative;
+  padding: 8px 12px;
+  background: var(--paper);
+  border: var(--border);
+  font: 700 13px/1 var(--font-sans);
+  cursor: pointer;
+}
+
+.support-kind.is-on {
+  background: var(--gold-500);
+}
+
+.support-kind input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.support-kind:has(input:focus-visible) {
+  outline: 3px solid var(--rust-700);
+  outline-offset: 2px;
+}
+
+.support-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.support-tab {
+  padding: 7px 12px;
+  background: var(--paper);
+  border: var(--border);
+  font: 700 12px/1 var(--font-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.support-tab[aria-pressed="true"] {
+  background: var(--gold-500);
+}
+
+.support-tickets {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.support-ticket {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  background: var(--paper);
+  border: var(--border);
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+}
+
+.support-ticket:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-brutal);
+}
+
+.support-ticket.is-unread {
+  border-left: 8px solid var(--rust-700);
+}
+
+.support-ticket-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.support-ticket-subject {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.support-ticket-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font: 600 12px/1.3 var(--font-sans);
+  color: var(--ink-muted);
+}
+
+.support-date {
+  font: 600 12px/1 var(--font-sans);
+}
+
+.support-new {
+  color: var(--rust-700);
+}
+
+/* fil de discussion */
+.support-thread-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: var(--border);
+}
+
+.support-thread-subject {
+  flex-basis: 100%;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.support-thread-user {
+  flex-basis: 100%;
+  font-size: 13px;
+  color: var(--ink-muted);
+  overflow-wrap: anywhere;
+}
+
+.support-msg {
+  align-self: flex-start;
+  max-width: 88%;
+  padding: 8px 10px;
+  background: var(--mist-100);
+  border: var(--border);
+}
+
+.support-msg.is-mine {
+  align-self: flex-end;
+  background: var(--gold-500);
+}
+
+.support-msg-meta {
+  margin-bottom: 4px;
+  font: 700 11px/1.2 var(--font-sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.support-msg-body {
+  font-size: 15px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.support-reply {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.support-reply-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.support-reply textarea {
+  flex: 1;
+  min-height: 44px;
+  max-height: 140px;
+  resize: none;
+}
+
+.support-link {
+  align-self: flex-start;
+  font: 600 13px/1 var(--font-sans);
+  color: var(--rust-700);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 620px) {
+  .support-panel {
+    left: 8px;
+    right: 8px;
+    width: auto;
+    bottom: calc(var(--support-gap) + 68px);
+    height: calc(100dvh - var(--nav-h) - var(--support-gap) - 80px);
+  }
+  .support-fab-tip {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
    Responsive
    -------------------------------------------------------------------------- */
 
