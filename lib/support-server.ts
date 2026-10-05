@@ -24,7 +24,7 @@ export interface Viewer {
   id: string;
   name: string | null;
   email: string | null;
-  /** Inscrit dans la table support_admins : répond en tant que « dev ». */
+  /** Adresse inscrite dans la table support_admins : répond en tant que « dev ». */
   isAdmin: boolean;
 }
 
@@ -62,20 +62,22 @@ export async function supportContext(): Promise<{ db: SupabaseClient; viewer: Vi
   const db = supabaseAdmin();
   if (!db) return fail("unavailable", 503);
 
-  const { data, error } = await db.from("support_admins").select("user_id").eq("user_id", id).maybeSingle();
-  if (error) {
-    console.error("[support] admins:", error.message);
-    return fail("unavailable", 503);
+  // Le dev est reconnu à l'adresse de son compte Google (vérifiée par Google).
+  const email = session.user?.email ?? null;
+  let isAdmin = false;
+  if (email) {
+    const { data, error } = await db
+      .from("support_admins")
+      .select("email")
+      .eq("email", email.trim().toLowerCase())
+      .maybeSingle();
+    if (error) {
+      console.error("[support] admins:", error.message);
+      return fail("unavailable", 503);
+    }
+    isAdmin = data !== null;
   }
-  return {
-    db,
-    viewer: {
-      id,
-      name: session.user?.name ?? null,
-      email: session.user?.email ?? null,
-      isAdmin: data !== null,
-    },
-  };
+  return { db, viewer: { id, name: session.user?.name ?? null, email, isAdmin } };
 }
 
 /** Le dev écrit en « dev », tout le monde d'autre en « user ». */

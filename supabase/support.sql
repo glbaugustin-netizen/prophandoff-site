@@ -35,10 +35,11 @@ create table if not exists public.support_messages (
 create index if not exists support_messages_ticket_idx on public.support_messages (ticket_id, created_at);
 create index if not exists support_messages_author_idx on public.support_messages (author_id, created_at desc);
 
--- Comptes qui répondent en tant que « dev » (identifiants Auth.js). Pour s'y
--- ajouter : insert into public.support_admins (user_id) values ('google:…');
+-- Comptes Google qui répondent en tant que « dev », par adresse e-mail (en
+-- minuscules). Pour en ajouter un :
+--   insert into public.support_admins (email) values ('adresse@gmail.com');
 create table if not exists public.support_admins (
-  user_id text primary key
+  email text primary key check (email = lower(email))
 );
 
 -- Chaque message met son ticket à jour : date, dernier auteur, lecture par
