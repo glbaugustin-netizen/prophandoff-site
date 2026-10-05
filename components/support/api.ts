@@ -8,6 +8,7 @@ const KNOWN_ERRORS: readonly SupportError[] = [
   "unavailable",
   "invalid",
   "not_found",
+  "forbidden",
   "too_many_open",
   "rate_limited",
 ];

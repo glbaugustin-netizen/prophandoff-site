@@ -39,12 +39,15 @@ export async function GET() {
   });
 }
 
-/** Nouveau ticket et son premier message. */
+/** Nouveau ticket et son premier message (visiteurs seulement). */
 export async function POST(req: Request) {
   if (!isTrustedWrite(req)) return fail("invalid", 400);
   const ctx = await supportContext();
   if (ctx instanceof NextResponse) return ctx;
   const { db, viewer } = ctx;
+
+  // Le dev répond aux tickets des visiteurs, il n'en ouvre pas.
+  if (viewer.isAdmin) return fail("forbidden", 403);
 
   const input = await readJson(req);
   const kind = cleanKind(input?.kind);
@@ -52,10 +55,8 @@ export async function POST(req: Request) {
   const body = cleanBody(input?.body);
   if (!kind || !subject || !body) return fail("invalid", 400);
 
-  if (!viewer.isAdmin) {
-    if (await hasTooManyOpen(db, viewer.id)) return fail("too_many_open", 429);
-    if (await isRateLimited(db, viewer.id)) return fail("rate_limited", 429);
-  }
+  if (await hasTooManyOpen(db, viewer.id)) return fail("too_many_open", 429);
+  if (await isRateLimited(db, viewer.id)) return fail("rate_limited", 429);
 
   const { data: ticket, error } = await db
     .from("support_tickets")

@@ -93,11 +93,14 @@ export default function TicketList({ onOpen, onNew }: { onOpen: (id: string) => 
           </ul>
         )}
       </div>
-      <footer className="support-foot">
-        <button type="button" className="btn btn-primary btn-block" onClick={onNew}>
-          {t.support.newTicket}
-        </button>
-      </footer>
+      {/* Le dev répond aux tickets, il n'en ouvre pas (refusé aussi côté serveur). */}
+      {data && !data.isAdmin && (
+        <footer className="support-foot">
+          <button type="button" className="btn btn-primary btn-block" onClick={onNew}>
+            {t.support.newTicket}
+          </button>
+        </footer>
+      )}
     </>
   );
 }
